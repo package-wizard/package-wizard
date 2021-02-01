@@ -26,6 +26,13 @@ final class Wizard extends BaseCommand
         $this->install();
     }
 
+    protected function configure()
+    {
+        $this
+            ->setName('package:init')
+            ->setDescription('Helps to initialize a new package project');
+    }
+
     protected function fill(): void
     {
         foreach ($this->steps() as $step => $value) {

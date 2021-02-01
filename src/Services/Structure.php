@@ -132,7 +132,7 @@ final class Structure implements Arrayable
         return $this->doc['license'] ?? null;
     }
 
-    public function magicMethod(string $method, string $value): self
+    public function magicMethod(string $method, $value = null): self
     {
         $this->doc[$method] = $value;
 

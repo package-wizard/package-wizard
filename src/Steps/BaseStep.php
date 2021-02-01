@@ -25,6 +25,8 @@ abstract class BaseStep implements Stepable
         $this->io = $io;
     }
 
+    abstract protected function input();
+
     public function question(string $question): Stepable
     {
         $this->question = $question;
@@ -37,8 +39,6 @@ abstract class BaseStep implements Stepable
         return $this->ask_many ? $this->getMany() : $this->getOnce();
     }
 
-    abstract protected function input();
-
     protected function getOnce()
     {
         return $this->input();
@@ -50,13 +50,10 @@ abstract class BaseStep implements Stepable
             $this->result = [];
         }
 
-        $again = true;
-
-        while ($again === true) {
+        do {
             $this->result[] = $this->getOnce();
-
-            $again = $this->askAgain();
         }
+        while ($this->askAgain());
 
         return $this->result;
     }

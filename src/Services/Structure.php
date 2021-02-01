@@ -38,6 +38,15 @@ final class Structure implements Arrayable
         'prefer-stable'     => true,
     ];
 
+    public function __call($method, $arguments): self
+    {
+        if (in_array($method, $this->methods, true)) {
+            return $this->magicMethod($method, ...$arguments);
+        }
+
+        throw new UnknownMethodException($method);
+    }
+
     public function authors(array $authors): self
     {
         $this->doc['authors'] = $authors;
@@ -128,15 +137,6 @@ final class Structure implements Arrayable
         $this->doc[$method] = $value;
 
         return $this;
-    }
-
-    public function __call($method, $arguments): Structure
-    {
-        if (in_array($method, $this->methods, true)) {
-            return $this->magicMethod($method, ...$arguments);
-        }
-
-        throw new UnknownMethodException($method);
     }
 
     public function toArray(): array

@@ -16,8 +16,6 @@ abstract class BaseStep implements Stepable
         $this->value = $value;
     }
 
-    abstract protected function process();
-
     public function get()
     {
         if ($value = $this->process()) {
@@ -26,4 +24,6 @@ abstract class BaseStep implements Stepable
 
         return $this->get();
     }
+
+    abstract protected function process();
 }

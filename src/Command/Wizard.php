@@ -5,12 +5,7 @@ namespace Helldar\PackageWizard\Command;
 use Helldar\PackageWizard\Constants\Steps;
 use Helldar\PackageWizard\Services\Storage;
 use Helldar\PackageWizard\Services\Structure;
-use Helldar\PackageWizard\Steps\Arr;
-use Helldar\PackageWizard\Steps\Boolean;
 use Helldar\PackageWizard\Steps\Choice;
-use Helldar\PackageWizard\Steps\KeyValue;
-use Helldar\PackageWizard\Steps\Text;
-use Helldar\PackageWizard\Steps\Url;
 
 final class Wizard extends BaseCommand
 {
@@ -35,12 +30,14 @@ final class Wizard extends BaseCommand
 
     protected function fill(): void
     {
-        foreach ($this->steps() as $step => $value) {
-            if ($step === Steps::USE_TESTS && $value === true) {
+        foreach ($this->steps() as $step => $question) {
+            $answer = $question->get();
+
+            if ($step === Steps::USE_TESTS && $answer === true) {
                 $this->pushTestsDependencies();
             }
 
-            $this->pushStructure($step, $value);
+            $this->pushStructure($step, $answer);
         }
     }
 
@@ -73,29 +70,32 @@ final class Wizard extends BaseCommand
         $this->structure->{$method}($value);
     }
 
+    /**
+     * @return \Helldar\PackageWizard\Contracts\Stepable[]|array
+     */
     protected function steps(): array
     {
         return [
-            Steps::NAME        => Text::make('What\'s a package name?'),
-            Steps::DESCRIPTION => Text::make('What\'s a package description?'),
+            Steps::NAME        => $this->inputText('What\'s a package name?'),
+            Steps::DESCRIPTION => $this->inputText('What\'s a package description?'),
 
-            Steps::TYPE => Choice::make('What\s a composer type', ['library', 'metapackage', 'composer-plugin', 'project', 'symfony-bundle']),
+            Steps::TYPE => $this->inputChoice('What\s a composer type', ['library', 'metapackage', 'composer-plugin', 'project', 'symfony-bundle'], 'library'),
 
-            Steps::LICENSE => Text::make('What\'s a license?'),
+            Steps::LICENSE => $this->inputText('What\'s a license?'),
 
-            Steps::KEYWORDS => Arr::make('What\s a keywords?'),
+            Steps::KEYWORDS => $this->inputArray('What\s a keywords?'),
 
-            Steps::AUTHORS => KeyValue::make('What\s a authors?'),
+            Steps::AUTHORS => $this->inputKeyValue('What\s a authors?', ['name', 'email']),
 
-            Steps::REPOSITORY_URL => Url::make('What\s a repository URL?'),
+            Steps::REPOSITORY_URL => $this->inputUrl('What\s a repository URL?'),
 
-            Steps::REQUIRE     => KeyValue::make('What\s a require dependencies?'),
-            Steps::REQUIRE_DEV => KeyValue::make('What\s a require dev dependencies?'),
+            Steps::REQUIRE     => $this->inputKeyValue('What\s a require dependencies?', ['package', 'versions']),
+            Steps::REQUIRE_DEV => $this->inputKeyValue('What\s a require dev dependencies?', ['package', 'versions']),
 
-            Steps::PACKAGE_NAMESPACE => Text::make('What\s a namespace?'),
+            Steps::PACKAGE_NAMESPACE => $this->inputText('What\s a namespace?'),
 
-            Steps::USE_TESTS => Boolean::make('You\'re using tests?'),
-            Steps::STABILITY => Boolean::make('Minimum stability - stable?'),
+            Steps::USE_TESTS => $this->inputBoolean('You\'re using tests?'),
+            Steps::STABILITY => $this->inputBoolean('Minimum stability - stable?'),
         ];
     }
 

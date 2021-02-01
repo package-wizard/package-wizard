@@ -3,6 +3,7 @@
 namespace Helldar\PackageWizard\Concerns;
 
 use Helldar\PackageWizard\Contracts\Stepable;
+use Helldar\PackageWizard\Services\Output;
 use Helldar\PackageWizard\Steps\Arr;
 use Helldar\PackageWizard\Steps\Boolean;
 use Helldar\PackageWizard\Steps\Choice;
@@ -15,12 +16,12 @@ trait Input
 {
     public function inputText(string $question): Stepable
     {
-        return Text::make($this->getIO())->question($question);
+        return Text::make($this->getIO(), $this->output())->question($question);
     }
 
     public function inputChoice(string $question, array $choices, $default): Stepable
     {
-        return Choice::make($this->getIO())
+        return Choice::make($this->getIO(), $this->output())
             ->question($question)
             ->choices($choices)
             ->back($default);
@@ -28,21 +29,26 @@ trait Input
 
     public function inputArray(string $question): Stepable
     {
-        return Arr::make($this->getIO())->question($question);
+        return Arr::make($this->getIO(), $this->output())->question($question);
     }
 
     public function inputKeyValue(string $question, array $values): Stepable
     {
-        return KeyValue::make($this->getIO())->question($question)->values($values);
+        return KeyValue::make($this->getIO(), $this->output())->question($question)->values($values);
     }
 
     public function inputUrl(string $question): Stepable
     {
-        return Url::make($this->getIO())->question($question);
+        return Url::make($this->getIO(), $this->output())->question($question);
     }
 
     public function inputBoolean(string $question): Stepable
     {
-        return Boolean::make($this->getIO())->question($question);
+        return Boolean::make($this->getIO(), $this->output())->question($question);
+    }
+
+    protected function output(): Output
+    {
+        return Output::make($this->getIO(), $this->output);
     }
 }

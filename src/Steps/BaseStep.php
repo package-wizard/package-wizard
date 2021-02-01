@@ -4,6 +4,7 @@ namespace Helldar\PackageWizard\Steps;
 
 use Composer\IO\IOInterface;
 use Helldar\PackageWizard\Contracts\Stepable;
+use Helldar\PackageWizard\Services\Output;
 use Helldar\Support\Concerns\Makeable;
 
 abstract class BaseStep implements Stepable
@@ -18,12 +19,18 @@ abstract class BaseStep implements Stepable
 
     protected $result;
 
+    /** @var \Helldar\PackageWizard\Services\Output */
+    protected $output;
+
     protected $ask_many = false;
 
-    public function __construct(IOInterface $io)
+    public function __construct(IOInterface $io, Output $output)
     {
-        $this->io = $io;
+        $this->io     = $io;
+        $this->output = $output;
     }
+
+    abstract protected function input();
 
     public function question(string $question): Stepable
     {
@@ -36,8 +43,6 @@ abstract class BaseStep implements Stepable
     {
         return $this->ask_many ? $this->getMany() : $this->getOnce();
     }
-
-    abstract protected function input();
 
     protected function getOnce()
     {
@@ -52,7 +57,8 @@ abstract class BaseStep implements Stepable
 
         do {
             $this->result[] = $this->getOnce();
-        } while ($this->askAgain());
+        }
+        while ($this->askAgain());
 
         return $this->result;
     }

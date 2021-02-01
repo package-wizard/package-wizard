@@ -14,7 +14,7 @@ final class Url extends BaseStep
             return $value;
         }
 
-        $this->io->writeln('An invalid URL was specified.');
+        $this->output->warning('An invalid URL was specified.');
 
         return $this->input();
     }

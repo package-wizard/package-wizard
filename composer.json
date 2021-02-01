@@ -1,7 +1,7 @@
 {
     "name": "andrey-helldar/package-wizard",
     "description": "Helps to initialize a new package project",
-    "type": "library",
+    "type": "composer-plugin",
     "license": "MIT",
     "keywords": ["package", "packages", "initializer", "wizard"],
     "authors": [
@@ -39,5 +39,8 @@
         "sort-packages": true
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "extra": {
+        "class": "Helldar\\PackageWizard\\Application"
+    }
 }

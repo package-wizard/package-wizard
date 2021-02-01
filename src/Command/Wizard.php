@@ -12,14 +12,14 @@ use Helldar\PackageWizard\Steps\KeyValue;
 use Helldar\PackageWizard\Steps\Text;
 use Helldar\PackageWizard\Steps\Url;
 
-final class Wizard
+final class Wizard extends BaseCommand
 {
     /** @var \Helldar\PackageWizard\Services\Structure */
     protected $structure;
 
-    public function handle(Structure $structure)
+    public function handle()
     {
-        $this->structure = $structure;
+        $this->structure = Structure::make();
 
         $this->fill();
         $this->store();
@@ -40,7 +40,7 @@ final class Wizard
     protected function store(): void
     {
         Storage::make()
-            ->basePath(__DIR__ . '/build')
+            ->basePath($this->basePath() . '/build')
             ->structure($this->structure)
             ->store();
     }

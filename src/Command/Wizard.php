@@ -71,7 +71,7 @@ final class Wizard extends BaseCommand
     }
 
     /**
-     * @return \Helldar\PackageWizard\Contracts\Stepable[]|array
+     * @return array|\Helldar\PackageWizard\Contracts\Stepable[]
      */
     protected function steps(): array
     {

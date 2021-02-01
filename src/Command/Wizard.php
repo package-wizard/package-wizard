@@ -2,6 +2,7 @@
 
 namespace Helldar\PackageWizard\Command;
 
+use Helldar\PackageWizard\Constants\Licenses;
 use Helldar\PackageWizard\Constants\Steps;
 use Helldar\PackageWizard\Services\Storage;
 use Helldar\PackageWizard\Services\Structure;
@@ -81,7 +82,7 @@ final class Wizard extends BaseCommand
 
             Steps::TYPE => $this->inputChoice('What\s a composer type', ['library', 'metapackage', 'composer-plugin', 'project', 'symfony-bundle'], 'library'),
 
-            Steps::LICENSE => $this->inputText('What\'s a license?'),
+            Steps::LICENSE => $this->inputChoice('What\'s a license?', Licenses::available(), Licenses::DEFAULT_LICENSE),
 
             Steps::KEYWORDS => $this->inputArray('What\s a keywords?'),
 

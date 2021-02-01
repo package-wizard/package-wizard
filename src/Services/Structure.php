@@ -3,28 +3,12 @@
 namespace Helldar\PackageWizard\Services;
 
 use Helldar\PackageWizard\Contracts\Arrayable;
-use Helldar\PackageWizard\Exceptions\UnknownMethodException;
 use Helldar\Support\Concerns\Makeable;
 use Helldar\Support\Facades\Helpers\Str;
 
-/**
- * @method Structure name(string $package_name)
- * @method Structure description(string $description)
- * @method Structure type(string $type)
- * @method Structure license(string $license)
- * @method Structure keywords(array $keywords)
- */
 final class Structure implements Arrayable
 {
     use Makeable;
-
-    protected $methods = [
-        'name',
-        'description',
-        'type',
-        'license',
-        'keywords',
-    ];
 
     protected $doc = [
         'type' => 'library',
@@ -38,13 +22,54 @@ final class Structure implements Arrayable
         'prefer-stable'     => true,
     ];
 
-    public function __call($method, $arguments): self
+    public function name(string $package_name): self
     {
-        if (in_array($method, $this->methods, true)) {
-            return $this->magicMethod($method, ...$arguments);
-        }
+        $this->doc['name'] = $package_name;
 
-        throw new UnknownMethodException($method);
+        return $this;
+    }
+
+    public function getName(): self
+    {
+        return $this->doc['name'];
+    }
+
+    public function description(string $description): self
+    {
+        $this->doc['description'] = $description;
+
+        return $this;
+    }
+
+    public function getDescription(): string
+    {
+        return $this->doc['description'];
+    }
+
+    public function type(string $type): self
+    {
+        $this->doc['type'] = $type;
+
+        return $this;
+    }
+
+    public function license(string $license): self
+    {
+        $this->doc['license'] = $license;
+
+        return $this;
+    }
+
+    public function getLicense(): ?string
+    {
+        return $this->doc['license'] ?? null;
+    }
+
+    public function keywords(array $keywords): self
+    {
+        $this->doc['keywords'] = array_values(array_filter(array_unique($keywords)));
+
+        return $this;
     }
 
     public function authors(array $authors): self
@@ -52,6 +77,11 @@ final class Structure implements Arrayable
         $this->doc['authors'] = $authors;
 
         return $this;
+    }
+
+    public function getAuthors(): array
+    {
+        return $this->doc['authors'];
     }
 
     public function repositoryUrl(string $url): self
@@ -110,26 +140,6 @@ final class Structure implements Arrayable
     public function hasTests(): bool
     {
         return isset($this->doc['autoload-dev']['psr-4']['Tests\\']);
-    }
-
-    public function getName(): string
-    {
-        return $this->doc['name'];
-    }
-
-    public function getDescription(): string
-    {
-        return $this->doc['description'];
-    }
-
-    public function getAuthors(): array
-    {
-        return $this->doc['authors'];
-    }
-
-    public function getLicense(): ?string
-    {
-        return $this->doc['license'] ?? null;
     }
 
     public function magicMethod(string $method, $value = null): self

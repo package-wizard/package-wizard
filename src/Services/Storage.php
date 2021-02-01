@@ -34,6 +34,8 @@ final class Storage
 
     public function store(): void
     {
+        dd($this->structure->toArray());
+
         $this->basic();
         $this->composerJson();
         $this->license();

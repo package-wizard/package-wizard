@@ -19,7 +19,7 @@
         "ext-json": "*",
         "composer-plugin-api": "^2.0",
         "andrey-helldar/support": "^2.6",
-        "symfony/console": "^4.0|^5.0"
+        "symfony/var-dumper": "^5.2"
     },
     "require-dev": {
         "composer/composer": "^2.0"

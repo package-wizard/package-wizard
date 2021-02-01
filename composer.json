@@ -1,9 +1,9 @@
 {
     "name": "andrey-helldar/package-wizard",
-    "description": "Helps to initialize a new package project",
+    "description": "Package Wizard is a composer plugin for creating a new packages using CLI tool.",
     "type": "composer-plugin",
     "license": "MIT",
-    "keywords": ["package", "packages", "initializer", "wizard"],
+    "keywords": ["package", "packages", "initializer", "wizard", "composer", "plugin"],
     "authors": [
         {
             "name": "Andrey Helldar",

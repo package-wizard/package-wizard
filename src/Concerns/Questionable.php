@@ -2,112 +2,63 @@
 
 namespace Helldar\PackageWizard\Concerns;
 
-use Composer\Factory;
-use Composer\Repository\RepositoryFactory;
-use Helldar\PackageWizard\Constants\Licenses;
 use Helldar\PackageWizard\Constants\Steps;
+use Helldar\PackageWizard\Contracts\Stepable;
 use Helldar\PackageWizard\Exceptions\UnknownStepException;
-use Helldar\Support\Facades\Helpers\Str;
+use Helldar\PackageWizard\Steps\Author;
+use Helldar\PackageWizard\Steps\Dependencies;
+use Helldar\PackageWizard\Steps\Description;
+use Helldar\PackageWizard\Steps\DevDependencies;
+use Helldar\PackageWizard\Steps\Keywords;
+use Helldar\PackageWizard\Steps\License;
+use Helldar\PackageWizard\Steps\Name;
+use Helldar\PackageWizard\Steps\RepositoryUrl;
+use Helldar\Support\Facades\Helpers\Instance;
 
-/** @mixin \Helldar\PackageWizard\Command\BaseCommand */
+/**
+ * @mixin \Helldar\PackageWizard\Command\BaseCommand
+ * @mixin \Helldar\PackageWizard\Concerns\Git
+ */
 trait Questionable
 {
     protected function ask(string $step)
     {
-        switch ($step) {
-            case Steps::NAME:
-                return $this->askName();
+        $questions = $this->questions();
 
-            case Steps::DESCRIPTION:
-                return $this->askDescription();
-
-            case Steps::LICENSE:
-                return $this->askLicense();
-
-            case Steps::KEYWORDS:
-                return $this->askKeywords();
-
-            case Steps::AUTHORS:
-                return $this->askAuthors();
-
-            case Steps::REPOSITORY_URL:
-                return $this->askRepositoryUrl();
-
-            case Steps::REQUIRE:
-                return $this->askDependencies();
-
-            case Steps::REQUIRE_DEV:
-                return $this->askDevDependencies();
-
-            default:
-                throw new UnknownStepException($step);
-        }
-    }
-
-    protected function askName(): string
-    {
-        return $this->inputText('Name of the package')->get();
-    }
-
-    protected function askDescription(): string
-    {
-        return $this->inputText('Description of package')->get();
-    }
-
-    protected function askLicense(): string
-    {
-        return $this->inputChoice('License of package', Licenses::available(), Licenses::DEFAULT_LICENSE)->get();
-    }
-
-    protected function askKeywords(): ?array
-    {
-        if ($this->askConfirm('Want to specify keywords')) {
-            return $this->inputArray('Specify the application keywords')->get();
+        if (isset($questions[$step])) {
+            return $this->resolveStep($questions[$step])->get();
         }
 
-        return null;
+        throw new UnknownStepException($step);
     }
 
-    protected function askAuthors(): array
+    protected function questions(): array
     {
-        return $this->inputKeyValue('Authors names of package', ['name', 'email'])->get();
+        return [
+            Steps::NAME           => Name::class,
+            Steps::DESCRIPTION    => Description::class,
+            Steps::LICENSE        => License::class,
+            Steps::KEYWORDS       => Keywords::class,
+            Steps::AUTHORS        => Author::class,
+            Steps::REPOSITORY_URL => RepositoryUrl::class,
+            Steps::REQUIRE        => Dependencies::class,
+            Steps::REQUIRE_DEV    => DevDependencies::class,
+        ];
     }
 
-    protected function askRepositoryUrl(): string
+    /**
+     * @param  \Helldar\PackageWizard\Steps\BaseStep|string  $step
+     *
+     * @throws \Helldar\PackageWizard\Exceptions\UnknownStepException
+     *
+     * @return \Helldar\PackageWizard\Contracts\Stepable
+     */
+    protected function resolveStep(string $step): Stepable
     {
-        $url = $this->inputUrl('Repository URL of package')->get();
-
-        $config = Factory::createConfig($this->getIO());
-
-        return RepositoryFactory::configFromString($this->getIO(), $config, $url);
-    }
-
-    protected function askDependencies(): ?array
-    {
-        if ($this->askConfirm('Want to specify required packages')) {
-            return $this
-                ->inputArray('Package to require with a version constraint, e.g. foo/bar:1.0.0 or foo/bar=1.0.0 or "foo/bar 1.0.0"')
-                ->get();
+        if (Instance::of($step, Stepable::class)) {
+            return $step::make($this->getIO(), $this->input, $this->output, $this->getGitConfig());
         }
 
-        return null;
-    }
-
-    protected function askDevDependencies(): ?array
-    {
-        if ($this->askConfirm('Want to specify dev-required packages')) {
-            return $this
-                ->inputArray('Package to require for development with a version constraint, e.g. foo/bar:1.0.0 or foo/bar=1.0.0 or "foo/bar 1.0.0"')
-                ->get();
-        }
-
-        return null;
-    }
-
-    protected function askConfirm(string $question, bool $default = true): bool
-    {
-        $question = Str::finish($question, ' (Y/n)?');
-
-        return $this->getIO()->askConfirmation($question, $default);
+        throw new UnknownStepException($step);
     }
 }

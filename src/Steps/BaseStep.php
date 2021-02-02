@@ -3,32 +3,40 @@
 namespace Helldar\PackageWizard\Steps;
 
 use Composer\IO\IOInterface;
+use Helldar\PackageWizard\Concerns\IO;
+use Helldar\PackageWizard\Concerns\Output;
 use Helldar\PackageWizard\Contracts\Stepable;
-use Helldar\PackageWizard\Services\Output;
 use Helldar\Support\Concerns\Makeable;
 use Helldar\Support\Facades\Helpers\Str;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 abstract class BaseStep implements Stepable
 {
+    use IO;
     use Makeable;
+    use Output;
 
-    /** @var \Symfony\Component\Console\Output\OutputInterface */
-    protected $io;
+    protected InputInterface $input;
 
-    /** @var string */
-    protected $question;
+    protected OutputInterface $output;
+
+    protected array $git;
+
+    protected string $question;
+
+    protected string $question_package = 'Want to add another (Y/n)?';
 
     protected $result;
 
-    /** @var \Helldar\PackageWizard\Services\Output */
-    protected $output;
+    protected bool $ask_many = false;
 
-    protected $ask_many = false;
-
-    public function __construct(IOInterface $io, Output $output)
+    public function __construct(IOInterface $io, InputInterface $input, OutputInterface $output, array $git = [])
     {
         $this->io     = $io;
+        $this->input  = $input;
         $this->output = $output;
+        $this->git    = $git;
     }
 
     abstract protected function input();
@@ -48,7 +56,11 @@ abstract class BaseStep implements Stepable
 
     public function get()
     {
-        return $this->ask_many ? $this->getMany() : $this->getOnce();
+        if ($this->ask_many && $this->getIO()->askConfirmation($this->question)) {
+            return $this->getMany();
+        }
+
+        return $this->getOnce();
     }
 
     protected function getOnce()
@@ -72,6 +84,6 @@ abstract class BaseStep implements Stepable
 
     protected function askAgain(): bool
     {
-        return $this->io->askConfirmation('Want to add another value (Y/n)?', false);
+        return $this->io->askConfirmation('Want to add another (Y/n)?', false);
     }
 }

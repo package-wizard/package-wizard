@@ -12,44 +12,44 @@ abstract class BaseStepper implements Stepperable
 {
     use Makeable;
 
-    protected $name;
+    protected string $name;
 
-    protected $description;
+    protected string $description;
 
-    protected $type = 'library';
+    protected string $type = 'library';
 
-    protected $license;
+    protected string $license;
 
-    protected $keywords = [];
+    protected array $keywords = [];
 
-    protected $authors = [];
+    protected array $authors = [];
 
-    protected $support = [];
+    protected array $support = [];
 
-    protected $require = [];
+    protected array $require = [];
 
-    protected $require_dev = [];
+    protected array $require_dev = [];
 
-    protected $autoload = [];
+    protected array $autoload = [];
 
-    protected $autoload_dev = [
+    protected array $autoload_dev = [
         'psr-4' => [
             'Tests\\' => 'tests',
         ],
     ];
 
-    protected $autoload_path = 'src';
+    protected string $autoload_path = 'src';
 
-    protected $config = [
+    protected array $config = [
         'preferred-install' => 'dist',
         'sort-packages'     => true,
     ];
 
-    protected $minimum_stability = 'stable';
+    protected string $minimum_stability = 'stable';
 
-    protected $prefer_stable = true;
+    protected bool $prefer_stable = true;
 
-    protected $extra = [];
+    protected array $extra = [];
 
     public function getName()
     {
@@ -66,7 +66,7 @@ abstract class BaseStepper implements Stepperable
         return $this->description;
     }
 
-    public function setDescription(?string $description): void
+    public function setDescription(string $description): void
     {
         $this->description = $description;
     }
@@ -103,7 +103,19 @@ abstract class BaseStepper implements Stepperable
 
     public function setAuthors(array $authors): void
     {
-        $this->authors = $authors;
+        $this->authors = array_map(static function ($author) {
+            [$name, $email] = $author;
+
+            return compact('name', 'email');
+        }, $authors);
+    }
+
+    public function pushAuthor(array $author): void
+    {
+        $name  = $author['name'] ?? $author[0];
+        $email = $author['email'] ?? $author[1];
+
+        $this->setAuthors([$name, $email]);
     }
 
     public function getSupport(): array
@@ -116,9 +128,9 @@ abstract class BaseStepper implements Stepperable
         return $this->require;
     }
 
-    public function setRequire(array $require): void
+    public function setRequire(array $dependencies): void
     {
-        $this->require = $require;
+        $this->require = $dependencies;
     }
 
     public function getRequireDev(): array
@@ -126,21 +138,16 @@ abstract class BaseStepper implements Stepperable
         return $this->require_dev;
     }
 
-    public function setRequireDev(array $require_dev): void
+    public function setRequireDev(array $dev_dependencies): void
     {
-        $this->require_dev = $require_dev;
+        $this->require_dev = $dev_dependencies;
     }
 
     public function getAutoload(): array
     {
+        $this->autoload['psr-4'] = [$this->getNamespace() => $this->autoload_path];
+
         return $this->autoload;
-    }
-
-    public function setAutoload(): void
-    {
-        $namespace = Str::finish($this->getNamespace() . '\\');
-
-        $this->autoload = ['psr-4' => [$namespace => $this->autoload_path]];
     }
 
     public function getAutoloadDev(): array
@@ -173,11 +180,6 @@ abstract class BaseStepper implements Stepperable
         return $this->extra;
     }
 
-    public function setExtra(string $key, $value): void
-    {
-        $this->extra[$key] = $value;
-    }
-
     public function setRepositoryUrl(string $url): void
     {
         Http::validateUrl($url);
@@ -208,18 +210,6 @@ abstract class BaseStepper implements Stepperable
     }
 
     public function toArray(): array
-    {
-        $this->fill();
-
-        return $this->items();
-    }
-
-    protected function fill(): void
-    {
-        $this->setAutoload();
-    }
-
-    protected function items(): array
     {
         return [
             'name'              => $this->getName(),

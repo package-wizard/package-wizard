@@ -4,13 +4,13 @@ namespace Helldar\PackageWizard\Steppers;
 
 final class SymfonyBundle extends BaseStepper
 {
-    protected $type = 'symfony-bundle';
+    protected string $type = 'symfony-bundle';
 
-    protected $require = [
+    protected array $require = [
         'php' => '^8.0',
     ];
 
-    protected $autoload_dev = [];
+    protected array $autoload_dev = [];
 
-    protected $autoload_path = '';
+    protected string $autoload_path = '';
 }

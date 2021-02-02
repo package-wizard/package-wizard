@@ -4,7 +4,7 @@ namespace Helldar\PackageWizard\Resources;
 
 final class Readme extends BaseResource
 {
-    protected $replaces = [];
+    protected array $replaces = [];
 
     public function replaces(array $replaces): self
     {

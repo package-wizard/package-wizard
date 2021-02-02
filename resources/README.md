@@ -13,7 +13,7 @@
 
 ## Installation
 
-To get the latest version of {{title}}, simply require the project using [Composer](https://getcomposer.org):
+To get the latest version of `{{title}}`, simply require the project using [Composer](https://getcomposer.org):
 
 ```bash
 $ composer require {{name}}
@@ -23,7 +23,7 @@ Or manually update `require` block of `composer.json` and run `composer update`.
 
 ```json
 {
-    "require-dev": {
+    "require": {
         "{{name}}": "^1.0"
     }
 }

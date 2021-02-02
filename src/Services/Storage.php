@@ -2,6 +2,8 @@
 
 namespace Helldar\PackageWizard\Services;
 
+use Composer\Factory;
+use Composer\Json\JsonFile;
 use Helldar\PackageWizard\Contracts\Stepperable;
 use Helldar\PackageWizard\Resources\License;
 use Helldar\PackageWizard\Resources\Readme;
@@ -15,18 +17,8 @@ final class Storage
 {
     use Makeable;
 
-    /** @var string */
-    protected $base_path;
-
     /** @var \Helldar\PackageWizard\Contracts\Stepperable */
-    protected $stepper;
-
-    public function basePath(string $path): self
-    {
-        $this->base_path = $path;
-
-        return $this;
-    }
+    protected Stepperable $stepper;
 
     public function stepper(Stepperable $stepper): self
     {
@@ -47,7 +39,9 @@ final class Storage
 
     protected function composerJson(): void
     {
-        Arr::storeAsJson($this->path('composer.json'), $this->printData(), false, JSON_PRETTY_PRINT);
+        $file = new JsonFile(Factory::getComposerFile());
+
+        $file->write($this->printData());
     }
 
     protected function source(): void
@@ -110,7 +104,7 @@ final class Storage
 
     protected function path(string $path): string
     {
-        return rtrim($this->base_path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $path;
+        return realpath('.') . '/' . trim($path, '/\\');
     }
 
     protected function resourcesPath(string $filename): string

@@ -12,7 +12,7 @@ abstract class BaseResource implements Stringable
     use Makeable;
 
     /** @var \Helldar\PackageWizard\Services\Parser */
-    protected $parser;
+    protected Parser $parser;
 
     abstract protected function path(): string;
 

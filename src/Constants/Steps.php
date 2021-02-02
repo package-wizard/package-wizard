@@ -12,7 +12,7 @@ final class Steps
 
     public const KEYWORDS = 'setKeywords';
 
-    public const AUTHORS = 'setAuthors';
+    public const AUTHORS = 'pushAuthor';
 
     public const REPOSITORY_URL = 'setRepositoryUrl';
 

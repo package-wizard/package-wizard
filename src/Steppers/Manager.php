@@ -3,27 +3,21 @@
 namespace Helldar\PackageWizard\Steppers;
 
 use Composer\IO\IOInterface;
-use Helldar\PackageWizard\Services\Output;
-use Helldar\PackageWizard\Steps\Choice;
+use Helldar\PackageWizard\Concerns\IO;
 use Helldar\Support\Concerns\Makeable;
 
 final class Manager
 {
+    use IO;
     use Makeable;
 
-    /** @var \Composer\IO\IOInterface */
-    protected $io;
+    protected string $question = 'Type of package';
 
-    /** @var \Helldar\PackageWizard\Services\Output */
-    protected $output;
+    protected string $default_stepper = Native::class;
 
-    protected $question = 'Type of package';
+    protected string $default_type = 'library';
 
-    protected $default_stepper = Native::class;
-
-    protected $default_type = 'library';
-
-    protected $map = [
+    protected array $map = [
         'composer-plugin' => ComposerPlugin::class,
         'laravel-package' => LaravelPackage::class,
         'symfony-bundle'  => SymfonyBundle::class,
@@ -33,10 +27,9 @@ final class Manager
         'project'     => Native::class,
     ];
 
-    public function __construct(IOInterface $io, Output $output)
+    public function __construct(IOInterface $io)
     {
-        $this->io     = $io;
-        $this->output = $output;
+        $this->io = $io;
     }
 
     public function get(): string
@@ -48,11 +41,7 @@ final class Manager
 
     protected function ask()
     {
-        return Choice::make($this->io, $this->output)
-            ->question($this->question)
-            ->choices($this->choices())
-            ->back($this->default_type)
-            ->get();
+        return $this->getIO()->select($this->question, $this->choices(), $this->default_type);
     }
 
     protected function choices(): array

@@ -4,27 +4,21 @@ namespace Helldar\PackageWizard\Constants;
 
 final class Steps
 {
-    public const NAME = 'name';
+    public const NAME = 'setName';
 
-    public const DESCRIPTION = 'description';
+    public const DESCRIPTION = 'setDescription';
 
-    public const TYPE = 'type';
+    public const LICENSE = 'setLicense';
 
-    public const LICENSE = 'license';
+    public const KEYWORDS = 'setKeywords';
 
-    public const KEYWORDS = 'keywords';
+    public const AUTHORS = 'setAuthors';
 
-    public const AUTHORS = 'authors';
+    public const REPOSITORY_URL = 'setRepositoryUrl';
 
-    public const REPOSITORY_URL = 'repositoryUrl';
+    public const REQUIRE = 'setRequire';
 
-    public const REQUIRE = 'requireDependencies';
+    public const REQUIRE_DEV = 'setRequireDev';
 
-    public const REQUIRE_DEV = 'requireDevDependencies';
-
-    public const PACKAGE_NAMESPACE = 'packageNamespace';
-
-    public const USE_TESTS = 'useTests';
-
-    public const STABILITY = 'minimumStability';
+    public const EXTRA = 'setExtra';
 }

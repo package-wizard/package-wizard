@@ -2,6 +2,9 @@
 
 namespace Helldar\PackageWizard\Services;
 
+use Helldar\PackageWizard\Contracts\Stepperable;
+use Helldar\PackageWizard\Resources\License;
+use Helldar\PackageWizard\Resources\Readme;
 use Helldar\Support\Concerns\Makeable;
 use Helldar\Support\Facades\Helpers\Arr;
 use Helldar\Support\Facades\Helpers\Filesystem\Directory;
@@ -15,8 +18,8 @@ final class Storage
     /** @var string */
     protected $base_path;
 
-    /** @var \Helldar\PackageWizard\Services\Structure */
-    protected $structure;
+    /** @var \Helldar\PackageWizard\Contracts\Stepperable */
+    protected $stepper;
 
     public function basePath(string $path): self
     {
@@ -25,17 +28,15 @@ final class Storage
         return $this;
     }
 
-    public function structure(Structure $structure): self
+    public function stepper(Stepperable $stepper): self
     {
-        $this->structure = $structure;
+        $this->stepper = $stepper;
 
         return $this;
     }
 
     public function store(): void
     {
-        dd($this->structure->toArray());
-
         $this->basic();
         $this->composerJson();
         $this->license();
@@ -46,33 +47,35 @@ final class Storage
 
     protected function composerJson(): void
     {
-        Arr::storeAsJson($this->path('composer.json'), $this->structure->toArray(), false, JSON_PRETTY_PRINT);
+        Arr::storeAsJson($this->path('composer.json'), $this->printData(), false, JSON_PRETTY_PRINT);
     }
 
     protected function source(): void
     {
-        Directory::make($this->path('source'));
+        if ($path = $this->stepper->getAutoloadPath()) {
+            Directory::make($this->path($path));
+        }
     }
 
     protected function tests(): void
     {
-        if ($this->structure->hasTests()) {
-            Directory::make($this->path('tests'));
-        }
+        Directory::make($this->path('tests'));
     }
 
     protected function license(): void
     {
-        if ($license = $this->structure->getLicense()) {
-            $template = file_get_contents($this->resourcesPath('licenses/' . $license));
+        if ($license = $this->stepper->getLicense()) {
+            $parser = Parser::make();
 
-            $authors = Arr::only($this->structure->getAuthors(), ['name']);
+            $authors = array_map(static function ($values) {
+                return Arr::get($values, 'name');
+            }, $this->stepper->getAuthors());
 
-            $content = Parser::make()
-                ->template($template)
-                ->replace('year', date('Y'))
-                ->replace('authors', implode(', ', $authors))
-                ->get();
+            $content = License::make()
+                ->parser($parser)
+                ->license($license)
+                ->authors($authors)
+                ->toString();
 
             File::store($this->path('LICENSE'), $content);
         }
@@ -80,17 +83,17 @@ final class Storage
 
     protected function readme(): void
     {
-        $template = file_get_contents($this->resourcesPath('README.md'));
+        $parser = Parser::make();
 
-        $name        = $this->structure->getName();
-        $description = $this->structure->getDescription();
+        $name        = $this->stepper->getName();
+        $description = $this->stepper->getDescription();
 
         $title = Str::studly(Str::after($name, '/'));
 
-        $content = Parser::make()
-            ->template($template)
-            ->many(compact('name', 'title', 'description'))
-            ->get();
+        $content = Readme::make()
+            ->parser($parser)
+            ->replaces(compact('name', 'title', 'description'))
+            ->toString();
 
         File::store($this->path('README.md'), $content);
     }
@@ -113,5 +116,12 @@ final class Storage
     protected function resourcesPath(string $filename): string
     {
         return realpath(__DIR__ . '/../../resources/' . $filename);
+    }
+
+    protected function printData(): array
+    {
+        return array_filter($this->stepper->toArray(), static function ($value) {
+            return ! empty($value) || is_bool($value) || is_numeric($value);
+        });
     }
 }

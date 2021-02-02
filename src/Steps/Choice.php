@@ -24,6 +24,8 @@ final class Choice extends BaseStep
 
     protected function input()
     {
-        return $this->io->select($this->question, $this->choices, $this->default);
+        $answer = $this->io->select($this->question, $this->choices, $this->default);
+
+        return $this->choices[$answer];
     }
 }

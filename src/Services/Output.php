@@ -41,7 +41,23 @@ final class Output
      */
     public function prepareWriteLn($level, string $message): void
     {
-        $styles = [
+        $style     = $this->styles($level);
+        $verbosity = $this->verbosity($level);
+
+        $this->writeln($message, $style, $verbosity);
+    }
+
+    protected function writeln(string $message, string $style = null, int $verbosity = 0): void
+    {
+        $prefix = ! empty($style) ? "<{$style}>" : '';
+        $suffix = ! empty($style) ? "</{$style}>" : '';
+
+        $this->output->writeln($prefix . $message . $suffix, $verbosity);
+    }
+
+    protected function styles(string $level): ?string
+    {
+        $levels = [
             LogLevel::EMERGENCY => 'error',
             LogLevel::ALERT     => 'error',
             LogLevel::CRITICAL  => 'error',
@@ -51,16 +67,21 @@ final class Output
             LogLevel::INFO      => 'info',
         ];
 
-        $style = $styles[$level] ?? null;
-
-        $this->writeln($message, $style, $level);
+        return $levels[$level] ?? null;
     }
 
-    protected function writeln(string $message, string $style = null, int $level = 0): void
+    protected function verbosity(string $level): int
     {
-        $prefix = ! empty($style) ? "<{$style}>" : '';
-        $suffix = ! empty($style) ? "</{$style}>" : '';
+        $levels = [
+            LogLevel::EMERGENCY => IOInterface::NORMAL,
+            LogLevel::ALERT     => IOInterface::NORMAL,
+            LogLevel::CRITICAL  => IOInterface::NORMAL,
+            LogLevel::ERROR     => IOInterface::NORMAL,
+            LogLevel::WARNING   => IOInterface::NORMAL,
+            LogLevel::NOTICE    => IOInterface::VERBOSE,
+            LogLevel::INFO      => IOInterface::VERY_VERBOSE,
+        ];
 
-        $this->output->writeln($prefix . $message . $suffix, $level);
+        return $levels[$level] ?? IOInterface::NORMAL;
     }
 }

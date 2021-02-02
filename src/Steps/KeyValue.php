@@ -17,7 +17,7 @@ final class KeyValue extends BaseStep
 
     protected function input(): array
     {
-        $this->io->writeln($this->question);
+        $this->output->info($this->question);
 
         $items = [];
 

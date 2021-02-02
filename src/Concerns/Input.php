@@ -42,9 +42,9 @@ trait Input
         return Url::make($this->getIO(), $this->output())->question($question);
     }
 
-    public function inputBoolean(string $question): Stepable
+    public function inputBoolean(string $question, bool $default = true): Stepable
     {
-        return Boolean::make($this->getIO(), $this->output())->question($question);
+        return Boolean::make($this->getIO(), $this->output())->question($question)->back($default);
     }
 
     protected function output(): Output

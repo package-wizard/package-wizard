@@ -25,7 +25,7 @@ final class Parser
         return $this;
     }
 
-    public function many(array $items): self
+    public function replacesMany(array $items): self
     {
         foreach ($items as $key => $value) {
             $this->replace($key, $value);

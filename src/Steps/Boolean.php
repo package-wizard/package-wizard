@@ -4,8 +4,17 @@ namespace Helldar\PackageWizard\Steps;
 
 final class Boolean extends BaseStep
 {
-    protected function input()
+    protected $default = true;
+
+    public function back(bool $default = true): self
     {
-        return $this->io->askConfirmation($this->question);
+        $this->default = $default;
+
+        return $this;
+    }
+
+    protected function input(): bool
+    {
+        return $this->io->askConfirmation($this->question, $this->default);
     }
 }

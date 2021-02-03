@@ -22,6 +22,12 @@ final class RepositoryUrl extends BaseStep
                 return null;
             }
 
+            if (! Http::exists($value)) {
+                $this->warning('This URL does not exist.');
+
+                return null;
+            }
+
             return HttpBuilder::parse($value)->compile();
         });
     }

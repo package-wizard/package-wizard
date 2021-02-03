@@ -44,6 +44,10 @@ abstract class BaseStep implements Stepable
 
     public function get()
     {
+        if ($this->skip()) {
+            return null;
+        }
+
         $result = $this->ask_many ? $this->hasMany() : $this->hasOne();
 
         if ($this->isEmpty($result)) {
@@ -69,6 +73,11 @@ abstract class BaseStep implements Stepable
         }
 
         return $result;
+    }
+
+    protected function skip(): bool
+    {
+        return false;
     }
 
     protected function question(string $question = null): string

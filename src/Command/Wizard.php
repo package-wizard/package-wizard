@@ -6,8 +6,6 @@ use Exception;
 use Helldar\PackageWizard\Contracts\Stepperable;
 use Helldar\PackageWizard\Services\Storage;
 use Helldar\PackageWizard\Steppers\Manager;
-use Helldar\Support\Facades\Helpers\Call;
-use Helldar\Support\Facades\Helpers\Is;
 use Symfony\Component\Console\Input\ArrayInput;
 
 final class Wizard extends BaseCommand
@@ -47,9 +45,9 @@ final class Wizard extends BaseCommand
     {
         foreach ($stepper->steps() as $method) {
             try {
-                $value = $this->ask($method);
-
-                Call::when($this->doesntEmpty($value), $stepper, $method, $value);
+                if ($value = $this->ask($method)) {
+                    call_user_func([$stepper, $method], $value);
+                }
             }
             catch (Exception $e) {
                 $this->throwError($e, $method);
@@ -79,10 +77,5 @@ final class Wizard extends BaseCommand
         $this->infoBlock('Welcome to the package generator', true);
 
         $this->lineBlock('This command will guide you through creating your package.', true);
-    }
-
-    protected function doesntEmpty($value): bool
-    {
-        return Is::doesntEmpty($value);
     }
 }

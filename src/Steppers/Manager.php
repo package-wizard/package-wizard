@@ -5,6 +5,7 @@ namespace Helldar\PackageWizard\Steppers;
 use Composer\IO\IOInterface;
 use Helldar\PackageWizard\Concerns\IO;
 use Helldar\Support\Concerns\Makeable;
+use Helldar\Support\Facades\Helpers\Arr;
 
 final class Manager
 {
@@ -34,9 +35,9 @@ final class Manager
 
     public function get(): string
     {
-        $type = $this->ask();
+        $code = $this->code($this->ask());
 
-        return $this->map[$type] ?? $this->default_stepper;
+        return Arr::get($this->map, $code, $this->default_stepper);
     }
 
     protected function ask()
@@ -47,5 +48,10 @@ final class Manager
     protected function choices(): array
     {
         return array_keys($this->map);
+    }
+
+    protected function code(int $key): ?string
+    {
+        return Arr::get($this->choices(), $key);
     }
 }

@@ -27,9 +27,14 @@ abstract class BaseStepper implements Stepperable
 
     protected array $support = [];
 
-    protected array $require = [];
+    protected array $require = [
+        'php' => '^8.0',
+    ];
 
-    protected array $require_dev = [];
+    protected array $require_dev = [
+        'mockery/mockery' => '^1.0',
+        'phpunit/phpunit' => '^9.0',
+    ];
 
     protected array $autoload = [];
 

@@ -25,7 +25,7 @@ final class ComposerPlugin extends BaseStepper
     {
         $namespace = trim($this->getNamespace(), '/\\');
 
-        $namespace = Str::finish($namespace, '\\\\');
+        $namespace = Str::finish($namespace, '\\');
 
         return ['class' => $namespace . 'Application'];
     }

@@ -28,15 +28,17 @@ The wizard will ask some questions and generate initial files for your project.
 
 The following files and folders will be created:
 
-* src/
-* tests/
-* .codecov.yml
-* .editorconfig
-* .gitattributes
-* .gitignore
-* .styleci.yml
-* phpunit.xml
-* README.md
+```
+src/
+tests/
+.codecov.yml
+.editorconfig
+.gitattributes
+.gitignore
+.styleci.yml
+phpunit.xml
+README.md
+```
 
 [badge_downloads]:      https://img.shields.io/packagist/dt/andrey-helldar/package-wizard.svg?style=flat-square
 

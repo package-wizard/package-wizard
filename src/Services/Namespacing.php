@@ -43,7 +43,7 @@ final class Namespacing
 
     protected function studly(array $values): array
     {
-        return array_map(static fn($value) => Str::studly($value), $values);
+        return array_map(static fn ($value) => Str::studly($value), $values);
     }
 
     protected function compact(array $values): string

@@ -14,14 +14,14 @@ abstract class BaseResource implements Stringable
     /** @var \Helldar\PackageWizard\Services\Parser */
     protected Parser $parser;
 
-    abstract protected function path(): string;
-
     public function parser(Parser $parser): self
     {
         $this->parser = $parser;
 
         return $this;
     }
+
+    abstract protected function path(): string;
 
     protected function load(): string
     {

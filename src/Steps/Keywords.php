@@ -10,7 +10,7 @@ final class Keywords extends BaseStep
 
     protected function input(): ?string
     {
-        return $this->getIO()->askAndValidate($this->question(), static fn($value) => trim($value));
+        return $this->getIO()->askAndValidate($this->question(), static fn ($value) => trim($value));
     }
 
     protected function post($result): array

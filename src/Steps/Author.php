@@ -19,7 +19,7 @@ final class Author extends BaseStep
 
     protected function ask()
     {
-        return $this->io->askAndValidate($this->question(), fn($value) => $this->parseAuthorString($value));
+        return $this->io->askAndValidate($this->question(), fn ($value) => $this->parseAuthorString($value));
     }
 
     protected function author(): ?array
@@ -65,10 +65,7 @@ final class Author extends BaseStep
             }
         }
 
-        throw new InvalidArgumentException(
-            'Invalid author string.  Must be in the format: ' .
-            'John Smith <john@example.com>'
-        );
+        throw new InvalidArgumentException('Invalid author string.  Must be in the format: ' . 'John Smith <john@example.com>');
     }
 
     protected function isValidEmail($email): bool

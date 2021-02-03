@@ -19,11 +19,7 @@ final class Name extends BaseStep
             }
 
             if (! preg_match('{^[a-z0-9_.-]+/[a-z0-9_.-]+$}D', $value)) {
-                throw new InvalidArgumentException(
-                    'The package name ' .
-                    $value .
-                    ' is invalid, it should be lowercase and have a vendor name, a forward slash, and a package name, matching: [a-z0-9_.-]+/[a-z0-9_.-]+'
-                );
+                throw new InvalidArgumentException('The package name ' . $value . ' is invalid, it should be lowercase and have a vendor name, a forward slash, and a package name, matching: [a-z0-9_.-]+/[a-z0-9_.-]+');
             }
 
             return $value;
@@ -40,7 +36,7 @@ final class Name extends BaseStep
 
     protected function name(): string
     {
-        $name = basename(realpath("."));
+        $name = basename(realpath('.'));
 
         return preg_replace('{(?:([a-z])([A-Z])|([A-Z])([A-Z][a-z]))}', '\\1\\3-\\2\\4', $name);
     }

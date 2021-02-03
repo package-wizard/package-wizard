@@ -48,8 +48,7 @@ final class Wizard extends BaseCommand
                 if ($value = $this->ask($method)) {
                     call_user_func([$stepper, $method], $value);
                 }
-            }
-            catch (Exception $e) {
+            } catch (Exception $e) {
                 $this->throwError($e, $method);
             }
         }
@@ -66,8 +65,7 @@ final class Wizard extends BaseCommand
             $install = $this->getApplication()->find('install');
 
             $install->run(new ArrayInput([]), $this->output);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->error('Could not install dependencies. Run `composer install` to see more information.');
         }
     }

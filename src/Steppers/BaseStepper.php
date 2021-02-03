@@ -4,6 +4,7 @@ namespace Helldar\PackageWizard\Steppers;
 
 use Helldar\PackageWizard\Constants\Steps;
 use Helldar\PackageWizard\Contracts\Stepperable;
+use Helldar\PackageWizard\Services\Namespacing;
 use Helldar\Support\Concerns\Makeable;
 use Helldar\Support\Facades\Helpers\Http;
 use Helldar\Support\Facades\Helpers\Str;
@@ -51,7 +52,7 @@ abstract class BaseStepper implements Stepperable
 
     protected array $extra = [];
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -61,7 +62,7 @@ abstract class BaseStepper implements Stepperable
         $this->name = $name;
     }
 
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -190,9 +191,7 @@ abstract class BaseStepper implements Stepperable
 
     public function getNamespace(): string
     {
-        $studly = Str::studly($this->getName());
-
-        return str_replace('/', '\\', $studly);
+        return Namespacing::make($this->getName())->get();
     }
 
     public function steps(): array

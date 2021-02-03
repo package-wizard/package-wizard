@@ -3,21 +3,26 @@
 namespace Helldar\PackageWizard\Steps;
 
 use Helldar\Support\Facades\Helpers\Http;
+use Helldar\Support\Facades\Helpers\HttpBuilder;
 
 final class RepositoryUrl extends BaseStep
 {
-    protected string $question = 'Repository URL of package: ';
+    protected string $question = 'Repository URL of package';
 
     protected function input(): ?string
     {
-        $value = $this->getIO()->ask($this->question);
+        return $this->getIO()->askAndValidate($this->question(), function ($value) {
+            if (empty($value)) {
+                return null;
+            }
 
-        if (Http::isUrl($value)) {
-            return $value;
-        }
+            if (! Http::isUrl($value)) {
+                $this->warning('This is not a valid URL.');
 
-        $this->warning('An invalid URL was specified.');
+                return null;
+            }
 
-        return $this->input();
+            return HttpBuilder::parse($value)->compile();
+        });
     }
 }

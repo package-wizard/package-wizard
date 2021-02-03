@@ -4,10 +4,12 @@ namespace Helldar\PackageWizard\Steps;
 
 final class Keywords extends BaseStep
 {
-    protected string $question = 'Keywords of package';
+    protected string $question = 'Keyword of package';
 
-    protected function input()
+    protected bool $ask_many = true;
+
+    protected function input(): ?string
     {
-        // TODO: Implement input() method.
+        return $this->getIO()->askAndValidate($this->question(), static fn($value) => trim($value));
     }
 }

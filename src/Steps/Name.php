@@ -9,14 +9,12 @@ final class Name extends BaseStep
 {
     protected string $question = 'Package name (<vendor>/<name>)';
 
-    protected function input()
+    protected function input(): ?string
     {
         $package = $this->package();
 
-        $question = $this->question . ' [<comment>' . $package . '</comment>]: ';
-
-        return $this->io->askAndValidate($question, static function ($value) use ($package) {
-            if (null === $value) {
+        return $this->io->askAndValidate($this->question($package), static function ($value) use ($package) {
+            if (Str::isEmpty($value)) {
                 return $package;
             }
 
@@ -68,5 +66,12 @@ final class Name extends BaseStep
             default:
                 return $name;
         }
+    }
+
+    protected function question(string $question = null): string
+    {
+        $question = $this->question . ' [<comment>' . $question . '</comment>]';
+
+        return parent::question($question);
     }
 }

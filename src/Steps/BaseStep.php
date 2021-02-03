@@ -7,6 +7,7 @@ use Helldar\PackageWizard\Concerns\IO;
 use Helldar\PackageWizard\Concerns\Output;
 use Helldar\PackageWizard\Contracts\Stepable;
 use Helldar\Support\Concerns\Makeable;
+use Helldar\Support\Facades\Helpers\Is;
 use Helldar\Support\Facades\Helpers\Str;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,11 +26,11 @@ abstract class BaseStep implements Stepable
 
     protected string $question;
 
-    protected string $question_package = 'Want to add another (Y/n)?';
-
-    protected $result;
+    protected string $empty_for_skip = '<comment>leave blank to skip</comment>';
 
     protected bool $ask_many = false;
+
+    protected bool $is_first = true;
 
     public function __construct(IOInterface $io, InputInterface $input, OutputInterface $output, array $git = [])
     {
@@ -41,49 +42,55 @@ abstract class BaseStep implements Stepable
 
     abstract protected function input();
 
-    public function question(string $question): Stepable
-    {
-        $question = trim($question);
-
-        $ends_with = Str::endsWith($question, ['?', '!', ':', '.']);
-
-        $suffix = $ends_with ? ' ' : ': ';
-
-        $this->question = $question . $suffix;
-
-        return $this;
-    }
-
     public function get()
     {
-        if ($this->ask_many && $this->getIO()->askConfirmation($this->question)) {
-            return $this->getMany();
+        $result = $this->ask_many ? $this->hasMany() : $this->hasOne();
+
+        if ($this->isEmpty($result)) {
+            $this->warning('The value cannot be empty.');
+
+            return $this->get();
         }
 
-        return $this->getOnce();
+        return $result;
     }
 
-    protected function getOnce()
+    protected function hasOne()
     {
         return $this->input();
     }
 
-    protected function getMany(): array
+    protected function hasMany(array $result = []): array
     {
-        if (! is_array($this->result)) {
-            $this->result = [];
+        while ($value = $this->hasOne()) {
+            $result[] = $value;
+
+            $this->is_first = false;
         }
 
-        do {
-            $this->result[] = $this->getOnce();
-        }
-        while ($this->askAgain());
-
-        return $this->result;
+        return $result;
     }
 
-    protected function askAgain(): bool
+    protected function question(string $question = null): string
     {
-        return $this->io->askConfirmation('Want to add another (Y/n)?', false);
+        $question = $this->getQuestionText($question ?: $this->question);
+
+        if (Str::endsWith($question, ['?', '!'])) {
+            return $question;
+        }
+
+        return Str::finish(trim($question, ':'), ': ');
+    }
+
+    protected function getQuestionText(string $question): string
+    {
+        return $this->ask_many && ! $this->is_first
+            ? trim($question) . ' ' . $this->empty_for_skip
+            : trim($question);
+    }
+
+    protected function isEmpty($value): bool
+    {
+        return Is::isEmpty($value);
     }
 }

@@ -6,9 +6,9 @@ use InvalidArgumentException;
 
 final class Author extends BaseStep
 {
-    protected string $question = 'Author of package (<comment>name</comment> <<comment>email</comment>>): ';
+    protected string $question = 'Author of package (<comment>name</comment> <<comment>email</comment>>)';
 
-    protected function input()
+    protected function input(): ?array
     {
         if ($author = $this->author()) {
             return $author;
@@ -19,7 +19,7 @@ final class Author extends BaseStep
 
     protected function ask()
     {
-        return $this->io->askAndValidate($this->question, fn($value) => $this->parseAuthorString($value));
+        return $this->io->askAndValidate($this->question(), fn($value) => $this->parseAuthorString($value));
     }
 
     protected function author(): ?array

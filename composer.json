@@ -18,7 +18,7 @@
         "php": "^7.4|^8.0",
         "ext-json": "*",
         "composer-plugin-api": "^2.0",
-        "andrey-helldar/support": "^2.6",
+        "andrey-helldar/support": "^2.8",
         "symfony/console": "^5.2",
         "symfony/var-dumper": "^5.2"
     },

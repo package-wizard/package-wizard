@@ -11,8 +11,6 @@ class Dependencies extends BaseStep
 {
     protected string $question = 'Would you like to define your dependencies (require) [<comment>yes</comment>]?';
 
-    protected string $question_package = 'Search for a package: ';
-
     protected InitCommand $init_command;
 
     public function __construct(IOInterface $io, InputInterface $input, OutputInterface $output, array $git = [])
@@ -22,7 +20,7 @@ class Dependencies extends BaseStep
         $this->init_command = new InitCommand();
     }
 
-    protected function input()
+    protected function input(): ?array
     {
         return $this->init_command->getDetermineRequirements($this->input, $this->output);
     }

@@ -2,6 +2,7 @@
 
 namespace Helldar\PackageWizard\Resources;
 
+use Helldar\PackageWizard\Constants\Licenses;
 use Helldar\Support\Concerns\Makeable;
 use Helldar\Support\Facades\Helpers\Str;
 
@@ -54,7 +55,12 @@ final class License extends BaseResource
 
     protected function path(): string
     {
-        $filename = Str::lower($this->license);
+        return $this->getPath($this->getLicense()) ?: $this->getPath(Licenses::DEFAULT_LICENSE);
+    }
+
+    protected function getPath(string $filename): string
+    {
+        $filename = Str::lower($filename);
 
         return realpath(__DIR__ . '/../../resources/licenses/' . $filename);
     }

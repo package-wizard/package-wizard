@@ -4,7 +4,7 @@ namespace Helldar\PackageWizard\Constants;
 
 final class Licenses
 {
-    public const DEFAULT_LICENSE = 'unknown';
+    public const DEFAULT_LICENSE = 'Other';
 
     public static function available(): array
     {
@@ -12,7 +12,8 @@ final class Licenses
             'MIT',
             'Apache-2.0',
             'BSD-2.0',
-            'Unknown',
+            'BSD-3.0',
+            'Other',
         ];
     }
 

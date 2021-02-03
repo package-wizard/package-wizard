@@ -4,6 +4,7 @@ namespace Helldar\PackageWizard\Steps;
 
 use Helldar\PackageWizard\Constants\Licenses;
 use Helldar\Support\Facades\Helpers\Arr;
+use Helldar\Support\Facades\Helpers\Is;
 
 final class License extends BaseStep
 {
@@ -11,7 +12,9 @@ final class License extends BaseStep
 
     protected function input(): ?string
     {
-        if ($index = $this->ask()) {
+        $index = $this->ask();
+
+        if (Is::doesntEmpty($index)) {
             return $this->stringable($index);
         }
 

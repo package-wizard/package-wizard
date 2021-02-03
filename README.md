@@ -31,11 +31,13 @@ The following files and folders will be created:
 ```
 src/
 tests/
+
 .codecov.yml
 .editorconfig
 .gitattributes
 .gitignore
 .styleci.yml
+
 phpunit.xml
 README.md
 ```

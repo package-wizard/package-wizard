@@ -115,7 +115,7 @@ abstract class BaseStepper implements Stepperable
         $name  = $author['name'] ?? $author[0];
         $email = $author['email'] ?? $author[1];
 
-        $this->setAuthors([$name, $email]);
+        $this->setAuthors([[$name, $email]]);
     }
 
     public function getSupport(): array
@@ -130,7 +130,7 @@ abstract class BaseStepper implements Stepperable
 
     public function setRequire(array $dependencies): void
     {
-        $this->require = $dependencies;
+        $this->require = array_merge($this->require, $dependencies);
     }
 
     public function getRequireDev(): array
@@ -138,9 +138,9 @@ abstract class BaseStepper implements Stepperable
         return $this->require_dev;
     }
 
-    public function setRequireDev(array $dev_dependencies): void
+    public function setRequireDev(array $dependencies): void
     {
-        $this->require_dev = $dev_dependencies;
+        $this->require_dev = array_merge($this->require_dev, $dependencies);
     }
 
     public function getAutoload(): array

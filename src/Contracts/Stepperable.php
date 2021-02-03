@@ -24,7 +24,7 @@ interface Stepperable extends Arrayable
 
     public function setRequire(array $dependencies): void;
 
-    public function setRequireDev(array $dev_dependencies): void;
+    public function setRequireDev(array $dependencies): void;
 
     public function getAutoloadPath(): ?string;
 

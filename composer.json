@@ -3,7 +3,17 @@
     "description": "Package Wizard is a composer plugin for creating a new packages using CLI tool.",
     "type": "composer-plugin",
     "license": "MIT",
-    "keywords": ["package", "packages", "initializer", "wizard", "composer", "plugin"],
+    "keywords": [
+        "composer",
+        "init",
+        "initializer",
+        "laravel",
+        "package",
+        "packages",
+        "plugin",
+        "symfony",
+        "wizard"
+    ],
     "authors": [
         {
             "name": "Andrey Helldar",
@@ -17,13 +27,15 @@
     "require": {
         "php": "^7.4|^8.0",
         "ext-json": "*",
-        "composer-plugin-api": "^2.0",
         "andrey-helldar/support": "^2.8",
-        "symfony/console": "^5.2",
-        "symfony/var-dumper": "^5.2"
+        "composer-plugin-api": "^2.0",
+        "symfony/console": "^5.2"
     },
     "require-dev": {
-        "composer/composer": "^2.0"
+        "composer/composer": "^2.0",
+        "mockery/mockery": "^1.0",
+        "phpunit/phpunit": "^9.0",
+        "symfony/console": "^5.0"
     },
     "autoload": {
         "psr-4": {

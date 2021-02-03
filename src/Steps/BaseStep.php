@@ -56,7 +56,7 @@ abstract class BaseStep implements Stepable
             return $this->get();
         }
 
-        return $result;
+        return $this->post($result);
     }
 
     protected function hasOne()
@@ -78,6 +78,11 @@ abstract class BaseStep implements Stepable
     protected function skip(): bool
     {
         return false;
+    }
+
+    protected function post($result)
+    {
+        return $result;
     }
 
     protected function question(string $question = null): string

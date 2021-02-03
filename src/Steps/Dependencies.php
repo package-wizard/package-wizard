@@ -3,6 +3,7 @@
 namespace Helldar\PackageWizard\Steps;
 
 use Composer\Package\Version\VersionParser;
+use Helldar\Support\Facades\Helpers\Str;
 
 class Dependencies extends BaseStep
 {
@@ -27,6 +28,22 @@ class Dependencies extends BaseStep
 
             return null;
         });
+    }
+
+    protected function post($result): array
+    {
+        $items = [];
+
+        foreach ($result as $value) {
+            $split = explode(' ', $value, 2);
+
+            $name    = trim($split[0]);
+            $version = Str::start(trim($split[1]), '^');
+
+            $items[$name] = $version;
+        }
+
+        return $items;
     }
 
     protected function skip(): bool

@@ -38,7 +38,7 @@ class Dependencies extends BaseStep
             $split = explode(' ', $value, 2);
 
             $name    = trim($split[0]);
-            $version = Str::start(trim($split[1]), '^');
+            $version = $split[1] === '*' ? '*' : Str::start(trim($split[1]), '^');
 
             $items[$name] = $version;
         }

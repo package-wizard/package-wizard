@@ -28,9 +28,9 @@
         "php": "^7.4|^8.0",
         "ext-json": "*",
         "composer-plugin-api": "^2.0",
-        "andrey-helldar/support": "^2.8",
-        "symfony/console": "^5.2",
-        "symfony/var-dumper": "^5.2"
+        "andrey-helldar/support": "v2.12",
+        "symfony/console": "^5.0",
+        "symfony/var-dumper": "^5.0"
     },
     "require-dev": {
         "composer/composer": "^2.0",

@@ -6,6 +6,7 @@ use Helldar\PackageWizard\Constants\Steps;
 use Helldar\PackageWizard\Contracts\Stepperable;
 use Helldar\PackageWizard\Services\Namespacing;
 use Helldar\Support\Concerns\Makeable;
+use Helldar\Support\Facades\Helpers\Arr;
 use Helldar\Support\Facades\Helpers\Http;
 use Helldar\Support\Facades\Helpers\Str;
 
@@ -136,7 +137,7 @@ abstract class BaseStepper implements Stepperable
 
     public function setRequire(array $dependencies): void
     {
-        $this->require = array_merge($this->require, $dependencies);
+        $this->filterDependencies($dependencies, $this->require, $this->require_dev, ['mockery/', 'phpunit/', 'composer/', 'orchestra/', 'symfony/thanks']);
     }
 
     public function getRequireDev(): array
@@ -146,7 +147,7 @@ abstract class BaseStepper implements Stepperable
 
     public function setRequireDev(array $dependencies): void
     {
-        $this->require_dev = array_merge($this->require_dev, $dependencies);
+        $this->filterDependencies($dependencies, $this->require_dev, $this->require, ['php']);
     }
 
     public function getAutoload(): array
@@ -232,5 +233,14 @@ abstract class BaseStepper implements Stepperable
             'prefer-stable'     => $this->isPreferStable(),
             'extra'             => $this->getExtra(),
         ];
+    }
+
+    protected function filterDependencies(array $dependencies, array &$target, array &$fallback, array $except_packages): void
+    {
+        $only   = Arr::only($dependencies, static fn ($key) => ! in_array($key, $except_packages) && ! Str::startsWith($key, $except_packages));
+        $except = Arr::except($dependencies, static fn ($key) => in_array($key, $except_packages) || Str::startsWith($key, $except_packages));
+
+        $target   = array_merge($target, $only);
+        $fallback = array_merge($fallback, $except);
     }
 }

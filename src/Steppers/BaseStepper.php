@@ -238,7 +238,7 @@ abstract class BaseStepper implements Stepperable
     protected function filterDependencies(array $dependencies, array &$target, array &$fallback, array $except_packages): void
     {
         $only   = Arr::only($dependencies, static fn ($key) => ! in_array($key, $except_packages) && ! Str::startsWith($key, $except_packages));
-        $except = Arr::except($dependencies, static fn ($key) => in_array($key, $except_packages) || Str::startsWith($key, $except_packages));
+        $except = Arr::only($dependencies, static fn ($key) => in_array($key, $except_packages) || Str::startsWith($key, $except_packages));
 
         $target   = array_merge($target, $only);
         $fallback = array_merge($fallback, $except);

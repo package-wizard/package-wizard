@@ -82,7 +82,9 @@ final class Storage
         $name        = $this->stepper->getName();
         $description = $this->stepper->getDescription();
 
-        $title = Str::studly(Str::after($name, '/'));
+        $title = Str::after($name, '/');
+        $title = Str::snake(Str::camel($title));
+        $title = Str::title(str_replace('_', ' ', $title));
 
         $content = Readme::make()
             ->parser($parser)

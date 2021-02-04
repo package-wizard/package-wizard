@@ -10,6 +10,7 @@
 ## Table of contents
 
 * [Installation](#installation)
+* [Using](#using)
 
 ## Installation
 
@@ -28,6 +29,10 @@ Or manually update `require` block of `composer.json` and run `composer update`.
     }
 }
 ```
+
+## Using
+
+    Coming soon...
 
 [badge_downloads]:      https://img.shields.io/packagist/dt/{{name}}.svg?style=flat-square
 

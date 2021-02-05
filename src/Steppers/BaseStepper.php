@@ -147,7 +147,7 @@ abstract class BaseStepper implements Stepperable
 
     public function setRequireDev(array $dependencies): void
     {
-        $this->filterDependencies($dependencies, $this->require_dev, $this->require, ['php']);
+        $this->filterDependencies($dependencies, $this->require_dev, $this->require, ['php', 'composer-plugin-api']);
     }
 
     public function getAutoload(): array

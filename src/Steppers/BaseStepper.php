@@ -119,8 +119,8 @@ abstract class BaseStepper implements Stepperable
 
     public function pushAuthor(array $author): void
     {
-        $name  = $author['name'] ?? $author[0];
-        $email = $author['email'] ?? $author[1];
+        $name  = $author['name'] ?? $author[0] ?? 'Example';
+        $email = $author['email'] ?? $author[1] ?? 'mail@example.com';
 
         $this->setAuthors([[$name, $email]]);
     }

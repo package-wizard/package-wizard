@@ -3,6 +3,7 @@
 namespace Helldar\PackageWizard\Resources;
 
 use Helldar\PackageWizard\Services\Namespacing;
+use Helldar\Support\Facades\Helpers\Arr;
 
 final class Custom extends BaseResource
 {
@@ -19,6 +20,7 @@ final class Custom extends BaseResource
     {
         return $this->getParser()
             ->replace('namespace', $this->getNamespace())
+            ->replace('php', $this->getPhpVersions())
             ->get();
     }
 
@@ -30,6 +32,19 @@ final class Custom extends BaseResource
     protected function getFullName(): string
     {
         return $this->stepper->getName();
+    }
+
+    protected function getPhpVersions(): string
+    {
+        $versions = Arr::get($this->stepper->getRequire(), 'php');
+
+        if (empty($versions) || $versions === '*') {
+            return '"8.0"';
+        }
+
+        $prepared = str_replace(['^', '>', '<', '>=', '<=', '~'], '', $versions);
+
+        return implode('", "', explode('|', $prepared));
     }
 
     protected function path(): string

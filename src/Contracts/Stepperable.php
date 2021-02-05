@@ -28,6 +28,8 @@ interface Stepperable extends Arrayable
 
     public function getAuthors(): array;
 
+    public function getRequire(): array;
+
     public function setRequire(array $dependencies): void;
 
     public function setRequireDev(array $dependencies): void;

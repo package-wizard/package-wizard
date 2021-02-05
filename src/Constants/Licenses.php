@@ -2,19 +2,15 @@
 
 namespace Helldar\PackageWizard\Constants;
 
+use Helldar\Support\Facades\Helpers\Filesystem\File;
+
 final class Licenses
 {
     public const DEFAULT_LICENSE = 'Other';
 
     public static function available(): array
     {
-        return [
-            'MIT',
-            'Apache-2.0',
-            'BSD-2.0',
-            'BSD-3.0',
-            'Other',
-        ];
+        return File::names(__DIR__ . '/../../resources/licenses');
     }
 
     public static function get(int $index): ?string

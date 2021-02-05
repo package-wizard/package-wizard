@@ -32,7 +32,7 @@ abstract class BaseStructure implements Structurable
 
     protected ?string $target_path;
 
-    /** @var \Helldar\PackageWizard\Resources\BaseResource[]|array */
+    /** @var array|\Helldar\PackageWizard\Resources\BaseResource[] */
     protected array $resources = [];
 
     public function __construct(Stepperable $stepper)
@@ -67,7 +67,6 @@ abstract class BaseStructure implements Structurable
     protected function copyResources(): void
     {
         foreach ($this->resources as $resource) {
-
         }
     }
 

@@ -1,0 +1,27 @@
+<?php
+
+namespace {{namespace}}\Command;
+
+use Exception;
+use Symfony\Component\Console\Input\ArrayInput;
+
+final class Wizard extends BaseCommand
+{
+    public function handle()
+    {
+        $this->welcome();
+    }
+
+    protected function configure()
+    {
+        $this
+            ->setName('command:name')
+            ->setDescription('Command description');
+    }
+
+    protected function welcome(): void
+    {
+        $this->infoBlock('Welcome to the package generator', true);
+        $this->lineBlock('This command will guide you through creating your package.', true);
+    }
+}

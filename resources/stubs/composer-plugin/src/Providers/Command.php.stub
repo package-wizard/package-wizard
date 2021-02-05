@@ -1,0 +1,16 @@
+<?php
+
+namespace {{namespace}}\Providers;
+
+use Composer\Plugin\Capability\CommandProvider;
+use {{namespace}}\Command\Me;
+
+final class Command implements CommandProvider
+{
+    public function getCommands(): array
+    {
+        return [
+            new Me(),
+        ];
+    }
+}

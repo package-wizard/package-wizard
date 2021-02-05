@@ -37,10 +37,9 @@ class Dependencies extends BaseStep
         foreach ($result as $value) {
             $split = explode(' ', $value, 2);
 
-            $name    = trim($split[0]);
-            $version = $split[1] === '*' ? '*' : Str::start(trim($split[1]), '^');
+            $name = trim($split[0]);
 
-            $items[$name] = $version;
+            $items[$name] = $this->fixVersion($split[1]);
         }
 
         return $items;
@@ -54,5 +53,18 @@ class Dependencies extends BaseStep
     protected function versionParser(): VersionParser
     {
         return new VersionParser();
+    }
+
+    protected function fixVersion(string $value): string
+    {
+        if ($value === '*') {
+            return $value;
+        }
+
+        if (! Str::contains($value, '.')) {
+            $value .= '.0';
+        }
+
+        return Str::start($value, '^');
     }
 }

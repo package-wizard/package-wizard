@@ -189,7 +189,7 @@ abstract class BaseStepper implements Stepperable
 
     public function setRepositoryUrl(string $url): void
     {
-        Http::validateUrl($url);
+        $url = Http::validatedUrl(trim($url, " \t\n\r\0\x0B/"));
 
         $this->support['issues'] = Str::finish($url, '/issues');
         $this->support['source'] = $url;

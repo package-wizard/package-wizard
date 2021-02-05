@@ -167,7 +167,7 @@ final class Storage
     /**
      * @param  string  $path
      *
-     * @return \SplFileInfo[]|array
+     * @return array|\SplFileInfo[]
      */
     protected function files(string $path): array
     {

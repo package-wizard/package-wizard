@@ -6,6 +6,8 @@ interface Stepperable extends Arrayable
 {
     public function steps(): array;
 
+    public function getStructure(): string;
+
     public function setName(string $name): void;
 
     public function setDescription(string $description): void;

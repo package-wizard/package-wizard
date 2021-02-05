@@ -16,8 +16,6 @@ abstract class BaseResource implements Stringable
 
     protected array $replaces = [];
 
-    abstract protected function path(): string;
-
     public function replaces(array $replaces): self
     {
         $this->replaces = $replaces;
@@ -31,6 +29,8 @@ abstract class BaseResource implements Stringable
 
         return $this;
     }
+
+    abstract protected function path(): string;
 
     protected function load(): string
     {

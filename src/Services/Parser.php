@@ -3,6 +3,7 @@
 namespace Helldar\PackageWizard\Services;
 
 use Helldar\Support\Concerns\Makeable;
+use Helldar\Support\Facades\Helpers\Filesystem\File;
 
 final class Parser
 {
@@ -11,9 +12,11 @@ final class Parser
     /** @var string */
     protected string $template;
 
-    public function template(string $template): self
+    public function template(string $path): self
     {
-        $this->template = $template;
+        File::validate($path);
+
+        $this->template = file_get_contents($path);
 
         return $this;
     }
@@ -21,15 +24,6 @@ final class Parser
     public function replace(string $key, string $value): self
     {
         $this->template = str_replace('{{' . $key . '}}', $value, $this->template);
-
-        return $this;
-    }
-
-    public function replacesMany(array $items): self
-    {
-        foreach ($items as $key => $value) {
-            $this->replace($key, $value);
-        }
 
         return $this;
     }

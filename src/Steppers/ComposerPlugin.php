@@ -2,15 +2,10 @@
 
 namespace Helldar\PackageWizard\Steppers;
 
-use Helldar\PackageWizard\Structures\ComposerPlugin as Structure;
 use Helldar\Support\Facades\Helpers\Str;
 
 final class ComposerPlugin extends BaseStepper
 {
-    protected string $structure = Structure::class;
-
-    protected string $type = 'composer-plugin';
-
     protected array $require = [
         'php' => '^8.0',
 

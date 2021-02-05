@@ -14,8 +14,6 @@ abstract class BaseStepper implements Stepperable
 {
     use Makeable;
 
-    protected string $structure;
-
     protected string $name;
 
     protected string $description;
@@ -59,11 +57,6 @@ abstract class BaseStepper implements Stepperable
     protected bool $prefer_stable = true;
 
     protected array $extra = [];
-
-    public function getStructure(): string
-    {
-        return $this->structure;
-    }
 
     public function getName(): string
     {

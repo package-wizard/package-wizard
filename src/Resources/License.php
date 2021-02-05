@@ -3,35 +3,14 @@
 namespace Helldar\PackageWizard\Resources;
 
 use Helldar\PackageWizard\Constants\Licenses;
-use Helldar\Support\Concerns\Makeable;
+use Helldar\Support\Facades\Helpers\Arr;
 use Helldar\Support\Facades\Helpers\Str;
 
 final class License extends BaseResource
 {
-    use Makeable;
-
-    protected string $license;
-
-    protected array $authors = [];
-
-    public function license(string $license): self
-    {
-        $this->license = $license;
-
-        return $this;
-    }
-
-    public function authors(array $authors): self
-    {
-        $this->authors = $authors;
-
-        return $this;
-    }
-
     public function toString(): string
     {
-        return $this->parser
-            ->template($this->load())
+        return $this->getParser()
             ->replace('license', $this->getLicense())
             ->replace('year', $this->getYear())
             ->replace('authors', $this->getAuthors())
@@ -40,7 +19,7 @@ final class License extends BaseResource
 
     protected function getLicense(): string
     {
-        return $this->license;
+        return $this->stepper->getLicense();
     }
 
     protected function getYear(): int
@@ -50,7 +29,9 @@ final class License extends BaseResource
 
     protected function getAuthors(): string
     {
-        return implode(', ', $this->authors);
+        $authors = array_map(static fn ($value) => Arr::get($value, 'name'), $this->stepper->getAuthors());
+
+        return implode(', ', $authors);
     }
 
     protected function path(): string

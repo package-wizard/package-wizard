@@ -9,7 +9,7 @@ final class Namespacing
 {
     use Makeable;
 
-    protected string $separator = '\\';
+    public const SEPARATOR = '\\';
 
     protected string $value;
 
@@ -33,12 +33,12 @@ final class Namespacing
 
     protected function separable(string $value): string
     {
-        return str_replace('/', $this->separator, $value);
+        return str_replace('/', self::SEPARATOR, $value);
     }
 
     protected function explode(string $value): array
     {
-        return explode($this->separator, $value);
+        return explode(self::SEPARATOR, $value);
     }
 
     protected function studly(array $values): array
@@ -48,11 +48,11 @@ final class Namespacing
 
     protected function compact(array $values): string
     {
-        return implode($this->separator, $values);
+        return implode(self::SEPARATOR, $values);
     }
 
     protected function finalization(string $value): string
     {
-        return Str::finish($value, $this->separator);
+        return Str::finish($value, self::SEPARATOR);
     }
 }

@@ -2,12 +2,8 @@
 
 namespace Helldar\PackageWizard\Steppers;
 
-use Helldar\PackageWizard\Structures\LaravelPackage as Structure;
-
 final class LaravelPackage extends BaseStepper
 {
-    protected string $structure = Structure::class;
-
     protected array $require = [
         'php' => '^8.0',
 

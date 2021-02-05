@@ -5,20 +5,36 @@ namespace Helldar\PackageWizard\Services;
 use Composer\Factory;
 use Composer\Json\JsonFile;
 use Helldar\PackageWizard\Contracts\Stepperable;
+use Helldar\PackageWizard\Resources\BaseResource;
+use Helldar\PackageWizard\Resources\Custom;
 use Helldar\PackageWizard\Resources\License;
 use Helldar\PackageWizard\Resources\Readme;
-use Helldar\Support\Concerns\Makeable;
-use Helldar\Support\Facades\Helpers\Arr;
 use Helldar\Support\Facades\Helpers\Filesystem\Directory;
 use Helldar\Support\Facades\Helpers\Filesystem\File;
+use Helldar\Support\Facades\Helpers\Is;
 use Helldar\Support\Facades\Helpers\Str;
+use Symfony\Component\Finder\Finder;
 
 final class Storage
 {
-    use Makeable;
-
     /** @var \Helldar\PackageWizard\Contracts\Stepperable */
     protected Stepperable $stepper;
+
+    protected array $base_resources = [
+        License::class => 'LICENSE',
+        Readme::class  => 'README.md',
+    ];
+
+    protected array $basic_files = [
+        '.codecov.yml',
+        '.editorconfig',
+        '.gitattributes',
+        '.gitignore',
+        '.styleci.yml',
+        'phpunit.xml',
+    ];
+
+    protected array $replaces = [];
 
     public function stepper(Stepperable $stepper): self
     {
@@ -29,11 +45,11 @@ final class Storage
 
     public function store(): void
     {
-        $this->basic();
+        $this->basicFiles();
         $this->composerJson();
-        $this->license();
-        $this->readme();
+        $this->resources();
         $this->source();
+        $this->structures();
         $this->tests();
     }
 
@@ -56,52 +72,75 @@ final class Storage
         Directory::make($this->path('tests'));
     }
 
-    protected function license(): void
+    protected function resources(): void
     {
-        if ($license = $this->stepper->getLicense()) {
-            $parser = Parser::make();
-
-            $authors = array_map(static function ($values) {
-                return Arr::get($values, 'name');
-            }, $this->stepper->getAuthors());
-
-            $content = License::make()
-                ->parser($parser)
-                ->license($license)
-                ->authors($authors)
-                ->toString();
-
-            File::store($this->path('LICENSE'), $content);
+        foreach ($this->base_resources as $resource => $filename) {
+            $this->save($filename, $this->resource($resource));
         }
     }
 
-    protected function readme(): void
+    /**
+     * @param  \Helldar\PackageWizard\Resources\BaseResource|string  $resource
+     *
+     * @return string
+     */
+    protected function resource(string $resource): BaseResource
     {
-        $parser = Parser::make();
-
-        $name        = $this->stepper->getName();
-        $description = $this->stepper->getDescription();
-
-        $title = Str::after($name, '/');
-        $title = Str::snake(Str::camel($title));
-        $title = Str::title(str_replace('_', ' ', $title));
-
-        $content = Readme::make()
-            ->parser($parser)
-            ->replaces(compact('name', 'title', 'description'))
-            ->toString();
-
-        File::store($this->path('README.md'), $content);
+        return $resource::make()
+            ->stepper($this->stepper)
+            ->parser($this->parser());
     }
 
-    protected function basic(): void
+    protected function basicFiles(): void
     {
-        copy($this->resourcesPath('.codecov.yml'), $this->path('.codecov.yml'));
-        copy($this->resourcesPath('.editorconfig'), $this->path('.editorconfig'));
-        copy($this->resourcesPath('.gitattributes'), $this->path('.gitattributes'));
-        copy($this->resourcesPath('.gitignore'), $this->path('.gitignore'));
-        copy($this->resourcesPath('.styleci.yml'), $this->path('.styleci.yml'));
-        copy($this->resourcesPath('phpunit.xml'), $this->path('phpunit.xml'));
+        foreach ($this->basic_files as $filename) {
+            $this->copy($filename);
+        }
+    }
+
+    protected function structures(): void
+    {
+        $name = $this->resolveStructureName();
+
+        $path = $this->resourcesPath('stubs/' . $name);
+
+        $replaces = $this->getReplaces();
+
+        foreach ($this->files($path) as $item) {
+            $relative = Str::after($item->getRealPath(), $path);
+            $relative = str_replace('.stub', '', $relative);
+            $relative = str_replace(array_keys($replaces), array_values($replaces), $relative);
+            $relative = trim($relative, '/\\');
+
+            $this->structure($item->getRealPath(), $relative);
+        }
+    }
+
+    protected function structure(string $source_path, string $target_path): void
+    {
+        $content = $this->resource(Custom::class)->setPath($source_path);
+
+        $this->save($target_path, $content);
+    }
+
+    protected function printData(): array
+    {
+        return array_filter($this->stepper->toArray(), static fn ($value) => Is::doesntEmpty($value));
+    }
+
+    protected function parser(): Parser
+    {
+        return Parser::make();
+    }
+
+    protected function copy(string $filename): void
+    {
+        copy($this->resourcesPath($filename), $this->path($filename));
+    }
+
+    protected function save(string $filename, BaseResource $resource): void
+    {
+        File::store($this->path($filename), $resource->toString());
     }
 
     protected function path(string $path): string
@@ -109,15 +148,47 @@ final class Storage
         return realpath('.') . '/' . trim($path, '/\\');
     }
 
-    protected function resourcesPath(string $filename): string
+    protected function resolveStructureName(): string
     {
-        return realpath(__DIR__ . '/../../resources/' . $filename);
+        $class = get_class($this->stepper);
+
+        $basename = basename(str_replace('\\', '/', $class));
+
+        $snake = Str::snake($basename, '-');
+
+        return Str::lower($snake);
     }
 
-    protected function printData(): array
+    protected function resourcesPath(string $filename): string
     {
-        return array_filter($this->stepper->toArray(), static function ($value) {
-            return ! empty($value) || is_bool($value) || is_numeric($value);
-        });
+        return realpath(rtrim(__DIR__ . '/../../resources', '/\\') . '/' . $filename);
+    }
+
+    /**
+     * @param  string  $path
+     *
+     * @return \SplFileInfo[]|array
+     */
+    protected function files(string $path): array
+    {
+        if (Directory::doesntExist($path)) {
+            return [];
+        }
+
+        return iterator_to_array(
+            Finder::create()->files()->ignoreDotFiles(false)->in($path)->sortByName(),
+            false
+        );
+    }
+
+    protected function getReplaces(): array
+    {
+        if (! empty($this->replaces)) {
+            return $this->replaces;
+        }
+
+        return $this->replaces = [
+            'config.php' => Str::after($this->stepper->getName(), '/'),
+        ];
     }
 }

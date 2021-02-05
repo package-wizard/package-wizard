@@ -4,8 +4,7 @@ namespace Helldar\PackageWizard\Command;
 
 use Exception;
 use Helldar\PackageWizard\Contracts\Stepperable;
-use Helldar\PackageWizard\Contracts\Structurable;
-use Helldar\PackageWizard\Services\Storage;
+use Helldar\PackageWizard\Facades\Storage;
 use Helldar\PackageWizard\Steppers\Manager;
 use Symfony\Component\Console\Input\ArrayInput;
 
@@ -18,7 +17,6 @@ final class Wizard extends BaseCommand
         $stepper = $this->resolveStepper();
 
         $this->fill($stepper);
-        $this->structure($stepper);
         $this->store($stepper);
         $this->install();
     }
@@ -30,32 +28,25 @@ final class Wizard extends BaseCommand
             ->setDescription('Creates a basic package presets in current directory.');
     }
 
-    protected function stepper(): string
-    {
-        return Manager::make($this->getIO())->get();
-    }
-
     protected function fill(Stepperable $stepper): void
     {
         foreach ($stepper->steps() as $method) {
             try {
-                if ($value = $this->ask($method)) {
+                $value = $this->ask($method);
+
+                if (! empty($value) && ! is_bool($value) && ! is_numeric($value)) {
                     call_user_func([$stepper, $method], $value);
                 }
-            } catch (Exception $e) {
+            }
+            catch (Exception $e) {
                 $this->throwError($e, $method);
             }
         }
     }
 
-    protected function structure(Stepperable $stepper): void
-    {
-        $structure = $this->resolveStructure($stepper);
-    }
-
     protected function store(Stepperable $stepper): void
     {
-        Storage::make()->stepper($stepper)->store();
+        Storage::stepper($stepper)->store();
     }
 
     protected function install(): void
@@ -73,7 +64,8 @@ final class Wizard extends BaseCommand
             $install = $this->getApplication()->find('install');
 
             $install->run(new ArrayInput([]), $this->output);
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             $this->error('Could not install dependencies. Run `composer install` to see more information.');
         }
     }
@@ -84,19 +76,16 @@ final class Wizard extends BaseCommand
         $this->lineBlock('This command will guide you through creating your package.', true);
     }
 
+    protected function stepper(): string
+    {
+        return Manager::make($this->getIO())->get();
+    }
+
     protected function resolveStepper(): Stepperable
     {
         /** @var \Helldar\PackageWizard\Steppers\BaseStepper $stepper */
         $stepper = $this->stepper();
 
         return $stepper::make();
-    }
-
-    protected function resolveStructure(Stepperable $stepper): Structurable
-    {
-        /** @var \Helldar\PackageWizard\Structures\BaseStructure $structure */
-        $structure = $stepper->getStructure();
-
-        return $structure::make($stepper);
     }
 }

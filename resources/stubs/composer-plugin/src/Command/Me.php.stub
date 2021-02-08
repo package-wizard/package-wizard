@@ -21,7 +21,7 @@ final class Wizard extends BaseCommand
 
     protected function welcome(): void
     {
-        $this->infoBlock('Welcome to the package generator', true);
-        $this->lineBlock('This command will guide you through creating your package.', true);
+        $this->infoBlock('Welcome!', true);
+        $this->lineBlock('This is my super mega cool project ☺', true);
     }
 }

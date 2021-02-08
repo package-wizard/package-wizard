@@ -1,8 +1,6 @@
 # Package Wizard
 
-<p align="center">
-    <img src="/.github/images/preview.gif?raw=true" alt="Preview"/>
-</p>
+`Package Wizard` is a composer plugin for creating a new packages using CLI tool.
 
 [![Stable Version][badge_stable]][link_packagist]
 [![Unstable Version][badge_unstable]][link_packagist]
@@ -23,6 +21,10 @@ $ composer global require andrey-helldar/package-wizard
 ```
 
 ## Using
+
+<p align="center">
+    <img src="/.github/images/preview.gif?raw=true" alt="Preview"/>
+</p>
 
 Once in the folder, call the `composer package:init` command and follow the prompts.
 

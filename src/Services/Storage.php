@@ -75,7 +75,6 @@ final class Storage
     protected function resources(): void
     {
         foreach ($this->base_resources as $resource => $filename) {
-
             $this->save($this->stubFilename($filename), $this->resource($resource));
         }
     }

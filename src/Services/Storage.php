@@ -26,12 +26,12 @@ final class Storage
     ];
 
     protected array $basic_files = [
-        '.codecov.yml',
-        '.editorconfig',
-        '.gitattributes',
-        '.gitignore',
-        '.styleci.yml',
-        'phpunit.xml',
+        '.codecov.yml.stub',
+        '.editorconfig.stub',
+        '.gitattributes.stub',
+        '.gitignore.stub',
+        '.styleci.yml.stub',
+        'phpunit.xml.stub',
     ];
 
     protected array $replaces = [];
@@ -135,7 +135,9 @@ final class Storage
 
     protected function copy(string $filename): void
     {
-        copy($this->resourcesPath($filename), $this->path($filename));
+        $target_file = Str::endsWith($filename, '.stub') ? pathinfo($filename, PATHINFO_FILENAME) : $filename;
+
+        copy($this->resourcesPath($filename), $this->path($target_file));
     }
 
     protected function save(string $filename, BaseResource $resource): void

@@ -11,7 +11,7 @@ jobs:
                 php: [ "{{php}}" ]
                 laravel: [ "{{laravel}}" ]
 
-        name: Laravel: ${{ matrix.laravel }}, PHP ${{ matrix.php }}
+        name: Laravel ${{ matrix.laravel }}, PHP ${{ matrix.php }}
 
         steps:
             -   name: Checkout code

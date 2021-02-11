@@ -108,8 +108,11 @@ final class Storage
 
         foreach ($this->files($path) as $item) {
             $relative = Str::after($item->getRealPath(), $path);
-            $relative = str_replace('.stub', '', $relative);
+
+            $relative = $this->nativeFilename($relative);
+
             $relative = str_replace(array_keys($replaces), array_values($replaces), $relative);
+
             $relative = trim($relative, '/\\');
 
             $this->structure($item->getRealPath(), $relative);
@@ -205,7 +208,7 @@ final class Storage
         }
 
         return $this->replaces = [
-            'config.php' => Str::after($this->stepper->getName(), '/'),
+            'config.php' => Str::after($this->stepper->getName(), '/') . '.php',
         ];
     }
 }

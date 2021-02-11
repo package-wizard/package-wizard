@@ -75,14 +75,15 @@ final class Storage
     protected function resources(): void
     {
         foreach ($this->base_resources as $resource => $filename) {
-            $this->save($filename, $this->resource($resource));
+
+            $this->save($this->stubFilename($filename), $this->resource($resource));
         }
     }
 
     /**
      * @param  \Helldar\PackageWizard\Resources\BaseResource|string  $resource
      *
-     * @return string
+     * @return \Helldar\PackageWizard\Resources\BaseResource
      */
     protected function resource(string $resource): BaseResource
     {
@@ -94,7 +95,7 @@ final class Storage
     protected function basicFiles(): void
     {
         foreach ($this->basic_files as $filename) {
-            $this->copy($filename);
+            $this->copy($this->stubFilename($filename));
         }
     }
 
@@ -164,6 +165,13 @@ final class Storage
     protected function resourcesPath(string $filename): string
     {
         return realpath(rtrim(__DIR__ . '/../../resources', '/\\') . '/' . $filename);
+    }
+
+    protected function stubFilename(string $filename): string
+    {
+        $stub = Str::finish($filename, '.stub');
+
+        return File::exists($this->path($stub)) ? $stub : $filename;
     }
 
     /**

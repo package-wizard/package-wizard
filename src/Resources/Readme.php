@@ -18,6 +18,6 @@ final class Readme extends BaseResource
 
     protected function path(): string
     {
-        return realpath(__DIR__ . '/../../resources/README.md');
+        return realpath(__DIR__ . '/../../resources/README.md.stub');
     }
 }

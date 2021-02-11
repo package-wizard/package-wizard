@@ -3,6 +3,7 @@
 namespace Helldar\PackageWizard\Constants;
 
 use Helldar\Support\Facades\Helpers\Filesystem\File;
+use Helldar\Support\Facades\Helpers\Str;
 
 final class Licenses
 {
@@ -10,7 +11,9 @@ final class Licenses
 
     public static function available(): array
     {
-        return File::names(__DIR__ . '/../../resources/licenses');
+        $names = File::names(__DIR__ . '/../../resources/licenses');
+
+        return array_map(fn ($name) => Str::endsWith($name, '.stub') ? pathinfo($name, PATHINFO_FILENAME) : $name, $names);
     }
 
     public static function get(int $index): ?string

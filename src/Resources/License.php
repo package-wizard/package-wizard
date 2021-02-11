@@ -43,6 +43,6 @@ final class License extends BaseResource
     {
         $filename = Str::lower($filename);
 
-        return realpath(__DIR__ . '/../../resources/licenses/' . $filename);
+        return realpath(__DIR__ . '/../../resources/licenses/' . $filename . '.stub');
     }
 }

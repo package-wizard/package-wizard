@@ -26,12 +26,12 @@ final class Storage
     ];
 
     protected array $basic_files = [
-        '.codecov.yml.stub',
-        '.editorconfig.stub',
-        '.gitattributes.stub',
-        '.gitignore.stub',
-        '.styleci.yml.stub',
-        'phpunit.xml.stub',
+        '.codecov.yml',
+        '.editorconfig',
+        '.gitattributes',
+        '.gitignore',
+        '.styleci.yml',
+        'phpunit.xml',
     ];
 
     protected array $replaces = [];
@@ -75,7 +75,7 @@ final class Storage
     protected function resources(): void
     {
         foreach ($this->base_resources as $resource => $filename) {
-            $this->save($this->stubFilename($filename), $this->resource($resource));
+            $this->save($filename, $this->resource($resource));
         }
     }
 
@@ -94,7 +94,7 @@ final class Storage
     protected function basicFiles(): void
     {
         foreach ($this->basic_files as $filename) {
-            $this->copy($this->stubFilename($filename));
+            $this->copy($filename);
         }
     }
 
@@ -135,13 +135,16 @@ final class Storage
 
     protected function copy(string $filename): void
     {
-        $target_file = Str::endsWith($filename, '.stub') ? pathinfo($filename, PATHINFO_FILENAME) : $filename;
+        $source = $this->stubFilename($filename);
+        $target = $this->nativeFilename($filename);
 
-        copy($this->resourcesPath($filename), $this->path($target_file));
+        copy($this->resourcesPath($source), $this->path($target));
     }
 
     protected function save(string $filename, BaseResource $resource): void
     {
+        $filename = $this->nativeFilename($filename);
+
         File::store($this->path($filename), $resource->toString());
     }
 
@@ -170,7 +173,12 @@ final class Storage
     {
         $stub = Str::finish($filename, '.stub');
 
-        return File::exists($this->path($stub)) ? $stub : $filename;
+        return File::exists($this->resourcesPath($stub)) ? $stub : $filename;
+    }
+
+    protected function nativeFilename(string $filename): string
+    {
+        return Str::endsWith($filename, '.stub') ? pathinfo($filename, PATHINFO_FILENAME) : $filename;
     }
 
     /**

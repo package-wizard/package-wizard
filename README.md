@@ -35,6 +35,7 @@ The wizard will ask some questions and generate initial files for your project.
 The following files and folders will be created:
 
 ```
+.github/workflows
 src/
 tests/
 
@@ -43,6 +44,8 @@ tests/
 .gitattributes
 .gitignore
 .styleci.yml
+
+composer.json
 
 phpunit.xml
 README.md

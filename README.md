@@ -12,6 +12,7 @@
 ## Table of contents
 
 * [Installation](#installation)
+* [Update](#update)
 * [Using](#using)
 
 ## Installation
@@ -20,6 +21,14 @@ To get the latest version of `Package Wizard`, simply require the project using 
 
 ```bash
 $ composer global require andrey-helldar/package-wizard
+```
+
+## Update
+
+You can update global dependencies by running the command:
+
+```bash
+$ composer global update
 ```
 
 ## Using

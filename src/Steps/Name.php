@@ -7,7 +7,7 @@ use InvalidArgumentException;
 
 final class Name extends BaseStep
 {
-    protected string $question = 'Package name (<vendor>/<name>)';
+    protected $question = 'Package name (<vendor>/<name>)';
 
     protected function input(): ?string
     {
@@ -19,7 +19,9 @@ final class Name extends BaseStep
             }
 
             if (! preg_match('{^[a-z0-9_.-]+/[a-z0-9_.-]+$}D', $value)) {
-                throw new InvalidArgumentException('The package name ' . $value . ' is invalid, it should be lowercase and have a vendor name, a forward slash, and a package name, matching: [a-z0-9_.-]+/[a-z0-9_.-]+');
+                throw new InvalidArgumentException('The package name ' .
+                    $value .
+                    ' is invalid, it should be lowercase and have a vendor name, a forward slash, and a package name, matching: [a-z0-9_.-]+/[a-z0-9_.-]+');
             }
 
             return $value;

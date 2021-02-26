@@ -12,13 +12,13 @@ final class Manager
     use IO;
     use Makeable;
 
-    protected string $question = 'Type of package';
+    protected $question = 'Type of package';
 
-    protected string $default_stepper = Native::class;
+    protected $default_stepper = Native::class;
 
-    protected string $default_type = 'library';
+    protected $default_type = 'library';
 
-    protected array $map = [
+    protected $map = [
         'composer-plugin' => ComposerPlugin::class,
         'laravel-package' => LaravelPackage::class,
         'symfony-bundle'  => SymfonyBundle::class,

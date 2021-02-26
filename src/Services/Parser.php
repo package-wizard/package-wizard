@@ -10,7 +10,7 @@ final class Parser
     use Makeable;
 
     /** @var string */
-    protected string $template;
+    protected $template;
 
     public function template(string $path): self
     {

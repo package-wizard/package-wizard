@@ -7,7 +7,8 @@ use Helldar\Support\Facades\Helpers\Arr;
 
 final class Custom extends BaseResource
 {
-    protected string $path;
+    /** @var string */
+    protected $path;
 
     public function setPath(string $path): self
     {

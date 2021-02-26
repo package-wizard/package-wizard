@@ -60,7 +60,10 @@ trait Output
 
     public function block($message, string $style, bool $large = false): void
     {
-        $message = ['', ...(array) $message, ''];
+        $message = (array) $message;
+
+        array_unshift($message, '');
+        array_push($message, '');
 
         $message = $this->formatter()->formatBlock($message, $style, $large);
 

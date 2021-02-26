@@ -7,7 +7,7 @@ use Composer\IO\IOInterface;
 trait IO
 {
     /** @var \Composer\IO\IOInterface */
-    protected IOInterface $io;
+    protected $io;
 
     public function getIO(): IOInterface
     {

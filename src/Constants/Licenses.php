@@ -13,7 +13,9 @@ final class Licenses
     {
         $names = File::names(__DIR__ . '/../../resources/licenses');
 
-        return array_map(fn ($name) => Str::endsWith($name, '.stub') ? pathinfo($name, PATHINFO_FILENAME) : $name, $names);
+        return array_map(function ($name) {
+            return Str::endsWith($name, '.stub') ? pathinfo($name, PATHINFO_FILENAME) : $name;
+        }, $names);
     }
 
     public static function get(int $index): ?string

@@ -14,49 +14,49 @@ abstract class BaseStepper implements Stepperable
 {
     use Makeable;
 
-    protected string $name;
+    protected $name;
 
-    protected string $description;
+    protected $description;
 
-    protected string $type = 'library';
+    protected $type = 'library';
 
-    protected string $license;
+    protected $license;
 
-    protected array $keywords = [];
+    protected $keywords = [];
 
-    protected array $authors = [];
+    protected $authors = [];
 
-    protected array $support = [];
+    protected $support = [];
 
-    protected array $require = [
+    protected $require = [
         'php' => '^8.0',
     ];
 
-    protected array $require_dev = [
+    protected $require_dev = [
         'mockery/mockery' => '^1.0',
         'phpunit/phpunit' => '^9.0',
     ];
 
-    protected array $autoload = [];
+    protected $autoload = [];
 
-    protected array $autoload_dev = [
+    protected $autoload_dev = [
         'psr-4' => [
             'Tests\\' => 'tests',
         ],
     ];
 
-    protected string $autoload_path = 'src';
+    protected $autoload_path = 'src';
 
-    protected array $config = [
+    protected $config = [
         'preferred-install' => 'dist',
         'sort-packages'     => true,
     ];
 
-    protected string $minimum_stability = 'stable';
+    protected $minimum_stability = 'stable';
 
-    protected bool $prefer_stable = true;
+    protected $prefer_stable = true;
 
-    protected array $extra = [];
+    protected $extra = [];
 
     public function getName(): string
     {
@@ -237,8 +237,13 @@ abstract class BaseStepper implements Stepperable
 
     protected function filterDependencies(array $dependencies, array &$target, array &$fallback, array $except_packages): void
     {
-        $only   = Arr::only($dependencies, static fn ($key) => ! in_array($key, $except_packages) && ! Str::startsWith($key, $except_packages));
-        $except = Arr::only($dependencies, static fn ($key) => in_array($key, $except_packages) || Str::startsWith($key, $except_packages));
+        $only = Arr::only($dependencies, static function ($key) use ($except_packages) {
+            return ! in_array($key, $except_packages) && ! Str::startsWith($key, $except_packages);
+        });
+
+        $except = Arr::only($dependencies, static function ($key) use ($except_packages) {
+            return in_array($key, $except_packages) || Str::startsWith($key, $except_packages);
+        });
 
         $target   = array_merge($target, $only);
         $fallback = array_merge($fallback, $except);

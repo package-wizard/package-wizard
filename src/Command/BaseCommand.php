@@ -16,10 +16,10 @@ abstract class BaseCommand extends ComposerBaseCommand
     use Questionable;
 
     /** @var \Symfony\Component\Console\Input\InputInterface */
-    protected InputInterface $input;
+    protected $input;
 
     /** @var \Symfony\Component\Console\Output\OutputInterface */
-    protected OutputInterface $output;
+    protected $output;
 
     abstract public function handle();
 

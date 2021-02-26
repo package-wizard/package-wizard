@@ -18,14 +18,14 @@ use Symfony\Component\Finder\Finder;
 final class Storage
 {
     /** @var \Helldar\PackageWizard\Contracts\Stepperable */
-    protected Stepperable $stepper;
+    protected $stepper;
 
-    protected array $base_resources = [
+    protected $base_resources = [
         License::class => 'LICENSE',
         Readme::class  => 'README.md',
     ];
 
-    protected array $basic_files = [
+    protected $basic_files = [
         '.codecov.yml',
         '.editorconfig',
         '.gitattributes',
@@ -34,7 +34,7 @@ final class Storage
         'phpunit.xml',
     ];
 
-    protected array $replaces = [];
+    protected $replaces = [];
 
     public function stepper(Stepperable $stepper): self
     {
@@ -128,7 +128,9 @@ final class Storage
 
     protected function printData(): array
     {
-        return array_filter($this->stepper->toArray(), static fn ($value) => Is::doesntEmpty($value));
+        return array_filter($this->stepper->toArray(), static function ($value) {
+            return Is::doesntEmpty($value);
+        });
     }
 
     protected function parser(): Parser

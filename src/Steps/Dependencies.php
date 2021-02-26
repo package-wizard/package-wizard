@@ -7,11 +7,11 @@ use Helldar\Support\Facades\Helpers\Str;
 
 class Dependencies extends BaseStep
 {
-    protected string $question = 'Would you like to define your dependencies (require) [<comment>Y/n</comment>]?';
+    protected $question = 'Would you like to define your dependencies (require) [<comment>Y/n</comment>]?';
 
-    protected string $sub_question = 'Search for a package';
+    protected $sub_question = 'Search for a package';
 
-    protected bool $ask_many = true;
+    protected $ask_many = true;
 
     protected function input(): ?string
     {

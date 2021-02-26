@@ -8,7 +8,7 @@ use Helldar\Support\Facades\Helpers\Is;
 
 final class License extends BaseStep
 {
-    protected string $question = 'License of package';
+    protected $question = 'License of package';
 
     protected function input(): ?string
     {

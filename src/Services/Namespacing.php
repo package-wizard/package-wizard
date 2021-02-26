@@ -11,7 +11,8 @@ final class Namespacing
 
     public const SEPARATOR = '\\';
 
-    protected string $value;
+    /** @var string */
+    protected $value;
 
     public function __construct(string $value)
     {

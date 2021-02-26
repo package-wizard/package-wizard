@@ -12,10 +12,13 @@ abstract class BaseResource implements Stringable
 {
     use Makeable;
 
-    protected Stepperable $stepper;
+    /** @var \Helldar\PackageWizard\Contracts\Stepperable */
+    protected $stepper;
 
     /** @var \Helldar\PackageWizard\Services\Parser */
-    protected Parser $parser;
+    protected $parser;
+
+    abstract protected function path(): string;
 
     public function stepper(Stepperable $stepper): self
     {
@@ -39,8 +42,6 @@ abstract class BaseResource implements Stringable
             ->replace('fullname', $this->getFullName())
             ->replace('name', $this->getShortName());
     }
-
-    abstract protected function path(): string;
 
     protected function getTitle(): string
     {

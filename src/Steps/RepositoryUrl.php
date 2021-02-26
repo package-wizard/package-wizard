@@ -7,7 +7,7 @@ use Helldar\Support\Facades\Helpers\HttpBuilder;
 
 final class RepositoryUrl extends BaseStep
 {
-    protected string $question = 'Repository URL of package';
+    protected $question = 'Repository URL of package';
 
     protected function input(): ?string
     {

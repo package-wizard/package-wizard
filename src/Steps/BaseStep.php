@@ -18,19 +18,26 @@ abstract class BaseStep implements Stepable
     use Makeable;
     use Output;
 
-    protected InputInterface $input;
+    /** @var \Symfony\Component\Console\Input\InputInterface */
+    protected $input;
 
-    protected OutputInterface $output;
+    /** @var \Symfony\Component\Console\Output\OutputInterface */
+    protected $output;
 
-    protected array $git;
+    /** @var array */
+    protected $git;
 
-    protected string $question;
+    /** @var string */
+    protected $question;
 
-    protected string $empty_for_skip = '<comment>leave blank to skip</comment>';
+    /** @var string */
+    protected $empty_for_skip = '<comment>leave blank to skip</comment>';
 
-    protected bool $ask_many = false;
+    /** @var bool */
+    protected $ask_many = false;
 
-    protected bool $is_first = true;
+    /** @var bool */
+    protected $is_first = true;
 
     public function __construct(IOInterface $io, InputInterface $input, OutputInterface $output, array $git = [])
     {
@@ -39,6 +46,8 @@ abstract class BaseStep implements Stepable
         $this->output = $output;
         $this->git    = $git;
     }
+
+    abstract protected function input();
 
     public function get()
     {
@@ -56,8 +65,6 @@ abstract class BaseStep implements Stepable
 
         return $this->post($result);
     }
-
-    abstract protected function input();
 
     protected function hasOne()
     {

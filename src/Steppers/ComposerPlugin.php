@@ -6,13 +6,13 @@ use Helldar\Support\Facades\Helpers\Str;
 
 final class ComposerPlugin extends BaseStepper
 {
-    protected array $require = [
+    protected $require = [
         'php' => '^8.0',
 
         'composer-plugin-api' => '^2.0',
     ];
 
-    protected array $require_dev = [
+    protected $require_dev = [
         'composer/composer' => '^2.0',
         'mockery/mockery'   => '^1.0',
         'phpunit/phpunit'   => '^9.0',

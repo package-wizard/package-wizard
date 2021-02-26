@@ -109,8 +109,6 @@ final class Storage
         foreach ($this->files($path) as $item) {
             $relative = Str::after($item->getRealPath(), $path);
 
-            $relative = $this->nativeFilename($relative);
-
             $relative = str_replace(array_keys($replaces), array_values($replaces), $relative);
 
             $relative = trim($relative, '/\\');
@@ -183,7 +181,7 @@ final class Storage
 
     protected function nativeFilename(string $filename): string
     {
-        return Str::endsWith($filename, '.stub') ? pathinfo($filename, PATHINFO_FILENAME) : $filename;
+        return str_replace('.stub', '', $filename);
     }
 
     /**

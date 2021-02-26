@@ -11,9 +11,18 @@
 
 ## Table of contents
 
+* [Requirements](#requirements)
 * [Installation](#installation)
 * [Update](#update)
 * [Using](#using)
+
+## Requirements
+
+| Service | Versions |
+|:---|:---|
+| Composer | ^2.0 |
+| PHP | ^7.2.5, ^8.0 |
+| php_ext-json | any |
 
 ## Installation
 

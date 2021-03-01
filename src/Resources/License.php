@@ -29,7 +29,9 @@ final class License extends BaseResource
 
     protected function getAuthors(): string
     {
-        $authors = array_map(static fn ($value) => Arr::get($value, 'name'), $this->stepper->getAuthors());
+        $authors = array_map(static function ($value) {
+            return Arr::get($value, 'name');
+        }, $this->stepper->getAuthors());
 
         return implode(', ', $authors);
     }

@@ -20,16 +20,16 @@ final class Application implements PluginInterface, Capable
 
     public function activate(Composer $composer, IOInterface $io)
     {
-        // TODO: Implement activate() method.
+        // nothing
     }
 
     public function deactivate(Composer $composer, IOInterface $io)
     {
-        // TODO: Implement deactivate() method.
+        // nothing
     }
 
     public function uninstall(Composer $composer, IOInterface $io)
     {
-        // TODO: Implement uninstall() method.
+        // nothing
     }
 }

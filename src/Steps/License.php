@@ -10,6 +10,8 @@ final class License extends BaseStep
 {
     protected $question = 'License of package';
 
+    protected $cached = [];
+
     protected function input(): ?string
     {
         $index = $this->ask();
@@ -23,23 +25,37 @@ final class License extends BaseStep
 
     protected function ask(): ?int
     {
-        return $this->getIO()->select($this->question(), $this->available(), $this->back());
+        return $this->getIO()->select($this->question(), $this->getCachedValues(), $this->back());
     }
 
     protected function available(): array
     {
-        return array_map(static function ($name) {
-            return str_replace('_', ' ', $name);
-        }, Licenses::available());
+        if (empty($this->cached)) {
+            foreach (Licenses::available() as $name) {
+                $this->cached[$name] = str_replace('_', ' ', $name);
+            }
+        }
+
+        return $this->cached;
+    }
+
+    protected function getCachedValues(): array
+    {
+        return array_values($this->available());
+    }
+
+    protected function getCachedKeys(): array
+    {
+        return array_keys($this->available());
     }
 
     protected function back(): int
     {
-        return array_search(Licenses::DEFAULT_LICENSE, $this->available());
+        return array_search(Licenses::DEFAULT_LICENSE, $this->getCachedValues());
     }
 
     protected function stringable(?int $index): ?string
     {
-        return Arr::get($this->available(), $index);
+        return Arr::get($this->getCachedKeys(), $index);
     }
 }

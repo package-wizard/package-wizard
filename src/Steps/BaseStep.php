@@ -96,8 +96,8 @@ abstract class BaseStep implements Stepable
     {
         $question = $this->getQuestionText($question ?: $this->question);
 
-        if (Str::endsWith($question, ['?', '!'])) {
-            return trim($question) . ' ';
+        if (Str::endsWith($question, ['?', '!', '.'])) {
+            return $question . ' ';
         }
 
         return Str::finish(trim($question, ':'), ': ');
@@ -106,7 +106,7 @@ abstract class BaseStep implements Stepable
     protected function getQuestionText(string $question): string
     {
         return $this->ask_many && ! $this->is_first
-            ? trim($question) . ' ' . $this->empty_for_skip
+            ? trim(trim($question) . ' ' . trim($this->empty_for_skip))
             : trim($question);
     }
 

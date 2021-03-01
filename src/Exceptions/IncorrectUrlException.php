@@ -4,7 +4,7 @@ namespace Helldar\PackageWizard\Exceptions;
 
 use Exception;
 
-final class UnknownStepException extends Exception
+final class IncorrectUrlException extends Exception
 {
     public function __construct(string $key)
     {

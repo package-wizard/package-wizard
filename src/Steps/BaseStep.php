@@ -47,6 +47,8 @@ abstract class BaseStep implements Stepable
         $this->git    = $git;
     }
 
+    abstract protected function input();
+
     public function get()
     {
         if ($this->skip()) {
@@ -63,8 +65,6 @@ abstract class BaseStep implements Stepable
 
         return $this->post($result);
     }
-
-    abstract protected function input();
 
     protected function hasOne()
     {
@@ -97,7 +97,7 @@ abstract class BaseStep implements Stepable
         $question = $this->getQuestionText($question ?: $this->question);
 
         if (Str::endsWith($question, ['?', '!'])) {
-            return $question;
+            return trim($question) . ' ';
         }
 
         return Str::finish(trim($question, ':'), ': ');

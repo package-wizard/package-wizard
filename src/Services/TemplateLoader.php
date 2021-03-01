@@ -6,6 +6,5 @@ final class TemplateLoader
 {
     public function load(string $url)
     {
-
     }
 }

@@ -46,8 +46,14 @@ trait Output
         $this->block($message, 'bg=red;fg=white', $large);
     }
 
-    public function infoBlock($message, bool $large = false): void
+    public function infoBlock($message, bool $large = false, string $substring = null): void
     {
+        $message = (array) $message;
+
+        if (! empty($substring)) {
+            array_push($message, $substring);
+        }
+
         $this->block($message, 'bg=blue;fg=white', $large);
     }
 

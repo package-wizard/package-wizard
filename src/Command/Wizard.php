@@ -2,6 +2,7 @@
 
 namespace Helldar\PackageWizard\Command;
 
+use Composer\InstalledVersions;
 use Exception;
 use Helldar\PackageWizard\Contracts\Stepperable;
 use Helldar\PackageWizard\Facades\Storage;
@@ -70,7 +71,7 @@ final class Wizard extends BaseCommand
 
     protected function welcome(): void
     {
-        $this->infoBlock('Welcome to the package generator', true);
+        $this->infoBlock('Welcome to the package generator', true, $this->version());
         $this->lineBlock('This command will guide you through creating your package.', true);
     }
 
@@ -85,5 +86,10 @@ final class Wizard extends BaseCommand
         $stepper = $this->stepper();
 
         return $stepper::make();
+    }
+
+    protected function version(): ?string
+    {
+        return InstalledVersions::getPrettyVersion('andrey-helldar/package-wizard');
     }
 }

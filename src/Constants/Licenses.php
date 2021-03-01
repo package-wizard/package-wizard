@@ -11,15 +11,18 @@ final class Licenses
 
     public static function available(): array
     {
-        $names = File::names(__DIR__ . '/../../resources/licenses');
-
         return array_map(function ($name) {
             return Str::endsWith($name, '.stub') ? pathinfo($name, PATHINFO_FILENAME) : $name;
-        }, $names);
+        }, static::all());
     }
 
     public static function get(int $index): ?string
     {
         return self::available()[$index] ?? null;
+    }
+
+    public static function all(): array
+    {
+        return File::names(__DIR__ . '/../../resources/licenses');
     }
 }

@@ -28,7 +28,9 @@ final class License extends BaseStep
 
     protected function available(): array
     {
-        return Licenses::available();
+        return array_map(static function ($name) {
+            return str_replace('_', ' ', $name);
+        }, Licenses::available());
     }
 
     protected function back(): int

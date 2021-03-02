@@ -19,3 +19,9 @@ about: "Report something that's broken"
 
 <!-- For details, run the command with the `-vvv` parameter: -->
 <!-- composer package:init -vvv -->
+
+<details>
+    <summary>Show result</summary>
+
+    // paste result here
+</details>

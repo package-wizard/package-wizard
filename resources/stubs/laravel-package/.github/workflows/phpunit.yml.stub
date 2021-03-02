@@ -9,9 +9,8 @@ jobs:
             fail-fast: true
             matrix:
                 php: [ "{{php}}" ]
-                laravel: [ "{{laravel}}" ]
 
-        name: Laravel ${{ matrix.laravel }}, PHP ${{ matrix.php }}
+        name: PHP ${{ matrix.php }}
 
         steps:
             -   name: Checkout code
@@ -28,9 +27,7 @@ jobs:
                 run: composer self-update
 
             -   name: Install dependencies
-                run: |
-                    composer require illuminate/laravel:^${{ matrix.laravel }}
-                    composer update --prefer-stable --prefer-dist --no-progress --no-interaction
+                run: composer update --prefer-stable --prefer-dist --no-progress --no-interaction
 
             -   name: Execute tests
                 run: sudo vendor/bin/phpunit

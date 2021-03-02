@@ -29,6 +29,7 @@
         "ext-json": "*",
         "composer-plugin-api": "^2.0",
         "andrey-helldar/support": "v2.15",
+        "andrey-helldar/verbose": "^1.0",
         "symfony/console": "^5.0",
         "symfony/finder": "^5.0"
     },

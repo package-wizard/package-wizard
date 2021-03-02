@@ -2,6 +2,7 @@
 
 namespace Helldar\PackageWizard\Resources;
 
+use Helldar\PackageWizard\Concerns\Logger;
 use Helldar\PackageWizard\Contracts\Stepperable;
 use Helldar\PackageWizard\Contracts\Stringable;
 use Helldar\PackageWizard\Services\Parser;
@@ -10,6 +11,7 @@ use Helldar\Support\Facades\Helpers\Str;
 
 abstract class BaseResource implements Stringable
 {
+    use Logger;
     use Makeable;
 
     /** @var \Helldar\PackageWizard\Contracts\Stepperable */
@@ -20,6 +22,8 @@ abstract class BaseResource implements Stringable
 
     public function stepper(Stepperable $stepper): self
     {
+        $this->log('Set the stepper:', $stepper);
+
         $this->stepper = $stepper;
 
         return $this;
@@ -27,6 +31,8 @@ abstract class BaseResource implements Stringable
 
     public function parser(Parser $parser): self
     {
+        $this->log('Set the parser:', $parser);
+
         $this->parser = $parser;
 
         return $this;
@@ -34,6 +40,8 @@ abstract class BaseResource implements Stringable
 
     public function getParser(): Parser
     {
+        $this->log('Getting a parsed content from path:', $this->path());
+
         return $this->parser
             ->template($this->path())
             ->replace('title', $this->getTitle())

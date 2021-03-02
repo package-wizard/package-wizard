@@ -6,6 +6,8 @@ final class Readme extends BaseResource
 {
     public function toString(): string
     {
+        $this->log('Stringable parser: ', self::class);
+
         return $this->getParser()
             ->replace('description', $this->getDescription())
             ->get();

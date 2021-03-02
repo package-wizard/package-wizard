@@ -2,14 +2,15 @@
 
 namespace Helldar\PackageWizard\Resources;
 
-use Helldar\PackageWizard\Constants\Licenses;
+use Helldar\PackageWizard\Facades\Licenses;
 use Helldar\Support\Facades\Helpers\Arr;
-use Helldar\Support\Facades\Helpers\Str;
 
 final class License extends BaseResource
 {
     public function toString(): string
     {
+        $this->log('Stringable parser: ', self::class);
+
         return $this->getParser()
             ->replace('license', $this->getLicense())
             ->replace('year', $this->getYear())
@@ -38,13 +39,15 @@ final class License extends BaseResource
 
     protected function path(): string
     {
-        return $this->getPath($this->getLicense()) ?: $this->getPath(Licenses::DEFAULT_LICENSE);
+        $path = $this->getPath($this->getLicense()) ?: $this->getPath(Licenses::getDefault());
+
+        $this->log('Getting the path to the license file:', $path);
+
+        return $path;
     }
 
     protected function getPath(string $filename): string
     {
-        $filename = Str::lower($filename);
-
         return realpath(__DIR__ . '/../../resources/licenses/' . $filename . '.stub');
     }
 }

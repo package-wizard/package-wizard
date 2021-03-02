@@ -18,6 +18,7 @@ use Helldar\Support\Facades\Helpers\Instance;
 /**
  * @mixin \Helldar\PackageWizard\Command\BaseCommand
  * @mixin \Helldar\PackageWizard\Concerns\Git
+ * @mixin \Helldar\PackageWizard\Concerns\Logger
  */
 trait Questionable
 {
@@ -26,6 +27,8 @@ trait Questionable
         $questions = $this->questions();
 
         if (isset($questions[$step])) {
+            $this->log('Getting a', $step, 'step');
+
             return $this->resolveStep($questions[$step])->get();
         }
 
@@ -56,6 +59,8 @@ trait Questionable
     protected function resolveStep(string $step): Stepable
     {
         if (Instance::of($step, Stepable::class)) {
+            $this->log('Resolve a', $step, 'step');
+
             return $step::make($this->getIO(), $this->input, $this->output, $this->getGitConfig());
         }
 

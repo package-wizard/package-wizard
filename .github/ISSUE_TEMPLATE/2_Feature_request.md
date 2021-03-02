@@ -1,5 +1,5 @@
 ---
-name: "Bug report"
+name: "Feature request"
 about: "New functionality proposal."
 ---
 

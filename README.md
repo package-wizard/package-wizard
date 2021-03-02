@@ -15,6 +15,7 @@
 * [Installation](#installation)
 * [Update](#update)
 * [Using](#using)
+* [Troubleshooting](#troubleshooting)
 
 ## Requirements
 
@@ -67,6 +68,14 @@ composer.json
 
 phpunit.xml
 README.md
+```
+
+## Troubleshooting
+
+For detailed information while the application is running, run it with the `-vvv` parameter:
+
+```bash
+$ composer package:init -vvv
 ```
 
 [badge_downloads]:      https://img.shields.io/packagist/dt/andrey-helldar/package-wizard.svg?style=flat-square

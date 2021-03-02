@@ -2,7 +2,7 @@
 
 namespace Helldar\PackageWizard\Steps;
 
-use Helldar\PackageWizard\Constants\Licenses;
+use Helldar\PackageWizard\Facades\Licenses;
 use Helldar\Support\Facades\Helpers\Arr;
 use Helldar\Support\Facades\Helpers\Is;
 
@@ -51,7 +51,7 @@ final class License extends BaseStep
 
     protected function back(): int
     {
-        return array_search(Licenses::DEFAULT_LICENSE, $this->getCachedValues());
+        return array_search(Licenses::getDefault(), $this->getCachedValues());
     }
 
     protected function stringable(?int $index): ?string

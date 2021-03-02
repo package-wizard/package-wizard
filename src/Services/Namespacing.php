@@ -2,11 +2,13 @@
 
 namespace Helldar\PackageWizard\Services;
 
+use Helldar\PackageWizard\Concerns\Logger;
 use Helldar\Support\Concerns\Makeable;
 use Helldar\Support\Facades\Helpers\Str;
 
 final class Namespacing
 {
+    use Logger;
     use Makeable;
 
     public const SEPARATOR = '\\';
@@ -34,11 +36,15 @@ final class Namespacing
 
     protected function separable(string $value): string
     {
+        $this->log('Replacing the splitter "/" to "', self::SEPARATOR, '" in "', $value, '"');
+
         return str_replace('/', self::SEPARATOR, $value);
     }
 
     protected function explode(string $value): array
     {
+        $this->log('Splitting a"', $value, '" string by "', self::SEPARATOR, '" splitter');
+
         return explode(self::SEPARATOR, $value);
     }
 

@@ -12,6 +12,8 @@ final class Custom extends BaseResource
 
     public function setPath(string $path): self
     {
+        $this->log('Set a path:', $path);
+
         $this->path = $path;
 
         return $this;
@@ -19,6 +21,8 @@ final class Custom extends BaseResource
 
     public function toString(): string
     {
+        $this->log('Stringable parser: ', self::class);
+
         return $this->getParser()
             ->replace('namespace', $this->getNamespace())
             ->replace('php', $this->getPhpVersions())

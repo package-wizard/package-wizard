@@ -2,6 +2,7 @@
 
 namespace Helldar\PackageWizard\Steppers;
 
+use Helldar\PackageWizard\Concerns\Logger;
 use Helldar\PackageWizard\Constants\Steps;
 use Helldar\PackageWizard\Contracts\Stepperable;
 use Helldar\PackageWizard\Services\Namespacing;
@@ -12,6 +13,7 @@ use Helldar\Support\Facades\Helpers\Str;
 
 abstract class BaseStepper implements Stepperable
 {
+    use Logger;
     use Makeable;
 
     protected $name;
@@ -110,8 +112,12 @@ abstract class BaseStepper implements Stepperable
 
     public function setAuthors(array $authors): void
     {
-        $this->authors = array_map(static function ($author) {
+        $this->log('Fill authors...');
+
+        $this->authors = array_map(function ($author) {
             [$name, $email] = $author;
+
+            $this->log($name, $email, 'author handling');
 
             return compact('name', 'email');
         }, $authors);
@@ -121,6 +127,8 @@ abstract class BaseStepper implements Stepperable
     {
         $name  = $author['name'] ?? $author[0] ?? 'Example';
         $email = $author['email'] ?? $author[1] ?? 'mail@example.com';
+
+        $this->log('Add author:', $name, $email);
 
         $this->setAuthors([[$name, $email]]);
     }
@@ -137,6 +145,8 @@ abstract class BaseStepper implements Stepperable
 
     public function setRequire(array $dependencies): void
     {
+        $this->log('Fill the list of basic dependencies');
+
         $this->filterDependencies($dependencies, $this->require, $this->require_dev, ['mockery/', 'phpunit/', 'composer/', 'orchestra/', 'symfony/thanks']);
     }
 
@@ -147,6 +157,8 @@ abstract class BaseStepper implements Stepperable
 
     public function setRequireDev(array $dependencies): void
     {
+        $this->log('Fill the list of dev dependencies');
+
         $this->filterDependencies($dependencies, $this->require_dev, $this->require, ['php', 'composer-plugin-api']);
     }
 
@@ -189,10 +201,16 @@ abstract class BaseStepper implements Stepperable
 
     public function setRepositoryUrl(string $url): void
     {
+        $this->log('Setting a link to the repository:', $url);
+
         $url = Http::validatedUrl(trim($url, " \t\n\r\0\x0B/"));
 
         $this->support['issues'] = Str::finish($url, '/issues');
         $this->support['source'] = $url;
+
+        $this->log('The values are set:');
+        $this->log('ISSUES:', $this->support['issues']);
+        $this->log('SOURCE:', $this->support['source']);
     }
 
     public function getNamespace(): string
@@ -216,6 +234,8 @@ abstract class BaseStepper implements Stepperable
 
     public function toArray(): array
     {
+        $this->log('Getting the stepper values');
+
         return [
             'name'              => $this->getName(),
             'description'       => $this->getDescription(),

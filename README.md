@@ -9,13 +9,6 @@
 [![Total Downloads][badge_downloads]][link_packagist]
 [![License][badge_license]][link_license]
 
-## Table of contents
-
-* [Requirements](#requirements)
-* [Installation](#installation)
-* [Update](#update)
-* [Using](#using)
-* [Troubleshooting](#troubleshooting)
 
 ## Requirements
 
@@ -77,6 +70,18 @@ For detailed information while the application is running, run it with the `-vvv
 ```bash
 $ composer package:init -vvv
 ```
+
+## License
+
+This package is licensed under the [MIT License](LICENSE).
+
+
+## For Enterprise
+
+Available as part of the Tidelift Subscription.
+
+The maintainers of `andrey-helldar/package-wizard` and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source packages you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact packages you use. [Learn more](https://tidelift.com/subscription/pkg/packagist-andrey-helldar-package-wizard?utm_source=packagist-andrey-helldar-package-wizard&utm_medium=referral&utm_campaign=enterprise&utm_term=repo).
+
 
 [badge_downloads]:      https://img.shields.io/packagist/dt/andrey-helldar/package-wizard.svg?style=flat-square
 

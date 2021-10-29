@@ -1,8 +1,6 @@
 # Package Wizard
 
-<p align="center">
-    <img src="/.github/images/logotype.png?raw=true" alt="Package Wizard Logotype"/>
-</p>
+<img src="https://preview.dragon-code.pro/package-wizard/wizard.svg?brand=composer" alt="Package Wizard"/>
 
 [![Stable Version][badge_stable]][link_packagist]
 [![Unstable Version][badge_unstable]][link_packagist]
@@ -74,13 +72,6 @@ $ composer package:init -vvv
 ## License
 
 This package is licensed under the [MIT License](LICENSE).
-
-
-## For Enterprise
-
-Available as part of the Tidelift Subscription.
-
-The maintainers of `andrey-helldar/package-wizard` and thousands of other packages are working with Tidelift to deliver commercial support and maintenance for the open source packages you use to build your applications. Save time, reduce risk, and improve code health, while paying the maintainers of the exact packages you use. [Learn more](https://tidelift.com/subscription/pkg/packagist-andrey-helldar-package-wizard?utm_source=packagist-andrey-helldar-package-wizard&utm_medium=referral&utm_campaign=enterprise&utm_term=repo).
 
 
 [badge_downloads]:      https://img.shields.io/packagist/dt/andrey-helldar/package-wizard.svg?style=flat-square

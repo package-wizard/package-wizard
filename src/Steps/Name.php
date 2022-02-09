@@ -64,7 +64,7 @@ final class Name extends BaseStep
         }
     }
 
-    protected function question(string $question = null): string
+    protected function question(?string $question = null): string
     {
         $question = $this->question . ' [<comment>' . $question . '</comment>]';
 

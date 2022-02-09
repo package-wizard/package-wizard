@@ -39,6 +39,8 @@ abstract class BaseStep implements Stepable
     /** @var bool */
     protected $is_first = true;
 
+    abstract protected function input();
+
     public function __construct(IOInterface $io, InputInterface $input, OutputInterface $output, array $git = [])
     {
         $this->io     = $io;
@@ -63,8 +65,6 @@ abstract class BaseStep implements Stepable
 
         return $this->post($result);
     }
-
-    abstract protected function input();
 
     protected function hasOne()
     {
@@ -92,7 +92,7 @@ abstract class BaseStep implements Stepable
         return $result;
     }
 
-    protected function question(string $question = null): string
+    protected function question(?string $question = null): string
     {
         $question = $this->getQuestionText($question ?: $this->question);
 

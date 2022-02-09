@@ -50,7 +50,7 @@ trait Questionable
     }
 
     /**
-     * @param  \Helldar\PackageWizard\Steps\BaseStep|string  $step
+     * @param \Helldar\PackageWizard\Steps\BaseStep|string $step
      *
      * @throws \Helldar\PackageWizard\Exceptions\UnknownStepException
      *

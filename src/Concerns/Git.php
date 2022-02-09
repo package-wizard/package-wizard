@@ -13,7 +13,7 @@ trait Git
 
     protected function getGitConfig(): array
     {
-        if (null !== $this->gitConfig) {
+        if ($this->gitConfig !== null) {
             return $this->gitConfig;
         }
 

@@ -20,6 +20,8 @@ abstract class BaseResource implements Stringable
     /** @var \Helldar\PackageWizard\Services\Parser */
     protected $parser;
 
+    abstract protected function path(): string;
+
     public function stepper(Stepperable $stepper): self
     {
         $this->log('Set the stepper:', $stepper);
@@ -49,15 +51,12 @@ abstract class BaseResource implements Stringable
             ->replace('name', $this->getShortName());
     }
 
-    abstract protected function path(): string;
-
     protected function getTitle(): string
     {
         $title = Str::after($this->getFullName(), '/');
         $title = Str::snake(Str::camel($title));
-        $title = Str::title(str_replace('_', ' ', $title));
 
-        return $title;
+        return Str::title(str_replace('_', ' ', $title));
     }
 
     protected function getFullName(): string

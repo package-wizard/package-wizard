@@ -2,7 +2,9 @@
 
 namespace Helldar\PackageWizard\Exceptions;
 
-final class UnknownStepException extends \Exception
+use Exception;
+
+final class UnknownStepException extends Exception
 {
     public function __construct(string $key)
     {

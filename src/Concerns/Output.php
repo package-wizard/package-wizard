@@ -46,7 +46,7 @@ trait Output
         $this->block($message, 'bg=red;fg=white', $large);
     }
 
-    public function infoBlock($message, bool $large = false, string $substring = null): void
+    public function infoBlock($message, bool $large = false, ?string $substring = null): void
     {
         $message = (array) $message;
 
@@ -76,7 +76,7 @@ trait Output
         $this->write($message);
     }
 
-    public function write($message, string $style = null, int $verbosity = IOInterface::NORMAL): void
+    public function write($message, ?string $style = null, int $verbosity = IOInterface::NORMAL): void
     {
         $prefix = ! empty($style) ? "<{$style}>" : '';
         $suffix = ! empty($style) ? "</{$style}>" : '';

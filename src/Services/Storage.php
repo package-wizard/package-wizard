@@ -14,6 +14,7 @@ use Helldar\Support\Facades\Helpers\Filesystem\Directory;
 use Helldar\Support\Facades\Helpers\Filesystem\File;
 use Helldar\Support\Facades\Helpers\Is;
 use Helldar\Support\Facades\Helpers\Str;
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
 final class Storage
@@ -97,7 +98,7 @@ final class Storage
     }
 
     /**
-     * @param  \Helldar\PackageWizard\Resources\BaseResource|string  $resource
+     * @param \Helldar\PackageWizard\Resources\BaseResource|string $resource
      *
      * @return \Helldar\PackageWizard\Resources\BaseResource
      */
@@ -230,9 +231,9 @@ final class Storage
     }
 
     /**
-     * @param  string  $path
+     * @param string $path
      *
-     * @return array|\SplFileInfo[]
+     * @return array|SplFileInfo[]
      */
     protected function files(string $path): array
     {

@@ -1,8 +1,8 @@
 {
     "name": "andrey-helldar/package-wizard",
     "description": "Package Wizard is a composer plugin for creating a new packages using CLI tool.",
-    "type": "composer-plugin",
     "license": "MIT",
+    "type": "composer-plugin",
     "keywords": [
         "composer",
         "init",
@@ -25,7 +25,7 @@
         "source": "https://github.com/andrey-helldar/package-wizard"
     },
     "require": {
-        "php": "^7.2.5|^8.0",
+        "php": "^7.2.5 || ^8.0",
         "ext-json": "*",
         "composer-plugin-api": "^2.0",
         "andrey-helldar/support": "^2.0",
@@ -38,6 +38,8 @@
         "mockery/mockery": "^1.0",
         "phpunit/phpunit": "^9.0"
     },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Helldar\\PackageWizard\\": "src"
@@ -52,8 +54,6 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "minimum-stability": "stable",
-    "prefer-stable": true,
     "extra": {
         "class": "Helldar\\PackageWizard\\Application"
     }

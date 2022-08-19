@@ -114,7 +114,7 @@ abstract class BaseStepper implements Stepperable
     {
         $this->log('Fill authors...');
 
-        $this->authors = array_map(function ($author) {
+        $this->authors      = array_map(function ($author) {
             [$name, $email] = $author;
 
             $this->log($name, $email, 'author handling');

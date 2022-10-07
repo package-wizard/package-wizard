@@ -25,6 +25,24 @@
         "issues": "https://github.com/andrey-helldar/package-wizard/issues",
         "source": "https://github.com/andrey-helldar/package-wizard"
     },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/TheDragonCode"
+        },
+        {
+            "type": "open_collective",
+            "url": "https://opencollective.com/dragon-code"
+        },
+        {
+            "type": "boosty",
+            "url": "https://boosty.to/dragon-code"
+        },
+        {
+            "type": "yoomoney",
+            "url": "https://yoomoney.ru/to/410012608840929"
+        }
+    ],
     "require": {
         "php": "^7.2.5 || ^8.0",
         "ext-json": "*",

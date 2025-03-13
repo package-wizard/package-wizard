@@ -25,10 +25,6 @@ composer global update
 
 ## Using
 
-<p align="center">
-    <img src="/.github/images/preview.gif?raw=true" alt="Preview"/>
-</p>
-
 Once in the folder, call the `composer package` command and follow the prompts.
 
 The wizard will ask some questions and generate initial files for your project.

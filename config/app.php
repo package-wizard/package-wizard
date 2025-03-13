@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => 'Package',
+    'name' => 'Package Wizard',
 
     /*
     |--------------------------------------------------------------------------
@@ -53,8 +53,6 @@ return [
     |
     */
 
-    'providers' => [
-        App\Providers\AppServiceProvider::class,
-    ],
+    'providers' => [],
 
 ];

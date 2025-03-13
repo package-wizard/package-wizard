@@ -4,10 +4,12 @@
         "app",
         "bootstrap",
         "config",
+        "resources",
         "vendor"
     ],
     "files": [
-        "composer.json"
+        "composer.json",
+        "LICENSE"
     ],
     "exclude-composer-files": false,
     "compression": "GZ",

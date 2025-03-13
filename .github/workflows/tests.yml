@@ -4,6 +4,8 @@ on:
     push:
     pull_request:
     workflow_dispatch:
+    schedule:
+        -   cron: '15 2 * * *'
 
 permissions: read-all
 
@@ -14,35 +16,35 @@ jobs:
         strategy:
             fail-fast: true
             matrix:
-                os: [ "ubuntu", "windows" ]
-                php: [ "8.2", "8.3", "8.4" ]
+                os: [ ubuntu, windows ]
+                php: [ 8.2, 8.3, 8.4 ]
+                laravel: [ 10, 11, 12 ]
+                exclude:
+                    -   php: 8.4
+                        laravel: 10
 
-        name: PHP ${{ matrix.php }} - ${{ matrix.os }}
+        name: OS ${{ matrix.os }} - PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
 
         steps:
+            -   name: Set git to use LF
+                if: ${{ matrix.os == 'windows' }}
+                run: |
+                    git config --global core.autocrlf false
+                    git config --global core.eol lf
+
             -   name: Checkout code
                 uses: actions/checkout@v4
-                with:
-                    submodules: true
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
                     php-version: ${{ matrix.php }}
-                    extensions: curl, mbstring, zip, pcntl, pdo, pdo_sqlite, iconv, json, dom, curl, libxml, fileinfo, tokenizer, xml
-                    ini-values: error_reporting=E_ALL
+                    extensions: dom, curl, libxml, mbstring, zip, fileinfo
+                    ini-values: error_reporting=E_ALL, memory_limit=512M
                     coverage: none
 
-            -   name: Git setup
-                run: |
-                    git config --local user.email "action@github.com"
-                    git config --local user.name "GitHub Action"
-                    
-                    git config --global core.autocrlf false
-                    git config --global core.eol lf
-
             -   name: Install dependencies
-                run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
+                run: composer update --prefer-dist --no-progress --no-interaction --with="illuminate/support=^${{ matrix.laravel }}"
 
-            -   name: Application code-style testing
-                run: php ./package --test
+            -   name: Execute tests
+                run: vendor/bin/pest --compact

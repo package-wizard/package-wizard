@@ -15,26 +15,26 @@ To get the latest version of `Package Wizard`, simply require the project using 
 composer global require package-wizard/installer:*
 ```
 
-## Update
-
-You can update global dependencies by running the command:
-
-```bash
-composer global update
-```
-
 ## Using
 
-Once in the folder, call the `composer package` command and follow the prompts.
+Once in the folder, call the `package` console command and follow the prompts.
 
 The wizard will ask some questions and generate initial files for your project.
+
+```bash
+package new
+```
+
+## Documentation
+
+See the [documentation](https://package-wizard.com) for detailed installation instructions.
 
 ## Troubleshooting
 
 For detailed information while the application is running, run it with the `-vvv` parameter:
 
 ```bash
-composer package -vvv
+package -vvv
 ```
 
 ## License

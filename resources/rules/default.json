@@ -1,0 +1,19 @@
+{
+    "wizard": {
+        "install": true,
+        "clean": true
+    },
+    "variables": [
+        {
+            "type": "year",
+            "replace": "%year%"
+        }
+    ],
+    "questions": [
+        {
+            "type": "license",
+            "default": "mit",
+            "replace": "%license%"
+        }
+    ]
+}

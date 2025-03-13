@@ -8,6 +8,7 @@ use LaravelZero\Framework\Commands\Command;
 
 use function Termwind\render;
 
+/** @deprecated */
 class InspireCommand extends Command
 {
     protected $signature = 'inspire {name=Artisan}';

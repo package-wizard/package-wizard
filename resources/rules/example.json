@@ -24,31 +24,31 @@
     "variables": [
         {
             "type": "year",
-            "replace": "%year%"
+            "replace": ["%year%"]
         },
         {
             "type": "year-range",
-            "replace": "%year%",
+            "replace": ["%year%"],
             "start": "2021"
         },
         {
             "type": "date",
             "format": "Y-m-d",
-            "replace": "%dateYMD%"
+            "replace": ["%dateYMD%"]
         },
         {
             "type": "date",
             "format": "d m Y",
-            "replace": "%dateDMY%"
+            "replace": ["%dateDMY%"]
         }
     ],
     "replaces": [
         {
-            "replace": "%namespace%",
+            "replace": ["%namespace%"],
             "with": "PackageWizard"
         },
         {
-            "replace": "%appName%",
+            "replace": ["%appName%"],
             "with": "Installer"
         }
     ],
@@ -80,20 +80,20 @@
         {
             "type": "license",
             "default": "mit",
-            "replace": "%license%"
+            "replace": ["%license%"]
         },
         {
             "type": "string",
             "title": "Any question",
             "default": "why not",
             "required": false,
-            "replace": "%someQuestion%"
+            "replace": ["%someQuestion%"]
         },
         {
             "type": "regex",
             "title": "Enter the task number",
             "required": true,
-            "replace": "/(Foo-\\d+)/",
+            "replace": ["/(Foo-\\d+)/"],
             "format": "App-%d"
         },
         {
@@ -106,7 +106,7 @@
             },
             "default": "foo",
             "required": false,
-            "replace": "%someChoice%"
+            "replace": ["%someChoice%"]
         },
         {
             "type": "copy",

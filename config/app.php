@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -56,5 +57,4 @@ return [
     'providers' => [
         App\Providers\AppServiceProvider::class,
     ],
-
 ];

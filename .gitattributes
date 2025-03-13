@@ -1,6 +1,30 @@
 * text=auto eol=lf
-/.github export-ignore
-.scrutinizer.yml export-ignore
-BACKERS.md export-ignore
-CONTRIBUTING.md export-ignore
-CHANGELOG.md export-ignore
+
+*.blade.php diff=html
+*.css diff=css
+*.html diff=html
+*.md diff=markdown
+*.php diff=php
+*.json diff=json
+
+.github export-ignore
+
+/app export-ignore
+/bootstrap export-ignore
+/config export-ignore
+/resources export-ignore
+/tests export-ignore
+
+/.editorconfig export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+
+/box.json export-ignore
+
+/package export-ignore
+
+/composer.lock export-ignore
+/phpunit.xml export-ignore
+
+/LICENSE export-ignore
+/README.md export-ignore

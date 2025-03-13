@@ -1,5 +1,5 @@
 {
-    "$id": "https://package-wizard.com/schema/installer-v1.json",
+    "$id": "https://package-wizard.com/schemas/schema-v2.json",
     "$schema": "http://json-schema.org/draft-06/schema#",
     "$ref": "#/definitions/Welcome4",
     "definitions": {

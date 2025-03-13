@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Commands\NewCommand;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -14,7 +16,7 @@ return [
     |
     */
 
-    'default' => NunoMaduro\LaravelConsoleSummary\SummaryCommand::class,
+    'default' => NewCommand::class,
 
     /*
     |--------------------------------------------------------------------------

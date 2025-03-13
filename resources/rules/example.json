@@ -105,7 +105,8 @@
                 "uppercase": false,
                 "camelcase": false,
                 "snake_case": false,
-                "filename": false
+                "filename": false,
+                "urlQuery": false
             }
         },
         {

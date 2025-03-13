@@ -1,0 +1,125 @@
+name: Build application
+
+on:
+    workflow_dispatch:
+        inputs:
+            tag:
+                description: 'Tag version'
+                required: true
+
+permissions: write-all
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        
+        steps:
+            -   name: Extract the tag version
+                id: tag
+                run: |
+                    if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+                      GITHUB_REF=${{ github.event.inputs.tag }}
+                    fi          
+                    echo "tag=${GITHUB_REF##*v}" >> "$GITHUB_OUTPUT"
+
+            -   name: Checkout the code
+                uses: actions/checkout@v4
+                with:
+                    submodules: true
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.2
+                    extensions: curl, mbstring, zip, pcntl, pdo, pdo_sqlite, iconv, json, dom, curl, libxml, fileinfo, tokenizer, xml
+                    ini-values: error_reporting=E_ALL
+                    coverage: none
+
+            -   name: Install the dependencies
+                run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
+
+            -   name: Execute unit/feature tests
+                run: php ./package --test
+
+            -   name: Create the PHAR file
+                run: php ./package app:build package --build-version=${{ steps.tag.outputs.tag }} --ansi
+
+            -   name: Upload artifact
+                uses: actions/upload-artifact@v4
+                with:
+                    name: package
+                    path: builds/package
+                    retention-days: 1
+    
+    checks:
+        runs-on: ubuntu-latest
+        
+        needs: build
+
+        strategy:
+            fail-fast: true
+            matrix:
+                os: [ "ubuntu-latest", "windows-latest" ]
+                php: [ "8.2", "8.3", "8.4" ]
+
+        name: OS ${{ matrix.os }}, PHP ${{ matrix.php }}
+        
+        steps:
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    extensions: curl, mbstring, zip, pcntl, pdo, pdo_sqlite, iconv, json, dom, curl, libxml, fileinfo, tokenizer, xml
+                    ini-values: error_reporting=E_ALL
+                    coverage: none
+
+            -   name: Remove old file
+                run: rm -f builds/package
+
+            -   uses: actions/download-artifact@v4
+                with:
+                    name: package
+                    path: builds
+
+            -   name: Show version
+                run: php builds/package --version
+    
+    push:
+        runs-on: ubuntu-latest
+        
+        needs: checks
+
+        steps:
+            -   name: Checkout the code
+                uses: actions/checkout@v4
+
+            -   name: Remove old file
+                run: rm -f builds/package
+
+            -   uses: actions/download-artifact@v4
+                with:
+                    name: package
+                    path: builds
+
+            -   name: Git setup
+                run: |
+                    git config --local user.email "action@github.com"
+                    git config --local user.name "GitHub Action"
+                    
+                    git config --global core.autocrlf false
+                    git config --global core.eol lf
+
+            -   name: Commit the PHAR file
+                id: build
+                run: |
+                    IS_DIRTY=1
+
+                    { git add ./builds/package && git commit -a -m "🏗️ Build application"; } || IS_DIRTY=0
+
+                    echo "is_dirty=${IS_DIRTY}" >> "$GITHUB_OUTPUT"
+
+            -   name: Push changes
+                uses: ad-m/github-push-action@master
+                if: steps.build.outputs.is_dirty == 1
+                with:
+                    github_token: ${{ secrets.COMPOSER_TOKEN }}

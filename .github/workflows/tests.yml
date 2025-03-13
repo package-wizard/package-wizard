@@ -1,0 +1,48 @@
+name: Tests
+
+on:
+    push:
+    pull_request:
+    workflow_dispatch:
+
+permissions: read-all
+
+jobs:
+    unit:
+        runs-on: ${{ matrix.os }}-latest
+
+        strategy:
+            fail-fast: true
+            matrix:
+                os: [ "ubuntu", "windows" ]
+                php: [ "8.2", "8.3", "8.4" ]
+
+        name: PHP ${{ matrix.php }} - ${{ matrix.os }}
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+                with:
+                    submodules: true
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    extensions: curl, mbstring, zip, pcntl, pdo, pdo_sqlite, iconv, json, dom, curl, libxml, fileinfo, tokenizer, xml
+                    ini-values: error_reporting=E_ALL
+                    coverage: none
+
+            -   name: Git setup
+                run: |
+                    git config --local user.email "action@github.com"
+                    git config --local user.name "GitHub Action"
+                    
+                    git config --global core.autocrlf false
+                    git config --global core.eol lf
+
+            -   name: Install dependencies
+                run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
+
+            -   name: Application code-style testing
+                run: php ./package --test

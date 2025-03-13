@@ -45,7 +45,8 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.6.12",
-        "pestphp/pest": "^3.7.4"
+        "pestphp/pest": "^3.7.4",
+        "roave/security-advisories": "dev-latest"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
@@ -71,5 +72,8 @@
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true
+    },
+    "scripts": {
+        "test": "@php vendor/bin/pest --compact"
     }
 }

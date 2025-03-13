@@ -62,6 +62,23 @@
             "source": "baz",
             "target": "qwerty"
         },
+        {
+            "type": "filename",
+            "source": "qwerty.stub",
+            "target": "qwerty.json",
+        },
+        {
+            "type": "filename",
+            "source": "foo/some.stub",
+            "target": "foo/some.json",
+            "recursive": false
+        },
+        {
+            "type": "filename",
+            "source": "qwerty",
+            "target": "foo",
+            "basename": true
+        },
     ],
     "removes": [
         "bar/some1",

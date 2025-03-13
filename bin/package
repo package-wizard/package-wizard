@@ -9,6 +9,7 @@ require file_exists(__DIR__ . '/../../../autoload.php')
     : __DIR__ . '/../vendor/autoload.php';
 
 $app = new Application('Package Wizard', '2.0.0');
+
 $app->add(new NewCommand());
 
 $app->run();

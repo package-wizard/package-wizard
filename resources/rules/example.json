@@ -1,5 +1,5 @@
 {
-    "$schema": "https://package-wizard.com/schema/installer-v1.json",
+    "$schema": "https://package-wizard.com/schemas/schema-v2.json",
     "wizard": {
         "install": true,
         "clean": true

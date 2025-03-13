@@ -35,17 +35,16 @@
     "require": {
         "php": "^8.2",
         "ext-json": "*",
-        "illuminate/filesystem": "^10.20 || ^11.0 || ^12.2",
-        "illuminate/support": "^10.20 || ^11.0 || ^12.2",
-        "justinrainbow/json-schema": "^6.2.1",
+        "illuminate/filesystem": "^10.20 || ^11.0 || ^12.0",
+        "illuminate/support": "^10.20 || ^11.0 || ^12.0",
+        "justinrainbow/json-schema": "^6.0",
         "laravel/prompts": "^0.3.5",
-        "symfony/console": "^6.2 || ^7.2.1",
-        "symfony/polyfill-mbstring": "^1.31",
-        "symfony/process": "^6.2 || ^7.2.4"
+        "symfony/console": "^6.2 || ^7.0",
+        "symfony/process": "^6.2 || ^7.0"
     },
     "require-dev": {
-        "mockery/mockery": "^1.6.12",
-        "pestphp/pest": "^3.7.4",
+        "mockery/mockery": "^1.6",
+        "pestphp/pest": "^3.7",
         "roave/security-advisories": "dev-latest"
     },
     "minimum-stability": "stable",

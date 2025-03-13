@@ -1,84 +1,67 @@
 {
-    "name": "andrey-helldar/package-wizard",
+    "name": "package-wizard/installer",
     "description": "Package Wizard is a composer plugin for creating a new packages using CLI tool.",
     "license": "MIT",
-    "type": "composer-plugin",
+    "type": "project",
     "keywords": [
+        "boilerplate",
         "composer",
         "init",
         "initializer",
+        "installer",
         "laravel",
         "package",
         "packages",
+        "php",
         "plugin",
+        "project",
         "symfony",
+        "template",
+        "templates",
         "wizard"
     ],
     "authors": [
         {
             "name": "Andrey Helldar",
             "email": "helldar@dragon-code.pro",
-            "homepage": "https://github.com/andrey-helldar"
+            "homepage": "https://github.com/TheDragonCode"
         }
     ],
+    "homepage": "https://dragon-code.pro",
     "support": {
-        "issues": "https://github.com/andrey-helldar/package-wizard/issues",
-        "source": "https://github.com/andrey-helldar/package-wizard"
+        "issues": "https://github.com/package-wizard/installer/issues",
+        "source": "https://github.com/package-wizard/installer"
     },
-    "funding": [
-        {
-            "type": "github",
-            "url": "https://github.com/sponsors/TheDragonCode"
-        },
-        {
-            "type": "open_collective",
-            "url": "https://opencollective.com/dragon-code"
-        },
-        {
-            "type": "boosty",
-            "url": "https://boosty.to/dragon-code"
-        },
-        {
-            "type": "yoomoney",
-            "url": "https://yoomoney.ru/to/410012608840929"
-        }
-    ],
     "require": {
-        "php": "^7.2.5 || ^8.0",
-        "ext-json": "*",
-        "composer-plugin-api": "^2.0",
-        "andrey-helldar/support": "^2.0",
-        "andrey-helldar/verbose": "^1.0",
-        "symfony/console": "^5.0",
-        "symfony/finder": "^5.0"
+        "php": "^8.2.0",
+        "laravel-zero/framework": "^11.36.1"
     },
     "require-dev": {
-        "composer/composer": "^2.0",
-        "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^9.0"
+        "laravel/pint": "^1.18.3",
+        "mockery/mockery": "^1.6.12",
+        "pestphp/pest": "^3.7.1"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "Helldar\\PackageWizard\\": "src"
+            "App\\": "app/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests"
+            "Tests\\": "tests/"
         }
     },
+    "bin": [
+        "package"
+    ],
     "config": {
         "allow-plugins": {
-            "dragon-code/codestyler": true,
-            "ergebnis/composer-normalize": true,
-            "friendsofphp/php-cs-fixer": true
+            "pestphp/pest-plugin": true
         },
+        "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true
-    },
-    "extra": {
-        "class": "Helldar\\PackageWizard\\Application"
     }
 }

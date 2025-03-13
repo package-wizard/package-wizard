@@ -1,12 +1,5 @@
-.idea/
-
-build/
-node_modules/
-vendor/
-
-*.bak
-*.cache
-*.clover
-*.orig
-
-*.lock
+/vendor
+/.idea
+/.vscode
+/.vagrant
+.phpunit.result.cache

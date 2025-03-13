@@ -10,7 +10,6 @@
         "description": "The best of the best"
     },
     "repository": {
-        "aa": "boo",
         "organization": "package-wizard",
         "name": "installer",
         "domain": "github.com"
@@ -52,6 +51,18 @@
             "with": "Installer"
         }
     ],
+    "renames": [
+        {
+            "type": "path",
+            "source": "baz/file.json",
+            "target": "baz/some.json"
+        },
+        {
+            "type": "path",
+            "source": "baz",
+            "target": "qwerty"
+        },
+    ],
     "removes": [
         "bar/some1",
         "bar/some2/file.json"
@@ -87,7 +98,15 @@
             "title": "Any question",
             "default": "why not",
             "required": false,
-            "replace": ["%someQuestion%"]
+            "replace": ["%someQuestion%"],
+            "with": {
+                "slug": false,
+                "lowercase": false,
+                "uppercase": false,
+                "camelcase": false,
+                "snake_case": false,
+                "filename": false
+            }
         },
         {
             "type": "regex",
@@ -95,6 +114,12 @@
             "required": true,
             "replace": ["/(Foo-\\d+)/"],
             "format": "App-%d"
+        },
+        {
+            "type": "url",
+            "title": "Enter the URL",
+            "required": true,
+            "replace": ["%someUrl%"]
         },
         {
             "id": "foo1",

@@ -37,10 +37,9 @@
         "laravel-zero/framework": "^11.36.1"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-latest",
-        "laravel/pint": "^1.18.3",
         "mockery/mockery": "^1.6.12",
-        "pestphp/pest": "^3.7.1"
+        "pestphp/pest": "^3.7.4",
+        "roave/security-advisories": "dev-latest"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,

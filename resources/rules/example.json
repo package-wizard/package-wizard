@@ -1,0 +1,180 @@
+{
+    "$schema": "https://package-wizard.com/schema/installer-v1.json",
+    "wizard": {
+        "install": true,
+        "clean": true
+    },
+    "project": {
+        "url": "https://example.com",
+        "title": "The best",
+        "description": "The best of the best"
+    },
+    "repository": {
+        "aa": "boo",
+        "organization": "package-wizard",
+        "name": "installer",
+        "domain": "github.com"
+    },
+    "authors": [
+        {
+            "name": "Andrey Helldar",
+            "email": "helldar@dragon-code.pro"
+        }
+    ],
+    "variables": [
+        {
+            "type": "year",
+            "replace": "%year%"
+        },
+        {
+            "type": "year-range",
+            "replace": "%year%",
+            "start": "2021"
+        },
+        {
+            "type": "date",
+            "format": "Y-m-d",
+            "replace": "%dateYMD%"
+        },
+        {
+            "type": "date",
+            "format": "d m Y",
+            "replace": "%dateDMY%"
+        }
+    ],
+    "replaces": [
+        {
+            "replace": "%namespace%",
+            "with": "PackageWizard"
+        },
+        {
+            "replace": "%appName%",
+            "with": "Installer"
+        }
+    ],
+    "removes": [
+        "bar/some1",
+        "bar/some2/file.json"
+    ],
+    "copies": [
+        {
+            "source": "foo/file.json",
+            "target": "resources/data/file.json"
+        },
+        {
+            "source": "foo/folder/",
+            "target": "public/images/folder"
+        }
+    ],
+    "dependencies": [
+        {
+            "name": "laravel/sail",
+            "remove": true
+        },
+        {
+            "name": "laravel/pail",
+            "remove": true
+        }
+    ],
+    "questions": [
+        {
+            "type": "license",
+            "default": "mit",
+            "replace": "%license%"
+        },
+        {
+            "type": "string",
+            "title": "Any question",
+            "default": "why not",
+            "required": false,
+            "replace": "%someQuestion%"
+        },
+        {
+            "type": "regex",
+            "title": "Enter the task number",
+            "required": true,
+            "replace": "/(Foo-\\d+)/",
+            "format": "App-%d"
+        },
+        {
+            "id": "foo1",
+            "type": "choice",
+            "title": "Select any option",
+            "options": {
+                "foo": "Foo option",
+                "bar": "Bar option"
+            },
+            "default": "foo",
+            "required": false,
+            "replace": "%someChoice%"
+        },
+        {
+            "type": "copy",
+            "title": "Copy any files or folders?",
+            "default": false,
+            "paths": [
+                {
+                    "source": "bar/file.json",
+                    "target": "resources/data/file.json"
+                },
+                {
+                    "source": "bar/folder/",
+                    "target": "public/images/folder"
+                }
+            ],
+            "condition": {
+                "type": "when",
+                "id": "foo1",
+                "equals": "foo"
+            }
+        },
+        {
+            "type": "remove",
+            "title": "Remove files or folders?",
+            "default": true,
+            "paths": [
+                "bar/some3",
+                "bar/some4/file.json"
+            ],
+            "condition": {
+                "type": "when",
+                "id": "foo1",
+                "equals": "bar"
+            }
+        },
+        {
+            "type": "dependency",
+            "title": "To establish any dependencies?",
+            "default": true,
+            "dependencies": [
+                {
+                    "name": "dragon-code/laravel-deploy-operations",
+                    "version": "^6.4"
+                },
+                {
+                    "name": "dragon-code/laravel-cache"
+                },
+                {
+                    "name": "dragon-code/pretty-routes",
+                    "version": "^3.6",
+                    "dev": true
+                }
+            ],
+            "condition": {
+                "type": "unless",
+                "id": "foo1",
+                "equals": "foo"
+            }
+        },
+        {
+            "type": "dependency",
+            "title": "To remove any dependencies?",
+            "default": false,
+            "remove": true,
+            "dependencies": [
+                { "name": "laravel/sail" },
+                { "name": "laravel/pail" }
+            ]
+        }
+    ]
+}

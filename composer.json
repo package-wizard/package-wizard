@@ -34,12 +34,16 @@
     },
     "require": {
         "php": "^8.2",
-        "ext-json": "*"
+        "ext-json": "*",
+        "illuminate/filesystem": "^10.20 || ^11.0 || ^12.2",
+        "illuminate/support": "^10.20 || ^11.0 || ^12.2",
+        "justinrainbow/json-schema": "^6.2.1",
+        "laravel/prompts": "^0.3.5 || ^0.3.5 || ^0.3.5",
+        "symfony/console": "^6.2 || ^7.2.1",
+        "symfony/polyfill-mbstring": "^1.31",
+        "symfony/process": "^6.2 || ^7.2.4"
     },
     "require-dev": {
-        "dragon-code/support": "^6.16",
-        "justinrainbow/json-schema": "^6.2",
-        "laravel-zero/framework": "^11.36.1",
         "mockery/mockery": "^1.6.12",
         "pestphp/pest": "^3.7.4"
     },
@@ -47,16 +51,16 @@
     "prefer-stable": true,
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
+            "PackageWizard\\Installer\\": "app/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
+            "PackageWizard\\Tests\\": "tests/"
         }
     },
     "bin": [
-        "package"
+        "bin/package"
     ],
     "config": {
         "allow-plugins": {

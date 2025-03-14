@@ -7,15 +7,16 @@ on:
   workflow_dispatch:
 
 jobs:
-    Update:
+    draft:
+        name: Draft
         uses: TheDragonCode/.github/.github/workflows/release-drafter.yml@main
 
-    Build:
+    build:
         runs-on: ubuntu-latest
 
         name: Buils Application
 
-        needs: Update
+        needs: draft
 
         steps:
             -   name: Checkout code
@@ -27,4 +28,4 @@ jobs:
                     token: ${{ secrets.COMPOSER_TOKEN }}
                     repo: package-wizard/installer
                     type: build
-                    payload: '{"tag": "${{ needs.drafter.outputs.tag_name }}"}'
+                    payload: '{"tag": "${{ needs.draft.outputs.tag_name }}"}'

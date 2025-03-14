@@ -6,7 +6,8 @@
             "condition": [
                 {
                     "functionNames": [
-                        "rule"
+                        "rule",
+                        "validateSchema"
                     ],
                     "place": "parameter",
                     "parameters": [

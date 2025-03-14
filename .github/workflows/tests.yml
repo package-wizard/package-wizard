@@ -18,12 +18,8 @@ jobs:
             matrix:
                 os: [ ubuntu, windows ]
                 php: [ 8.2, 8.3, 8.4 ]
-                laravel: [ 10, 11, 12 ]
-                exclude:
-                    -   php: 8.4
-                        laravel: 10
 
-        name: OS ${{ matrix.os }} - PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
+        name: OS ${{ matrix.os }} - PHP ${{ matrix.php }}
 
         steps:
             -   name: Set git to use LF
@@ -44,7 +40,7 @@ jobs:
                     coverage: none
 
             -   name: Install dependencies
-                run: composer update --prefer-dist --no-progress --no-interaction --with="illuminate/support=^${{ matrix.laravel }}"
+                run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
 
             -   name: Execute tests
-                run: vendor/bin/pest --compact
+                run: composer test

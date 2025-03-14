@@ -1,69 +1,85 @@
 {
     "$id": "https://package-wizard.com/schemas/schema-v2.json",
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$ref": "#/definitions/Welcome4",
-    "definitions": {
-        "Welcome4": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "wizard": {
-                    "$ref": "#/definitions/Wizard"
-                },
-                "project": {
-                    "$ref": "#/definitions/Project"
-                },
-                "repository": {
-                    "$ref": "#/definitions/Repository"
-                },
-                "authors": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Author"
-                    }
-                },
-                "variables": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Variable"
-                    }
-                },
-                "replaces": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Replace"
-                    }
-                },
-                "removes": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "copies": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Copy"
-                    }
-                },
-                "dependencies": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Welcome4Dependency"
-                    }
-                },
-                "questions": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Question"
-                    }
-                }
-            },
-            "title": "Welcome4"
+    "title": "Package Wizard configuration",
+    "description": "Package Wizard configuration",
+    "type": "object",
+    "properties": {
+        "wizard": {
+            "$ref": "#/definitions/wizard"
         },
-        "Author": {
+        "project": {
+            "$ref": "#/definitions/project"
+        },
+        "authors": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/author"
+            }
+        },
+        "renames": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/rename"
+            }
+        },
+        "copies": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/copy"
+            }
+        },
+        "dependencies": {
+            "type": "array",
+            "items": {
+                "$ref": "#/definitions/dependency"
+            }
+        },
+        "variables": {
+            "type": "array",
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/variableYear"
+                },
+                {
+                    "$ref": "#/definitions/variableYearRange"
+                },
+                {
+                    "$ref": "#/definitions/variableDate"
+                }
+            ]
+        }
+    },
+    "definitions": {
+        "wizard": {
             "type": "object",
-            "additionalProperties": false,
+            "properties": {
+                "install": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "clean": {
+                    "type": "boolean",
+                    "default": true
+                }
+            }
+        },
+        "project": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "author": {
+            "type": "object",
             "properties": {
                 "name": {
                     "type": "string"
@@ -71,12 +87,34 @@
                 "email": {
                     "type": "string"
                 }
-            },
-            "title": "Author"
+            }
         },
-        "Copy": {
+        "rename": {
             "type": "object",
-            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "path",
+                        "name"
+                    ]
+                },
+                "source": {
+                    "type": "string"
+                },
+                "target": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "type",
+                "source",
+                "target"
+            ],
+            "uniqueItems": true
+        },
+        "copy": {
+            "type": "object",
             "properties": {
                 "source": {
                     "type": "string"
@@ -85,237 +123,98 @@
                     "type": "string"
                 }
             },
-            "title": "Copy"
+            "required": [
+                "source",
+                "target"
+            ],
+            "uniqueItems": true
         },
-        "Welcome4Dependency": {
+        "dependency": {
             "type": "object",
-            "additionalProperties": false,
             "properties": {
                 "name": {
                     "type": "string"
                 },
                 "remove": {
-                    "type": "boolean"
-                }
-            },
-            "title": "Welcome4Dependency"
-        },
-        "Project": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "url": {
-                    "type": "string",
-                    "format": "uri",
-                    "qt-uri-protocols": [
-                        "https"
-                    ]
-                },
-                "title": {
-                    "type": "string"
-                },
-                "description": {
-                    "type": "string"
-                }
-            },
-            "title": "Project"
-        },
-        "Question": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "type": {
-                    "type": "string"
-                },
-                "default": {
-                    "$ref": "#/definitions/Default"
-                },
-                "replace": {
-                    "type": "string"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "required": {
-                    "type": "boolean"
-                },
-                "format": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "options": {
-                    "$ref": "#/definitions/Options"
-                },
-                "paths": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/Path"
-                    }
-                },
-                "condition": {
-                    "$ref": "#/definitions/Condition"
-                },
-                "dependencies": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/QuestionDependency"
-                    }
-                },
-                "remove": {
-                    "type": "boolean"
-                }
-            },
-            "required": [
-                "type"
-            ],
-            "title": "Question"
-        },
-        "Condition": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "type": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "equals": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "equals",
-                "id",
-                "type"
-            ],
-            "title": "Condition"
-        },
-        "QuestionDependency": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "version": {
-                    "type": "string"
-                },
-                "dev": {
                     "type": "boolean"
                 }
             },
             "required": [
                 "name"
             ],
-            "title": "QuestionDependency"
+            "uniqueItems": true
         },
-        "Options": {
+        "variableYear": {
             "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "foo": {
-                    "type": "string"
-                },
-                "bar": {
-                    "type": "string"
-                }
-            },
-            "title": "Options"
-        },
-        "Replace": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "replace": {
-                    "type": "string"
-                },
-                "with": {
-                    "type": "string"
-                }
-            },
-            "required": [
-                "replace",
-                "with"
-            ],
-            "title": "Replace"
-        },
-        "Repository": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-                "organization": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "domain": {
-                    "type": "string"
-                }
-            },
-            "title": "Repository"
-        },
-        "Variable": {
-            "type": "object",
-            "additionalProperties": false,
             "properties": {
                 "type": {
                     "type": "string"
                 },
                 "replace": {
-                    "type": "string"
-                },
-                "start": {
-                    "type": "string",
-                    "format": "integer"
-                },
-                "format": {
-                    "type": "string"
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "default": ":year:",
+                        "uniqueItems": true
+                    },
+                    "minItems": 1
                 }
             },
             "required": [
-                "replace",
-                "type"
-            ],
-            "title": "Variable"
+                "type",
+                "replace"
+            ]
         },
-        "Wizard": {
+        "variableYearRange": {
             "type": "object",
-            "additionalProperties": false,
             "properties": {
-                "install": {
-                    "type": "boolean"
+                "type": {
+                    "type": "string"
                 },
-                "clean": {
-                    "type": "boolean"
+                "replace": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "default": ":yearRange:",
+                        "uniqueItems": true
+                    },
+                    "minItems": 1
+                },
+                "start": {
+                    "type": "number"
                 }
             },
-            "title": "Wizard"
+            "required": [
+                "type",
+                "replace",
+                "start"
+            ]
         },
-        "Default": {
-            "anyOf": [
-                {
-                    "type": "boolean"
-                },
-                {
+        "variableDate": {
+            "type": "object",
+            "properties": {
+                "type": {
                     "type": "string"
-                }
-            ],
-            "title": "Default"
-        },
-        "Path": {
-            "anyOf": [
-                {
-                    "$ref": "#/definitions/Copy"
                 },
-                {
-                    "type": "string"
+                "replace": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "default": ":yearRange:",
+                        "uniqueItems": true
+                    },
+                    "minItems": 1
+                },
+                "format": {
+                    "type": "string",
+                    "default": "Y-m-d"
                 }
-            ],
-            "title": "Path"
+            },
+            "required": [
+                "type",
+                "replace",
+                "format"
+            ]
         }
     }
 }

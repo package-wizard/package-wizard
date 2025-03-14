@@ -75,21 +75,19 @@
             "target": "qwerty"
         },
         {
-            "type": "filename",
+            "type": "name",
+            "source": "foo/some.stub",
+            "target": "foo/some.json"
+        },
+        {
+            "type": "name",
             "source": "qwerty.stub",
             "target": "qwerty.json"
         },
         {
-            "type": "filename",
-            "source": "foo/some.stub",
-            "target": "foo/some.json",
-            "recursive": false
-        },
-        {
-            "type": "filename",
+            "type": "name",
             "source": "qwerty",
-            "target": "foo",
-            "basename": true
+            "target": "foo"
         }
     ],
     "removes": [

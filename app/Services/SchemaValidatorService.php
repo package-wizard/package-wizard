@@ -21,11 +21,13 @@ class SchemaValidatorService
      */
     public function validate(array $data): void
     {
-        if ($this->schema->validate($data, $this->reference())) {
-            return;
-        }
+        $resolved = (object) $data;
 
-        $this->throw();
+        $this->schema->validate($resolved, $this->reference());
+
+        if (! $this->schema->isValid()) {
+            $this->throw();
+        }
     }
 
     /**

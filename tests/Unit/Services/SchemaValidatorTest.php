@@ -2,21 +2,25 @@
 
 declare(strict_types=1);
 
+use PackageWizard\Installer\Data\SomeData;
 use PackageWizard\Installer\Exceptions\JsonSchemaException;
-use PackageWizard\Installer\Services\SchemaValidatorService;
 
 test('correct', function () {
-    $validator = new SchemaValidatorService();
+    $data = SomeData::from([
+        'foo' => 'qwe',
+    ]);
 
-    $validator->validate(rule('correct-1'));
+    dd(
+        $data->foo
+    );
+
+    validateSchema('correct-1');
 
     expect(true)->toBeTrue();
 });
 
 test('incorrect', function (int $attempt) {
-    $validator = new SchemaValidatorService();
-
-    $validator->validate(rule('incorrect-' . $attempt));
+    validateSchema('incorrect-' . $attempt);
 })
-    ->throws(JsonSchemaException::class, 'JSON does not validate. Violations:')
+    ->throws(JsonSchemaException::class, 'JSON does not validate')
     ->repeat(4);

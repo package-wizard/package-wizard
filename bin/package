@@ -1,15 +1,24 @@
 #!/usr/bin/env php
 <?php
 
-use PackageWizard\Installer\Commands\NewCommand;
-use PackageWizard\Installer\Core\Application;
+declare(strict_types=1);
 
-require file_exists(__DIR__ . '/../../../autoload.php')
-    ? __DIR__ . '/../../../autoload.php'
-    : __DIR__ . '/../vendor/autoload.php';
+use Illuminate\Contracts\Console\Kernel;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
-$app = new Application('Package Wizard', '2.0.0');
+define('LARAVEL_START', microtime(true));
 
-$app->add(new NewCommand());
+$autoloader = require file_exists(__DIR__ . '/../vendor/autoload.php')
+    ? __DIR__ . '/../vendor/autoload.php'
+    : __DIR__ . '/../../../autoload.php';
 
-$app->run();
+$app = require __DIR__ . '/../bootstrap/app.php';
+
+$kernel = $app->make(Kernel::class);
+
+$status = $kernel->handle($input = new ArgvInput(), new ConsoleOutput());
+
+$kernel->terminate($input, $status);
+
+exit($status);

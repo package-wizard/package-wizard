@@ -1,16 +1,14 @@
 name: Build application
 
 on:
-    release:
-        types:
-            - created
-            - edited
-            - deleted
     workflow_dispatch:
         inputs:
             tag:
                 description: 'Tag version'
                 required: true
+    repository_dispatch:
+        types:
+            - build
 
 permissions: write-all
 
@@ -24,14 +22,18 @@ jobs:
                 run: |
                     if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
                       GITHUB_REF=${{ github.event.inputs.tag }}
+                      
+                      echo "tag=${GITHUB_REF##*}" >> "$GITHUB_OUTPUT"
                     fi
-
-                    echo "tag=${GITHUB_REF##*}" >> "$GITHUB_OUTPUT"
+                    
+                    if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+                      GITHUB_REF=${{ github.event.client_payload.tag }}
+                      
+                      echo "tag=${GITHUB_REF}" >> "$GITHUB_OUTPUT"
+                    fi
 
             -   name: Checkout the code
                 uses: actions/checkout@v4
-                with:
-                    submodules: true
 
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2

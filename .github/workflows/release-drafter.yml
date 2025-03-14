@@ -9,3 +9,22 @@ on:
 jobs:
     Update:
         uses: TheDragonCode/.github/.github/workflows/release-drafter.yml@main
+
+    Build:
+        runs-on: ubuntu-latest
+
+        name: Buils Application
+
+        needs: Update
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+
+            -   name: Generate docs trigger
+                uses: myrotvorets/trigger-repository-dispatch-action@v2.0.2
+                with:
+                    token: ${{ secrets.COMPOSER_TOKEN }}
+                    repo: package-wizard/installer
+                    type: build
+                    payload: '{"tag": "${{ needs.drafter.outputs.tag_name }}"}'

@@ -1,0 +1,8 @@
+{
+    "variables123": [
+        {
+            "type": "year",
+            "replace": "%year%"
+        }
+    ]
+}

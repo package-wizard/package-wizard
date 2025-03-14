@@ -1,0 +1,9 @@
+{
+    "$schema": "https://package-wizard.com/schemas/schema-v2.json",
+    "variables": [
+        {
+            "type111": "year",
+            "replace": "%year%"
+        }
+    ]
+}

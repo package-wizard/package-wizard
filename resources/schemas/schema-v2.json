@@ -1,6 +1,6 @@
 {
     "$id": "https://package-wizard.com/schemas/schema-v2.json",
-    "$schema": "http://json-schema.org/draft-06/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema#",
     "$ref": "#/definitions/Welcome4",
     "definitions": {
         "Welcome4": {
@@ -59,18 +59,6 @@
                     }
                 }
             },
-            "required": [
-                "authors",
-                "copies",
-                "dependencies",
-                "project",
-                "questions",
-                "removes",
-                "replaces",
-                "repository",
-                "variables",
-                "wizard"
-            ],
             "title": "Welcome4"
         },
         "Author": {
@@ -84,10 +72,6 @@
                     "type": "string"
                 }
             },
-            "required": [
-                "email",
-                "name"
-            ],
             "title": "Author"
         },
         "Copy": {
@@ -101,10 +85,6 @@
                     "type": "string"
                 }
             },
-            "required": [
-                "source",
-                "target"
-            ],
             "title": "Copy"
         },
         "Welcome4Dependency": {
@@ -118,10 +98,6 @@
                     "type": "boolean"
                 }
             },
-            "required": [
-                "name",
-                "remove"
-            ],
             "title": "Welcome4Dependency"
         },
         "Project": {
@@ -142,11 +118,6 @@
                     "type": "string"
                 }
             },
-            "required": [
-                "description",
-                "title",
-                "url"
-            ],
             "title": "Project"
         },
         "Question": {
@@ -252,10 +223,6 @@
                     "type": "string"
                 }
             },
-            "required": [
-                "bar",
-                "foo"
-            ],
             "title": "Options"
         },
         "Replace": {
@@ -289,11 +256,6 @@
                     "type": "string"
                 }
             },
-            "required": [
-                "domain",
-                "name",
-                "organization"
-            ],
             "title": "Repository"
         },
         "Variable": {
@@ -331,10 +293,6 @@
                     "type": "boolean"
                 }
             },
-            "required": [
-                "clean",
-                "install"
-            ],
             "title": "Wizard"
         },
         "Default": {

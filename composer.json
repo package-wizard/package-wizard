@@ -45,7 +45,8 @@
     "require-dev": {
         "mockery/mockery": "^1.6",
         "pestphp/pest": "^3.7",
-        "roave/security-advisories": "dev-latest"
+        "roave/security-advisories": "dev-latest",
+        "symfony/var-dumper": "^6.2 || ^7.0"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,

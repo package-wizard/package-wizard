@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use PackageWizard\Installer\Fillers\Filler;
+
+/** @method static make() */
+class DummyClass extends Filler
+{
+    public function get(): string
+    {
+        //
+    }
+}

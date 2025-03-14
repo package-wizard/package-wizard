@@ -9,6 +9,7 @@ use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+use function dirname;
 use function file_exists;
 use function implode;
 use function is_array;
@@ -24,10 +25,27 @@ class ProcessService
         return static::$output ??= new ConsoleOutput();
     }
 
-    public function run(array|string $command, string $path): Process
+    public function run(array|string $command, string $directory): void
     {
-        $process = Process::fromShellCommandline($this->prepareCommand($command), $path);
+        $process = $this->process(
+            $this->prepareCommand($command),
+            $directory
+        );
 
+        $this->tty($process);
+
+        $process->run(
+            fn ($type, $line) => static::output()->write('    ' . $line)
+        );
+    }
+
+    protected function process(string $command, string $path): Process
+    {
+        return Process::fromShellCommandline($command, dirname($path), timeout: 300);
+    }
+
+    protected function tty(Process $process): void
+    {
         if ('\\' !== DIRECTORY_SEPARATOR && file_exists('/dev/tty') && is_readable('/dev/tty')) {
             try {
                 $process->setTty(true);
@@ -36,10 +54,6 @@ class ProcessService
                 warning($e->getMessage());
             }
         }
-
-        $process->run(fn ($type, $line) => static::output()->write('    ' . $line));
-
-        return $process;
     }
 
     protected function prepareCommand(array|string $command): string

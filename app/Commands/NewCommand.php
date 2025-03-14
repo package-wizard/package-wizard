@@ -6,33 +6,57 @@ namespace PackageWizard\Installer\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\PromptsForMissingInput;
-use PackageWizard\Installer\Concerns\InteractsWithNew;
-use PackageWizard\Installer\Fillers\ProjectNameFiller;
-use PackageWizard\Installer\Fillers\ProjectPathFiller;
-use PackageWizard\Installer\Services\HttpService;
+use PackageWizard\Installer\Fillers\DirectoryFiller;
+use PackageWizard\Installer\Fillers\PackageFiller;
+use PackageWizard\Installer\Services\ComposerService;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
+use function getcwd;
+use function is_dir;
+use function is_readable;
+use function Laravel\Prompts\warning;
+
 class NewCommand extends Command implements PromptsForMissingInput
 {
-    use InteractsWithNew;
-
     protected $signature = 'new';
 
     protected $description = 'Create new project';
 
-    public function handle(HttpService $http): int
+    public function __construct(
+        protected ComposerService $composer
+    ) {
+        parent::__construct();
+    }
+
+    public function handle(): int
     {
-        dd(
-            $this->repositoryPath($http)
+        $directory = $this->getInstallationDirectory(
+            $this->argument('name')
         );
-        // Step 1
-        // TODO: Ask for project
-        // TODO: Download project or use local
-        /*
-         * Если запуск с параметром --local, то проверять существование папки иначе эксепшен.
-         * Если ищем репу, то кидать запрос на существование урла https://repo.packagist.org/p2/laravel-lang/publisher.json и, если репы нет, кидать эксепшен.
-         */
+
+        if (! $this->option('local')) {
+            $package = $this->argument('search');
+            $version = $this->option('package-version');
+            $dev     = $this->option('dev');
+            $ansi    = $this->hasAnsi();
+
+            $this->composer->createProject($directory, $package, $version, (bool) $dev, $ansi);
+        }
+        elseif (! is_dir($directory)) {
+            warning('The directory does not exist: ' . $directory);
+
+            $directory = $this->getInstallationDirectory(
+                DirectoryFiller::make(local: true)
+            );
+        }
+        elseif (! is_readable($directory)) {
+            warning('No access to the specified directory');
+
+            $directory = $this->getInstallationDirectory(
+                DirectoryFiller::make(local: true)
+            );
+        }
 
         // Step 2
         // TODO: Read wizard.json file and validate schema
@@ -44,22 +68,36 @@ class NewCommand extends Command implements PromptsForMissingInput
     protected function configure(): void
     {
         $this
-            ->addArgument('name', InputArgument::REQUIRED)
-            ->addArgument('path', InputArgument::REQUIRED, 'The path to the folder for downloading the project')
-            ->addOption('dev', null, InputOption::VALUE_OPTIONAL, 'Install the latest "development" release')
-            ->addOption('local', null, InputOption::VALUE_NONE, 'Set up a local project in the specified folder');
+            ->addArgument('name', InputArgument::REQUIRED, 'Directory where the files should be created')
+            ->addArgument('search', InputArgument::OPTIONAL, 'Package name to be installed')
+            ->addOption('package-version', null, InputOption::VALUE_OPTIONAL, 'Version, will default to latest')
+            ->addOption('dev', null, InputOption::VALUE_NONE, 'Install the latest "development" release')
+            ->addOption(
+                'local',
+                null,
+                InputOption::VALUE_NONE,
+                'Specifies that the "name" parameter specifies the path to the local project'
+            );
     }
 
     protected function promptForMissingArgumentsUsing(): array
     {
         return [
-            'name' => fn () => ProjectNameFiller::make(
+            'name' => fn () => DirectoryFiller::make(
                 local: $this->option('local')
             ),
 
-            'path' => fn () => ProjectPathFiller::make(
-                name: $this->argument('name')
-            ),
+            'search' => fn () => PackageFiller::make(),
         ];
+    }
+
+    protected function hasAnsi(): bool
+    {
+        return $this->option('ansi') || ! $this->option('no-ansi');
+    }
+
+    protected function getInstallationDirectory(string $name): string
+    {
+        return $name !== '.' ? getcwd() . '/' . $name : '.';
     }
 }

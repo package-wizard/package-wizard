@@ -51,13 +51,17 @@ jobs:
                 run: |
                     IS_DIRTY=1
                     sudo php ./bin/package app:build package.phar --build-version=${{ steps.tag.outputs.tag }}
+
             -   name: Upload the PHAR artifact
                 uses: actions/upload-artifact@v4
                 with:
-                    name: package.phar
+                    name: package-wizard.phar
                     path: builds/package.phar
 
+            -   name: Prepare filename
+                run: mv builds/package.phar builds/package-wizard.phar
+
             -   name: Upload the PHAR to release
-                run: gh release upload v${{ steps.tag.outputs.tag }} builds/package.phar
+                run: gh release upload ${{ steps.tag.outputs.tag }} builds/package-wizard.phar
                 env:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,6 +1,11 @@
 name: Build application
 
 on:
+    release:
+        types:
+            - created
+            - edited
+            - deleted
     workflow_dispatch:
         inputs:
             tag:
@@ -14,13 +19,15 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            -   name: Extract the tag version
+            -   name: Get the version
                 id: tag
                 run: |
                     if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
                       GITHUB_REF=${{ github.event.inputs.tag }}
-                    fi          
-                    echo "tag=${GITHUB_REF##*v}" >> "$GITHUB_OUTPUT"
+                    fi
+
+                    echo "tag=${GITHUB_REF##*}" >> "$GITHUB_OUTPUT"
+
             -   name: Checkout the code
                 uses: actions/checkout@v4
                 with:
@@ -107,12 +114,17 @@ jobs:
                     
                     git config --global core.autocrlf false
                     git config --global core.eol lf
+
             -   name: Commit the PHAR file
                 id: build
                 run: |
                     IS_DIRTY=1
-                    { git add ./builds/package && git commit -a -m "🏗️ Build application"; } || IS_DIRTY=0
+                    TAG=${{ steps.tag.outputs.tag }}
+                    
+                    { git add ./builds/package && git commit -a -m "🏗️ Build application ${TAG}"; } || IS_DIRTY=0
+                    
                     echo "is_dirty=${IS_DIRTY}" >> "$GITHUB_OUTPUT"
+
             -   name: Push changes
                 uses: ad-m/github-push-action@master
                 if: steps.build.outputs.is_dirty == 1

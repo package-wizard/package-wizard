@@ -1,0 +1,249 @@
+{
+    "$schema": "https://package-wizard.com/schemas/schema-v2.json",
+    "wizard": {
+        "install": true,
+        "clean": true
+    },
+    "project": {
+        "url": "https://example.com",
+        "title": "The best",
+        "description": "The best of the best"
+    },
+    "repository": {
+        "organization": "package-wizard",
+        "name": "installer",
+        "domain": "github.com"
+    },
+    "authors": [
+        {
+            "name": "Andrey Helldar",
+            "email": "helldar@dragon-code.pro"
+        }
+    ],
+    "variables": [
+        {
+            "type": "year",
+            "replace": [
+                "%year%"
+            ]
+        },
+        {
+            "type": "year-range",
+            "replace": [
+                "%year%"
+            ],
+            "start": "2021"
+        },
+        {
+            "type": "date",
+            "format": "Y-m-d",
+            "replace": [
+                "%dateYMD%"
+            ]
+        },
+        {
+            "type": "date",
+            "format": "d m Y",
+            "replace": [
+                "%dateDMY%"
+            ]
+        }
+    ],
+    "replaces": [
+        {
+            "replace": [
+                "%namespace%"
+            ],
+            "with": "PackageWizard"
+        },
+        {
+            "replace": [
+                "%appName%"
+            ],
+            "with": "Installer"
+        }
+    ],
+    "renames": [
+        {
+            "type": "path",
+            "source": "baz/file.json",
+            "target": "baz/some.json"
+        },
+        {
+            "type": "path",
+            "source": "baz",
+            "target": "qwerty"
+        },
+        {
+            "type": "filename",
+            "source": "qwerty.stub",
+            "target": "qwerty.json"
+        },
+        {
+            "type": "filename",
+            "source": "foo/some.stub",
+            "target": "foo/some.json",
+            "recursive": false
+        },
+        {
+            "type": "filename",
+            "source": "qwerty",
+            "target": "foo",
+            "basename": true
+        }
+    ],
+    "removes": [
+        "bar/some1",
+        "bar/some2/file.json"
+    ],
+    "copies": [
+        {
+            "source": "foo/file.json",
+            "target": "resources/data/file.json"
+        },
+        {
+            "source": "foo/folder/",
+            "target": "public/images/folder"
+        }
+    ],
+    "dependencies": [
+        {
+            "name": "laravel/sail",
+            "remove": true
+        },
+        {
+            "name": "laravel/pail",
+            "remove": true
+        }
+    ],
+    "questions": [
+        {
+            "type": "license",
+            "default": "mit",
+            "replace": [
+                "%license%"
+            ]
+        },
+        {
+            "type": "string",
+            "title": "Any question",
+            "default": "why not",
+            "required": false,
+            "replace": [
+                "%someQuestion%"
+            ],
+            "with": {
+                "slug": false,
+                "lowercase": false,
+                "uppercase": false,
+                "camelcase": false,
+                "snake_case": false,
+                "filename": false,
+                "urlQuery": false
+            }
+        },
+        {
+            "type": "regex",
+            "title": "Enter the task number",
+            "required": true,
+            "replace": [
+                "/(Foo-\\d+)/"
+            ],
+            "format": "App-%d"
+        },
+        {
+            "type": "url",
+            "title": "Enter the URL",
+            "required": true,
+            "replace": [
+                "%someUrl%"
+            ]
+        },
+        {
+            "id": "foo1",
+            "type": "choice",
+            "title": "Select any option",
+            "options": {
+                "foo": "Foo option",
+                "bar": "Bar option"
+            },
+            "default": "foo",
+            "required": false,
+            "replace": [
+                "%someChoice%"
+            ]
+        },
+        {
+            "type": "copy",
+            "title": "Copy any files or folders?",
+            "default": false,
+            "paths": [
+                {
+                    "source": "bar/file.json",
+                    "target": "resources/data/file.json"
+                },
+                {
+                    "source": "bar/folder/",
+                    "target": "public/images/folder"
+                }
+            ],
+            "condition": {
+                "type": "when",
+                "id": "foo1",
+                "equals": "foo"
+            }
+        },
+        {
+            "type": "remove",
+            "title": "Remove files or folders?",
+            "default": true,
+            "paths": [
+                "bar/some3",
+                "bar/some4/file.json"
+            ],
+            "condition": {
+                "type": "when",
+                "id": "foo1",
+                "equals": "bar"
+            }
+        },
+        {
+            "type": "dependency",
+            "title": "To establish any dependencies?",
+            "default": true,
+            "dependencies": [
+                {
+                    "name": "dragon-code/laravel-deploy-operations",
+                    "version": "^6.4"
+                },
+                {
+                    "name": "dragon-code/laravel-cache"
+                },
+                {
+                    "name": "dragon-code/pretty-routes",
+                    "version": "^3.6",
+                    "dev": true
+                }
+            ],
+            "condition": {
+                "type": "unless",
+                "id": "foo1",
+                "equals": "foo"
+            }
+        },
+        {
+            "type": "dependency",
+            "title": "To remove any dependencies?",
+            "default": false,
+            "remove": true,
+            "dependencies": [
+                {
+                    "name": "laravel/sail"
+                },
+                {
+                    "name": "laravel/pail"
+                }
+            ]
+        }
+    ]
+}

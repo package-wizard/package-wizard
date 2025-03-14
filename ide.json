@@ -1,0 +1,24 @@
+{
+    "$schema": "https://laravel-ide.com/schema/laravel-ide-v2.json",
+    "completions": [
+        {
+            "complete": "directoryFiles",
+            "condition": [
+                {
+                    "functionNames": [
+                        "rule"
+                    ],
+                    "place": "parameter",
+                    "parameters": [
+                        1
+                    ]
+                }
+            ],
+            "options": {
+                "directory": "tests/Fixtures/Rules",
+                "suffixToClear": ".json",
+                "recursive": true
+            }
+        }
+    ]
+}

@@ -8,12 +8,11 @@ use DragonCode\Support\Facades\Filesystem\File;
 use Illuminate\Support\Str;
 
 use function collect;
+use function PackageWizard\Installer\resource_path;
 
 class ProjectService
 {
     public const Search = 'Search on Packagist';
-
-    protected string $basePath = __DIR__ . '/../../resources/rules';
 
     public function list(): array
     {
@@ -25,6 +24,6 @@ class ProjectService
 
     protected function search(): array
     {
-        return File::names($this->basePath, recursive: true);
+        return File::names(resource_path('rules'), recursive: true);
     }
 }

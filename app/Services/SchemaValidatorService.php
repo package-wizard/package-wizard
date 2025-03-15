@@ -8,6 +8,7 @@ use JsonSchema\Validator;
 use PackageWizard\Installer\Exceptions\JsonSchemaException;
 use stdClass;
 
+use function PackageWizard\Installer\resource_path;
 use function realpath;
 
 class SchemaValidatorService
@@ -45,6 +46,6 @@ class SchemaValidatorService
 
     protected function schema(): string
     {
-        return realpath(__DIR__ . '/../../resources/schemas/schema-v2.json');
+        return realpath(resource_path('schemas/schema-v2.json'));
     }
 }

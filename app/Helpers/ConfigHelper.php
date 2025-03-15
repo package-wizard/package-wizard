@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Helpers;
 
+use JsonException;
 use PackageWizard\Installer\Data\ConfigData;
 
 use function array_merge;
@@ -20,7 +21,7 @@ class ConfigHelper
     protected static string $filename = 'wizard.json';
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     public static function data(string $directory, string $package = 'default'): ConfigData
     {

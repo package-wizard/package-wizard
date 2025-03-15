@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Commands;
 
+use DragonCode\Support\Facades\Filesystem\Directory;
 use Illuminate\Console\Command;
 use PackageWizard\Installer\Data\ConfigData;
 use PackageWizard\Installer\Fillers\DirectoryFiller;
@@ -16,9 +17,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function getcwd;
-use function is_dir;
 use function is_readable;
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\warning;
+use function realpath;
 
 class NewCommand extends Command
 {
@@ -46,10 +48,6 @@ class NewCommand extends Command
             $config
         );
 
-        // Step 2
-        // TODO: Read wizard.json file and validate schema
-        // TODO: Fill MainData class
-
         return static::SUCCESS;
     }
 
@@ -59,13 +57,14 @@ class NewCommand extends Command
             ->addArgument('name', InputArgument::OPTIONAL, 'Directory where the files should be created')
             ->addArgument('search', InputArgument::OPTIONAL, 'Package name to be installed')
             ->addOption('package-version', null, InputOption::VALUE_OPTIONAL, 'Version, will default to latest')
-            ->addOption('dev', null, InputOption::VALUE_NONE, 'Install the latest "development" release')
+            ->addOption('dev', 'd', InputOption::VALUE_NONE, 'Install the latest "development" release')
             ->addOption(
                 'local',
-                null,
+                'l',
                 InputOption::VALUE_NONE,
                 'Specifies that the "name" parameter specifies the path to the local project'
-            );
+            )
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Forces install even if the directory already exists');
     }
 
     /**
@@ -92,10 +91,7 @@ class NewCommand extends Command
         $output->writeln('');
 
         if (! $input->getArgument('name')) {
-            $input->setArgument(
-                'name',
-                DirectoryFiller::make(local: $input->getOption('local'))
-            );
+            $input->setArgument('name', DirectoryFiller::make(local: $input->getOption('local')));
         }
 
         if (! $input->getArgument('search') && ! $input->getOption('local')) {
@@ -129,9 +125,11 @@ class NewCommand extends Command
             $dev     = $this->option('dev');
             $ansi    = $this->hasAnsi();
 
+            $this->ensureDirectory($directory);
+
             $this->composer->createProject($directory, $package, $version, (bool) $dev, $ansi);
         }
-        elseif (! is_dir($directory)) {
+        elseif (Directory::doesntExist($directory)) {
             warning('The directory does not exist: ' . $directory);
 
             $directory = $this->getInstallationDirectory(
@@ -139,7 +137,7 @@ class NewCommand extends Command
             );
         }
         elseif (! is_readable($directory)) {
-            warning('No access to the specified directory');
+            warning('No access to the specified directory: ' . $directory);
 
             $directory = $this->getInstallationDirectory(
                 DirectoryFiller::make(local: true)
@@ -149,8 +147,29 @@ class NewCommand extends Command
         return $directory;
     }
 
+    protected function ensureDirectory(string $directory): void
+    {
+        if (! $this->option('force') && Directory::exists($directory)) {
+            warning('Application already exists.');
+
+            $path = realpath($directory);
+
+            if (! confirm("Do you want to overwrite the \"$path\" directory?")) {
+                warning('It\'s impossible to continue.');
+
+                exit(static::FAILURE);
+            }
+        }
+
+        Directory::ensureDelete($directory);
+    }
+
     protected function getConfig(string $directory): ConfigData
     {
-        return ConfigHelper::data($directory);
+        if (! $this->option('local')) {
+            $package = $this->argument('search');
+        }
+
+        return ConfigHelper::data($directory, $package ?? 'default');
     }
 }

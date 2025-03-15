@@ -6,7 +6,9 @@ namespace PackageWizard\Installer\Data;
 
 use Spatie\LaravelData\Data;
 
-class SomeData extends Data
+class WizardData extends Data
 {
-    public string $foo;
+    public bool $install = true;
+
+    public bool $clean = true;
 }

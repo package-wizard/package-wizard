@@ -1,5 +1,47 @@
 {
     "$schema": "https://laravel-ide.com/schema/laravel-ide-v2.json",
+    "codeGenerations": [
+        {
+            "id": "app.filler",
+            "name": "Create Filler",
+            "classSuffix": "Filler",
+            "regex": ".+",
+            "files": [
+                {
+                    "appNamespace": "Fillers",
+                    "name": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}.php",
+                    "template": {
+                        "type": "stub",
+                        "path": "stubs/filler.stub",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "app.helper",
+            "name": "Create Helper",
+            "classSuffix": "Helper",
+            "regex": ".+",
+            "files": [
+                {
+                    "appNamespace": "Helpers",
+                    "name": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}.php",
+                    "template": {
+                        "type": "stub",
+                        "path": "stubs/helper.stub",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        }
+    ],
     "completions": [
         {
             "complete": "directoryFiles",

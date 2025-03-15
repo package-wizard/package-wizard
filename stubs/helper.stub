@@ -1,0 +1,13 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+class DummyClass
+{
+    public static function get(): mixed
+    {
+        //
+    }
+}

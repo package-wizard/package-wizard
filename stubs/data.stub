@@ -1,0 +1,12 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Spatie\LaravelData\Data;
+
+class DummyClass extends Data
+{
+    //
+}

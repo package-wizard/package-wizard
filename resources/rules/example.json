@@ -9,11 +9,6 @@
         "title": "The best",
         "description": "The best of the best"
     },
-    "repository": {
-        "organization": "package-wizard",
-        "name": "installer",
-        "domain": "github.com"
-    },
     "authors": [
         {
             "name": "Andrey Helldar",

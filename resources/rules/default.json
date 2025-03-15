@@ -1,20 +1,16 @@
 {
     "$schema": "https://package-wizard.com/schemas/schema-v2.json",
-    "wizard": {
-        "install": true,
-        "clean": true
-    },
     "variables": [
         {
             "type": "year",
-            "replace": "%year%"
+            "replace": ":year:"
         }
     ],
     "questions": [
         {
             "type": "license",
             "default": "mit",
-            "replace": "%license%"
+            "replace": ":license:"
         }
     ]
 }

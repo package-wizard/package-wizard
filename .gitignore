@@ -1,6 +1,7 @@
 /.idea
 /.vscode
 
+/temp
 /vendor
 
 .phpunit.result.cache

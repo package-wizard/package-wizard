@@ -8,4 +8,6 @@ return [
     'version' => app('git.version'),
 
     'env' => 'development',
+
+    'providers' => [],
 ];

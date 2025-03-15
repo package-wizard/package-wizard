@@ -34,7 +34,7 @@ See the [documentation](https://package-wizard.com) for detailed installation in
 For detailed information while the application is running, run it with the `-vvv` parameter:
 
 ```bash
-package -vvv
+package new -vvv
 ```
 
 ## License

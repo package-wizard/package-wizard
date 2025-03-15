@@ -42,7 +42,9 @@ class NewCommand extends Command
      */
     public function handle(): int
     {
-        $config = $this->getConfig($this->projectDirectory());
+        $config = $this->getConfig(
+            $this->projectDirectory()
+        );
 
         dd(
             $config
@@ -169,9 +171,15 @@ class NewCommand extends Command
      */
     protected function getConfig(string $directory): ConfigData
     {
+        $this->output->writeln('Configuration loading...', OutputInterface::VERBOSITY_DEBUG);
+
         if (! $this->option('local')) {
+            $this->output->writeln('Searching for a package...', OutputInterface::VERBOSITY_DEBUG);
+
             $package = $this->argument('search');
         }
+
+        $this->output->writeln('Build configuration data object...', OutputInterface::VERBOSITY_DEBUG);
 
         return ConfigHelper::data($directory, $package ?? 'default');
     }

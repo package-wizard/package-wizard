@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-use PackageWizard\Installer\Data\Normalizers\JsonNormalizer;
-
 return [
     'date_format' => \DATE_ATOM,
 
@@ -40,7 +38,7 @@ return [
         Spatie\LaravelData\Normalizers\ArrayableNormalizer::class,
         Spatie\LaravelData\Normalizers\ObjectNormalizer::class,
         Spatie\LaravelData\Normalizers\ArrayNormalizer::class,
-        JsonNormalizer::class,
+        Spatie\LaravelData\Normalizers\JsonNormalizer::class,
     ],
 
     'wrap' => null,
@@ -48,9 +46,9 @@ return [
     'var_dumper_caster_mode' => 'development',
 
     'structure_caching' => [
-        'enabled'     => true,
-        'directories' => [app_path('Data')],
-        'cache'       => [
+        'enabled'              => true,
+        'directories'          => [app_path('Data')],
+        'cache'                => [
             'store'    => env('CACHE_STORE', 'array'),
             'prefix'   => 'laravel-data',
             'duration' => null,

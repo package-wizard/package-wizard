@@ -4,18 +4,13 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Helpers;
 
-use DragonCode\Support\Facades\Helpers\Boolean;
-use Illuminate\Console\View\Components\Factory;
 use Illuminate\Support\Collection;
 use Illuminate\Support\HigherOrderTapProxy;
-use PackageWizard\Installer\Data\ConfigData;
 use PackageWizard\Installer\Data\ReplaceData;
-use PackageWizard\Installer\Data\WizardData;
-use PackageWizard\Installer\Enums\TypeEnum;
-use Spatie\LaravelData\Data;
 
 use function collect;
-use function date;
+use function count;
+use function Laravel\Prompts\info;
 use function ob_end_clean;
 use function ob_get_contents;
 use function ob_start;
@@ -25,58 +20,33 @@ use function Termwind\render;
 
 class PreviewHelper
 {
-    public static function show(ConfigData $data, Factory $output): void
+    /**
+     * @param  Collection<ReplaceData>  $items
+     */
+    public static function replaces(Collection $items): void
     {
-        static::wizard($data->wizard, $output);
-        static::authors($data->authors, $output);
-        static::variables($data->variables, $output);
-        static::replaces($data->replaces, $output);
+        info('Replaces:');
+
+        foreach ($items as $item) {
+            static::twoColumnDetail(
+                static::compactReplace($item->replace),
+                static::compactValue($item->with)
+            );
+        }
     }
 
-    protected static function wizard(WizardData $data, Factory $output): void
+    protected static function compactReplace(array $values): string
     {
-        $output->info('Wizard');
+        $count = count($values);
 
-        static::twoColumnDetail('Install', Boolean::toString($data->install));
-        static::twoColumnDetail('Clean', Boolean::toString($data->clean));
+        return collect($values)->map(
+            static fn (string $value) => $count > 1 ? '"' . $value . '"' : $value
+        )->join(', ', ' and ');
     }
 
-    protected static function authors(Collection $items, Factory $output): void
+    protected static function compactValue(int|string $value): string
     {
-        $output->info('Authors');
-
-        $items->each(
-            fn (ReplaceData $data) => static::twoColumnDetail(static::compact($data->replace), $data->with)
-        );
-    }
-
-    protected static function variables(Collection $items, Factory $output): void
-    {
-        $output->info('Variables');
-
-        $items->each(function (Data $data) {
-            $with = match ($data->type) {
-                TypeEnum::Year      => date('Y'),
-                TypeEnum::YearRange => $data->start === (int) date('Y') ? $data->start : $data->start . '-' . date('Y'),
-                TypeEnum::Date      => date($data->format),
-            };
-
-            static::twoColumnDetail(static::compact($data->replace), $with);
-        });
-    }
-
-    protected static function replaces(Collection $items, Factory $output): void
-    {
-        $output->info('Replace');
-
-        $items->each(
-            fn (ReplaceData $data) => static::twoColumnDetail(static::compact($data->replace), $data->with)
-        );
-    }
-
-    protected static function compact(array $values): string
-    {
-        return collect($values)->join(', ', ' and ');
+        return (string) $value;
     }
 
     protected static function twoColumnDetail(string $first, int|string $second): void

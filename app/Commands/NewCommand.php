@@ -6,8 +6,8 @@ namespace PackageWizard\Installer\Commands;
 
 use DragonCode\Support\Facades\Filesystem\Directory;
 use Illuminate\Console\Command;
-use Illuminate\Support\Collection;
 use JsonException;
+use PackageWizard\Installer\Data\AuthorData;
 use PackageWizard\Installer\Data\ConfigData;
 use PackageWizard\Installer\Enums\TypeEnum;
 use PackageWizard\Installer\Fillers\AskFiller;
@@ -17,7 +17,13 @@ use PackageWizard\Installer\Fillers\Questions\AuthorFiller;
 use PackageWizard\Installer\Fillers\Questions\LicenseFiller;
 use PackageWizard\Installer\Helpers\ConfigHelper;
 use PackageWizard\Installer\Helpers\PreviewHelper;
+use PackageWizard\Installer\Replacers\AskReplacer;
+use PackageWizard\Installer\Replacers\AuthorReplacer;
+use PackageWizard\Installer\Replacers\LicenseReplacer;
+use PackageWizard\Installer\Replacers\VariableReplacer;
 use PackageWizard\Installer\Services\ComposerService;
+use PackageWizard\Installer\Services\FilesystemService;
+use PackageWizard\Installer\Services\ReplaceService;
 use Spatie\LaravelData\Data;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -51,19 +57,28 @@ class NewCommand extends Command
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws JsonException
      */
-    public function handle(): int
+    public function handle(FilesystemService $filesystem, ReplaceService $replacer): int
     {
         $config = $this->getConfig(
-            $this->projectDirectory()
+            $directory = $this->projectDirectory()
         );
 
+        $this->authors($config);
+        $this->variables($config);
         $this->questions($config);
 
         if (! $this->confirmChanges($config)) {
-            return $this->handle();
+            return $this->handle($filesystem, $replacer);
         }
 
-        // TODO: Replace variables
+        $this->newLine();
+
+        $this->withProgressBar(
+            $filesystem->allFiles($directory),
+            static fn (string $filename) => $replacer->replace($filename, $config->replaces)
+        );
+
+        $this->newLine();
 
         return static::SUCCESS;
     }
@@ -194,35 +209,60 @@ class NewCommand extends Command
         return ConfigHelper::data($directory, $package ?? 'default');
     }
 
+    protected function authors(ConfigData $config): void
+    {
+        $this->debugMessage('Processing of authors...');
+
+        $config->authors->each(function (AuthorData $item, int $index) use ($config) {
+            $this->debugMessage("    Author #$index...");
+
+            $author = AuthorReplacer::get($item);
+
+            $config->replaces->push($author);
+        });
+    }
+
+    protected function variables(ConfigData $config): void
+    {
+        $this->debugMessage('Processing of variables...');
+
+        $config->variables->each(function (Data $item, int $index) use ($config) {
+            $this->debugMessage("    Variable #$index...");
+
+            $variable = VariableReplacer::get($item);
+
+            $config->replaces->push($variable);
+        });
+    }
+
     protected function questions(ConfigData $config): void
     {
-        $this->debugMessage('We ask questions to the user ...');
+        $this->debugMessage('We ask questions to the user...');
 
         $config->questions->each(
             function (Data $item, int $index) use ($config) {
                 $this->debugMessage("    Question #$index...");
 
-                match ($item->type) {
-                    TypeEnum::Ask     => $this->pushIf($config->replaces, AskFiller::make(data: $item)),
-                    TypeEnum::Author  => $this->pushIf($config->authors, AuthorFiller::make(data: $item)),
-                    TypeEnum::License => $this->pushIf($config->replaces, LicenseFiller::make(data: $item)),
+                $value = match ($item->type) {
+                    TypeEnum::Ask     => AskReplacer::get(AskFiller::make(data: $item)),
+                    TypeEnum::Author  => AuthorReplacer::get(AuthorFiller::make(data: $item)),
+                    TypeEnum::License => LicenseReplacer::get(LicenseFiller::make(data: $item)),
                 };
+
+                if ($value) {
+                    $config->replaces->push($value);
+                }
             }
         );
-    }
-
-    protected function pushIf(Collection $items, mixed $value): void
-    {
-        if ($value) {
-            $items->push($value);
-        }
     }
 
     protected function confirmChanges(ConfigData $config): bool
     {
         intro(PHP_EOL . 'Check the data before continuing' . PHP_EOL);
 
-        PreviewHelper::show($config, $this->components);
+        PreviewHelper::replaces($config->replaces);
+
+        $this->newLine();
 
         return confirm('Do you confirm generation?');
     }

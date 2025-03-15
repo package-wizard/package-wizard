@@ -12,12 +12,11 @@ use function config;
 use function file_exists;
 use function file_get_contents;
 use function is_file;
+use function PackageWizard\Installer\resource_path;
 use function realpath;
 
 class ConfigHelper
 {
-    public static string $directory = __DIR__ . '/../../resources/rules';
-
     protected static string $filename = 'wizard.json';
 
     /**
@@ -36,7 +35,7 @@ class ConfigHelper
             return $path;
         }
 
-        return static::path(static::$directory, $package . '.json');
+        return static::path(resource_path('rules'), $package . '.json');
     }
 
     protected static function decode(string $payload): array

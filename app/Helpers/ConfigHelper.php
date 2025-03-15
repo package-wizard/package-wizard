@@ -17,8 +17,6 @@ use function realpath;
 
 class ConfigHelper
 {
-    protected static string $filename = 'wizard.json';
-
     /**
      * @throws JsonException
      */
@@ -31,7 +29,7 @@ class ConfigHelper
 
     public static function search(string $directory, string $package): ?string
     {
-        if ($path = static::path($directory, static::$filename)) {
+        if ($path = static::path($directory, config('wizard.filename'))) {
             return $path;
         }
 

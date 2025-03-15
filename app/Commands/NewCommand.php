@@ -37,12 +37,11 @@ class NewCommand extends Command
     /**
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \JsonException
      */
     public function handle(): int
     {
-        $config = $this->getConfig(
-            $directory = $this->projectDirectory()
-        );
+        $config = $this->getConfig($this->projectDirectory());
 
         dd(
             $config
@@ -164,6 +163,9 @@ class NewCommand extends Command
         Directory::ensureDelete($directory);
     }
 
+    /**
+     * @throws \JsonException
+     */
     protected function getConfig(string $directory): ConfigData
     {
         if (! $this->option('local')) {

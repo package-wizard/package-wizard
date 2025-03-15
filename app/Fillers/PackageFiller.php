@@ -32,8 +32,8 @@ class PackageFiller extends Filler
         return select(
             label   : 'Select a project:',
             options : $this->project->list(),
-            scroll  : 10,
-            required: 'The project name is required.',
+            scroll  : 20,
+            required: 'The project is required.',
         );
     }
 

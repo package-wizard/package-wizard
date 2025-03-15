@@ -10,7 +10,6 @@ use PackageWizard\Installer\Data\Casts\VariablesCast;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Optional;
 
 class ConfigData extends Data
 {
@@ -21,14 +20,14 @@ class ConfigData extends Data
     public ProjectData $project;
 
     #[DataCollectionOf(AuthorData::class)]
-    public Collection|Optional $authors;
+    public Collection $authors;
 
     #[WithCast(VariablesCast::class)]
-    public Collection|Optional $variables;
-
-    #[WithCast(QuestionsCast::class)]
-    public Collection|Optional $questions;
+    public Collection $variables;
 
     #[DataCollectionOf(ReplaceData::class)]
-    public Collection|Optional $replaces;
+    public Collection $replaces;
+
+    #[WithCast(QuestionsCast::class)]
+    public Collection $questions;
 }

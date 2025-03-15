@@ -8,7 +8,7 @@ use Spatie\LaravelData\Data;
 
 class WizardData extends Data
 {
-    public bool $install = true;
+    public bool $install;
 
-    public bool $clean = true;
+    public bool $clean;
 }

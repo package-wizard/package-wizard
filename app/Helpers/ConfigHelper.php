@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Helpers;
 
-use Illuminate\Support\Str;
 use PackageWizard\Installer\Data\ConfigData;
 
 use function file_exists;
@@ -18,7 +17,7 @@ class ConfigHelper
 
     protected static string $filename = 'wizard.json';
 
-    public static function data(string $directory, string $package = 'local'): ConfigData
+    public static function data(string $directory, string $package = 'default'): ConfigData
     {
         $data = ConfigData::from(
             static::search($directory, $package)
@@ -29,13 +28,13 @@ class ConfigHelper
         return $data;
     }
 
-    public static function search(string $directory, string $package = 'local'): string
+    public static function search(string $directory, string $package): string
     {
         if ($path = static::path($directory, static::$filename)) {
             return $path;
         }
 
-        return static::path(static::$directory, Str::slug($package, '_'))
+        return static::path(static::$directory, $package . '.json')
             ?? static::path(static::$directory, static::$default);
     }
 

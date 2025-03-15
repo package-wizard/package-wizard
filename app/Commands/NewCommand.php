@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Commands;
 
+use Closure;
 use DragonCode\Support\Facades\Filesystem\Directory;
+use DragonCode\Support\Facades\Filesystem\File;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use JsonException;
 use PackageWizard\Installer\Data\AuthorData;
 use PackageWizard\Installer\Data\ConfigData;
@@ -23,13 +26,16 @@ use PackageWizard\Installer\Replacers\LicenseReplacer;
 use PackageWizard\Installer\Replacers\VariableReplacer;
 use PackageWizard\Installer\Services\ComposerService;
 use PackageWizard\Installer\Services\FilesystemService;
+use PackageWizard\Installer\Services\NpmService;
 use PackageWizard\Installer\Services\ReplaceService;
+use PackageWizard\Installer\Services\YarnService;
 use Spatie\LaravelData\Data;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function config;
 use function getcwd;
 use function is_readable;
 use function Laravel\Prompts\confirm;
@@ -45,7 +51,9 @@ class NewCommand extends Command
     protected $description = 'Create new project';
 
     public function __construct(
-        protected ComposerService $composer
+        protected ComposerService $composer,
+        protected NpmService $npm,
+        protected YarnService $yarn,
     ) {
         parent::__construct();
 
@@ -79,6 +87,9 @@ class NewCommand extends Command
         );
 
         $this->newLine();
+
+        $this->installDependencies($config, $directory);
+        $this->cleanUp($config, $directory);
 
         return static::SUCCESS;
     }
@@ -150,11 +161,10 @@ class NewCommand extends Command
             $package = $this->argument('search');
             $version = $this->option('package-version');
             $dev     = $this->option('dev');
-            $ansi    = $this->option('ansi') || ! $this->option('no-ansi');
 
             $this->ensureDirectory($directory);
 
-            $this->composer->createProject($directory, $package, $version, (bool) $dev, $ansi);
+            $this->composer->createProject($directory, $package, $version, (bool) $dev, $this->hasAnsi());
         }
         elseif (Directory::doesntExist($directory)) {
             warning('The directory does not exist: ' . $directory);
@@ -267,8 +277,58 @@ class NewCommand extends Command
         return confirm('Do you confirm generation?');
     }
 
+    protected function installDependencies(ConfigData $config, string $directory): void
+    {
+        $this->installDependency(
+            when   : $config->wizard->install->composer,
+            command: fn () => $this->composer->update($directory, $this->hasAnsi()),
+            what   : 'composer'
+        );
+
+        $this->installDependency(
+            when   : $config->wizard->install->npm,
+            command: fn () => $this->npm->install($directory),
+            what   : 'npm'
+        );
+        $this->installDependency(
+            when   : $config->wizard->install->yarn,
+            command: fn () => $this->yarn->install($directory),
+            what   : 'yarn'
+        );
+    }
+
+    protected function cleanUp(ConfigData $config, string $directory): void
+    {
+        if (! $config->wizard->clean) {
+            $this->debugMessage('Clean up is disabled.');
+
+            return;
+        }
+
+        $this->debugMessage('Removing wizard.json file from the project');
+
+        File::ensureDelete($directory . '/' . config('wizard.filename'));
+    }
+
+    protected function installDependency(bool $when, Closure $command, string $what): void
+    {
+        if ($when) {
+            info('Install ' . $what . ' dependencies...');
+
+            $command();
+        }
+        else {
+            $this->debugMessage(Str::ucfirst($what) . ' dependencies installation skipped.');
+        }
+    }
+
     protected function debugMessage(string $message): void
     {
         $this->output->writeln($message, OutputInterface::VERBOSITY_DEBUG);
+    }
+
+    protected function hasAnsi(): bool
+    {
+        return $this->option('ansi') || ! $this->option('no-ansi');
     }
 }

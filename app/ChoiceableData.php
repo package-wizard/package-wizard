@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer;
 
+use BackedEnum;
 use Illuminate\Support\Collection;
 use PackageWizard\Installer\Enums\TypeEnum;
 use Spatie\LaravelData\Data;
@@ -28,12 +29,16 @@ trait ChoiceableData
 
     protected function type(string|TypeEnum $type): ?TypeEnum
     {
-        return $type instanceof TypeEnum ? $type : TypeEnum::tryFrom($type);
+        if ($type instanceof TypeEnum) {
+            return $type;
+        }
+
+        return TypeEnum::tryFrom($type);
     }
 
-    protected function throw(string|TypeEnum $type): void
+    protected function throw(BackedEnum|string $type): void
     {
-        $name = $this->type($type)?->value ?? $type;
+        $name = $type->value ?? $type;
 
         throw new UnexpectedValueException('Unsupported type: ' . $name);
     }

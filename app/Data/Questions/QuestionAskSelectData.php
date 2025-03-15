@@ -5,27 +5,25 @@ declare(strict_types=1);
 namespace PackageWizard\Installer\Data\Questions;
 
 use PackageWizard\Installer\Data\Casts\ArrayWrapCast;
-use PackageWizard\Installer\Enums\PromptType;
+use PackageWizard\Installer\Enums\PromptEnum;
 use PackageWizard\Installer\Enums\TypeEnum;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
 
-class QuestionAskData extends Data
+class QuestionAskSelectData extends Data
 {
     public TypeEnum $type = TypeEnum::Ask;
 
-    public PromptType $prompt = PromptType::Text;
+    public PromptEnum $prompt = PromptEnum::Select;
 
     #[WithCast(ArrayWrapCast::class)]
     public array $replace;
 
     public string $question;
 
-    public ?string $placeholder = null;
+    public array $options;
 
-    public ?string $regex = null;
+    public int|string|null $default = null;
 
-    public bool $trim = true;
-
-    public bool $required = true;
+    public bool|string $required = true;
 }

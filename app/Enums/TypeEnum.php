@@ -6,11 +6,11 @@ namespace PackageWizard\Installer\Enums;
 
 enum TypeEnum: string
 {
-    case Year      = 'year';
-    case YearRange = 'yearRange';
+    case Ask       = 'ask';
+    case Author    = 'author';
     case Date      = 'date';
     case License   = 'license';
     case Replace   = 'replace';
-    case Ask       = 'ask';
-    case Author    = 'author';
+    case Year      = 'year';
+    case YearRange = 'yearRange';
 }

@@ -51,7 +51,10 @@
     "autoload": {
         "psr-4": {
             "PackageWizard\\Installer\\": "app/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

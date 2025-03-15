@@ -11,6 +11,4 @@ class AuthorData extends Data
     public ?string $name = null;
 
     public ?string $email = null;
-
-    public ?string $homepage = null;
 }

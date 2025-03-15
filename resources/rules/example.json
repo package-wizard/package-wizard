@@ -4,11 +4,6 @@
         "install": true,
         "clean": true
     },
-    "project": {
-        "url": "https://example.com",
-        "title": "The best",
-        "description": "The best of the best"
-    },
     "authors": [
         {
             "name": "Andrey Helldar",

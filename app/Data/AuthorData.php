@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace PackageWizard\Installer\Data;
 
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Optional;
 
 class AuthorData extends Data
 {
-    public Optional|string $name;
+    public ?string $name = null;
 
-    public Optional|string $email;
+    public ?string $email = null;
 
-    public Optional|string $homepage;
+    public ?string $homepage = null;
 }

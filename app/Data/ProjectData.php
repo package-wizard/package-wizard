@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace PackageWizard\Installer\Data;
 
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Optional;
 
 class ProjectData extends Data
 {
     public ?string $directory = null;
 
-    public Optional|string $url;
+    public ?string $url = null;
 
-    public Optional|string $title;
+    public ?string $title = null;
 
-    public Optional|string $description;
+    public ?string $description = null;
 }

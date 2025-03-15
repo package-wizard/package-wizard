@@ -6,7 +6,7 @@ use PackageWizard\Installer\Enums\TypeEnum;
 
 return [
     'filename' => 'wizard.json',
-    
+
     'default' => [
         'wizard' => [
             'install' => true,

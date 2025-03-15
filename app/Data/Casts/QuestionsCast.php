@@ -17,7 +17,7 @@ class QuestionsCast implements Cast
 {
     use ChoiceableData;
 
-    protected function map(TypeEnum|string $type, array $item): Data
+    protected function map(string|TypeEnum $type, array $item): Data
     {
         return match ($type) {
             TypeEnum::License => QuestionLicenseData::from($item),

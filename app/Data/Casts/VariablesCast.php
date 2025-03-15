@@ -16,7 +16,7 @@ class VariablesCast implements Cast
 {
     use ChoiceableData;
 
-    protected function map(TypeEnum|string $type, array $item): Data
+    protected function map(string|TypeEnum $type, array $item): Data
     {
         return match ($this->type($type)) {
             TypeEnum::Year      => VariableYearData::from($item),

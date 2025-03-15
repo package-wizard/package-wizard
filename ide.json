@@ -20,6 +20,26 @@
                     }
                 }
             ]
+        },
+        {
+            "id": "app.helper",
+            "name": "Create Helper",
+            "classSuffix": "Helper",
+            "regex": ".+",
+            "files": [
+                {
+                    "appNamespace": "Helpers",
+                    "name": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}.php",
+                    "template": {
+                        "type": "stub",
+                        "path": "stubs/helper.stub",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
         }
     ],
     "completions": [

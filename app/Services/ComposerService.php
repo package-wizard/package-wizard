@@ -17,12 +17,23 @@ readonly class ComposerService
 
     public function createProject(string $directory, string $package, ?string $version, bool $dev, bool $ansi): void
     {
-        $command = vsprintf('%s create-project %s "%s" %s %s %s', [
+        $command = vsprintf('%s create-project --no-install %s "%s" %s %s %s', [
             $this->find(),
             $package,
             $directory,
             $version,
             $this->stability($dev),
+            $this->options(),
+            $this->ansi($ansi),
+        ]);
+
+        $this->process->runWithInteract($command, $directory);
+    }
+
+    public function update(string $directory, bool $ansi): void
+    {
+        $command = vsprintf('%s update %s %s', [
+            $this->find(),
             $this->options(),
             $this->ansi($ansi),
         ]);
@@ -48,7 +59,6 @@ readonly class ComposerService
     {
         return implode(' ', [
             '--ignore-platform-reqs',
-            '--no-install',
             '--no-scripts',
             '--prefer-dist',
             '--remove-vcs',

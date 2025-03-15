@@ -8,11 +8,14 @@ use Illuminate\Support\Collection;
 use PackageWizard\Installer\Data\Casts\QuestionsCast;
 use PackageWizard\Installer\Data\Casts\VariablesCast;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
+use Spatie\LaravelData\Attributes\MapName;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
+use Spatie\LaravelData\Mappers\ProvidedNameMapper;
 
 class ConfigData extends Data
 {
+    #[MapName(new ProvidedNameMapper('$schema'))]
     public string $schema = 'https://package-wizard.com/schemas/schema-v2.json';
 
     public WizardData $wizard;
@@ -28,4 +31,15 @@ class ConfigData extends Data
 
     #[WithCast(QuestionsCast::class)]
     public Collection $questions;
+
+    public static function prepareForPipeline(array $properties): array
+    {
+        $properties['wizard']    ??= [];
+        $properties['authors']   ??= [];
+        $properties['variables'] ??= [];
+        $properties['replaces']  ??= [];
+        $properties['questions'] ??= [];
+
+        return $properties;
+    }
 }

@@ -9,14 +9,14 @@ return [
 
     'default' => [
         'wizard' => [
-            'install' => true,
-            'clean'   => true,
-        ],
+            'install' => [
+                'composer' => true,
+                'npm'      => false,
+                'yarn'     => false,
+            ],
 
-        'authors'  => [],
-        'replaces' => [],
-        'renames'  => [],
-        'removes'  => [],
+            'clean' => true,
+        ],
 
         'variables' => [
             [

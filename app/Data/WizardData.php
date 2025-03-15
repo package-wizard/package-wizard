@@ -8,7 +8,14 @@ use Spatie\LaravelData\Data;
 
 class WizardData extends Data
 {
-    public bool $install;
+    public WizardInstallData $install;
 
     public bool $clean;
+
+    public static function prepareForPipeline(array $properties): array
+    {
+        $properties['install'] ??= [];
+
+        return $properties;
+    }
 }

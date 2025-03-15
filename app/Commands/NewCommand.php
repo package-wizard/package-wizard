@@ -6,6 +6,7 @@ namespace PackageWizard\Installer\Commands;
 
 use DragonCode\Support\Facades\Filesystem\Directory;
 use Illuminate\Console\Command;
+use JsonException;
 use PackageWizard\Installer\Data\ConfigData;
 use PackageWizard\Installer\Fillers\DirectoryFiller;
 use PackageWizard\Installer\Fillers\PackageFiller;
@@ -37,7 +38,7 @@ class NewCommand extends Command
     /**
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \JsonException
+     * @throws JsonException
      */
     public function handle(): int
     {
@@ -164,7 +165,7 @@ class NewCommand extends Command
     }
 
     /**
-     * @throws \JsonException
+     * @throws JsonException
      */
     protected function getConfig(string $directory): ConfigData
     {

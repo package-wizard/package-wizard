@@ -38,13 +38,13 @@
     },
     "require-dev": {
         "dragon-code/support": "^6.16",
-        "illuminate/http": "^11.44",
+        "illuminate/http": "^11.44.2",
         "justinrainbow/json-schema": "^6.3.0",
         "laravel-zero/framework": "^11.36.1",
         "laravel/prompts": "^0.3.5",
         "mockery/mockery": "^1.6.12",
         "pestphp/pest": "^3.7.4",
-        "spatie/laravel-data": "^4.13.2"
+        "spatie/laravel-data": "^4.14.0"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,

@@ -28,7 +28,7 @@ class ConfigData extends Data
 
     #[DataCollectionOf(ReplaceData::class)]
     public Collection $replaces;
-    
+
     // TODO: renames + questions
     // TODO: removes + questions
     // TODO: copies + questions

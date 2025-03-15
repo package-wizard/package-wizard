@@ -48,11 +48,31 @@
             "regex": ".+",
             "files": [
                 {
-                    "appNamespace": "Contract",
+                    "appNamespace": "Contracts",
                     "name": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}.php",
                     "template": {
                         "type": "stub",
                         "path": "stubs/contract.stub",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": "app.replacer",
+            "name": "Create Replacer",
+            "classSuffix": "Replacer",
+            "regex": ".+",
+            "files": [
+                {
+                    "appNamespace": "Replacers",
+                    "name": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}.php",
+                    "template": {
+                        "type": "stub",
+                        "path": "stubs/replacer.stub",
                         "parameters": {
                             "DummyNamespace": "${INPUT_FQN|namespace}",
                             "DummyClass": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}"

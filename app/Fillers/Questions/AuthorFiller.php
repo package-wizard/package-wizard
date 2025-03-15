@@ -6,13 +6,11 @@ namespace PackageWizard\Installer\Fillers\Questions;
 
 use PackageWizard\Installer\Data\AuthorData;
 use PackageWizard\Installer\Data\Questions\QuestionAuthorData;
-use PackageWizard\Installer\Data\ReplaceData;
 use PackageWizard\Installer\Fillers\Filler;
 use PackageWizard\Installer\Services\GitService;
 use Spatie\LaravelData\Data;
 
 use function Laravel\Prompts\text;
-use function str_replace;
 
 /** @method static make(QuestionAuthorData|Data $data) */
 class AuthorFiller extends Filler
@@ -26,21 +24,14 @@ class AuthorFiller extends Filler
         }
     }
 
-    public function get(): ReplaceData
+    public function get(): AuthorData
     {
-        return ReplaceData::from([
+        return AuthorData::from([
             'replace' => $this->data->replace,
-            'with'    => $this->answer(),
+            'format'  => $this->data->format,
+            'name'    => $this->name(),
+            'email'   => $this->email(),
         ]);
-    }
-
-    protected function answer(): string
-    {
-        return str_replace(
-            [':name:', ':email:'],
-            [$this->name(), $this->email()],
-            $this->data->format
-        );
     }
 
     protected function name(): string

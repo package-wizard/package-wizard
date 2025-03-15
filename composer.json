@@ -24,10 +24,10 @@
         {
             "name": "Andrey Helldar",
             "email": "helldar@dragon-code.pro",
-            "homepage": "https://github.com/TheDragonCode"
+            "homepage": "https://dragon-code.pro"
         }
     ],
-    "homepage": "https://dragon-code.pro",
+    "homepage": "https://package-wizard.com",
     "support": {
         "issues": "https://github.com/package-wizard/installer/issues",
         "source": "https://github.com/package-wizard/installer"

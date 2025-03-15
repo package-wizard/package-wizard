@@ -46,9 +46,9 @@ return [
     'var_dumper_caster_mode' => 'development',
 
     'structure_caching' => [
-        'enabled'              => true,
-        'directories'          => [app_path('Data')],
-        'cache'                => [
+        'enabled'     => true,
+        'directories' => [app_path('Data')],
+        'cache'       => [
             'store'    => env('CACHE_STORE', 'array'),
             'prefix'   => 'laravel-data',
             'duration' => null,

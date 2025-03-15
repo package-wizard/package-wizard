@@ -13,7 +13,7 @@ use UnexpectedValueException;
 
 trait ChoiceableData
 {
-    abstract protected function map(TypeEnum|string $type, array $item): Data;
+    abstract protected function map(string|TypeEnum $type, array $item): Data;
 
     public function cast(
         DataProperty $property,
@@ -26,12 +26,12 @@ trait ChoiceableData
         );
     }
 
-    protected function type(TypeEnum|string $type): ?TypeEnum
+    protected function type(string|TypeEnum $type): ?TypeEnum
     {
         return $type instanceof TypeEnum ? $type : TypeEnum::tryFrom($type);
     }
 
-    protected function throw(TypeEnum|string $type): void
+    protected function throw(string|TypeEnum $type): void
     {
         $name = $this->type($type)?->value ?? $type;
 

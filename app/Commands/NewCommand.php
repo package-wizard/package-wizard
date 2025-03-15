@@ -6,12 +6,19 @@ namespace PackageWizard\Installer\Commands;
 
 use DragonCode\Support\Facades\Filesystem\Directory;
 use Illuminate\Console\Command;
+use Illuminate\Support\Collection;
 use JsonException;
 use PackageWizard\Installer\Data\ConfigData;
+use PackageWizard\Installer\Enums\TypeEnum;
+use PackageWizard\Installer\Fillers\AskFiller;
 use PackageWizard\Installer\Fillers\DirectoryFiller;
 use PackageWizard\Installer\Fillers\PackageFiller;
+use PackageWizard\Installer\Fillers\Questions\AuthorFiller;
+use PackageWizard\Installer\Fillers\Questions\LicenseFiller;
 use PackageWizard\Installer\Helpers\ConfigHelper;
+use PackageWizard\Installer\Helpers\PreviewHelper;
 use PackageWizard\Installer\Services\ComposerService;
+use Spatie\LaravelData\Data;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -20,8 +27,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function getcwd;
 use function is_readable;
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\intro;
 use function Laravel\Prompts\warning;
 use function realpath;
+use function Termwind\renderUsing;
 
 class NewCommand extends Command
 {
@@ -33,6 +42,8 @@ class NewCommand extends Command
         protected ComposerService $composer
     ) {
         parent::__construct();
+
+        renderUsing($this->output);
     }
 
     /**
@@ -46,9 +57,13 @@ class NewCommand extends Command
             $this->projectDirectory()
         );
 
-        dd(
-            $config
-        );
+        $this->questions($config);
+
+        if (! $this->confirmChanges($config)) {
+            return $this->handle();
+        }
+
+        // TODO: Replace variables
 
         return static::SUCCESS;
     }
@@ -101,11 +116,6 @@ class NewCommand extends Command
         }
     }
 
-    protected function hasAnsi(): bool
-    {
-        return $this->option('ansi') || ! $this->option('no-ansi');
-    }
-
     protected function getInstallationDirectory(string $name): string
     {
         return $name !== '.' ? getcwd() . '/' . $name : '.';
@@ -125,7 +135,7 @@ class NewCommand extends Command
             $package = $this->argument('search');
             $version = $this->option('package-version');
             $dev     = $this->option('dev');
-            $ansi    = $this->hasAnsi();
+            $ansi    = $this->option('ansi') || ! $this->option('no-ansi');
 
             $this->ensureDirectory($directory);
 
@@ -171,16 +181,54 @@ class NewCommand extends Command
      */
     protected function getConfig(string $directory): ConfigData
     {
-        $this->output->writeln('Configuration loading...', OutputInterface::VERBOSITY_DEBUG);
+        $this->debugMessage('Configuration loading...');
 
         if (! $this->option('local')) {
-            $this->output->writeln('Searching for a package...', OutputInterface::VERBOSITY_DEBUG);
+            $this->debugMessage('Searching for a package...');
 
             $package = $this->argument('search');
         }
 
-        $this->output->writeln('Build configuration data object...', OutputInterface::VERBOSITY_DEBUG);
+        $this->debugMessage('Build configuration data object...');
 
         return ConfigHelper::data($directory, $package ?? 'default');
+    }
+
+    protected function questions(ConfigData $config): void
+    {
+        $this->debugMessage('We ask questions to the user ...');
+
+        $config->questions->each(
+            function (Data $item, int $index) use ($config) {
+                $this->debugMessage("    Question #$index...");
+
+                match ($item->type) {
+                    TypeEnum::Ask     => $this->pushIf($config->replaces, AskFiller::make(data: $item)),
+                    TypeEnum::Author  => $this->pushIf($config->authors, AuthorFiller::make(data: $item)),
+                    TypeEnum::License => $this->pushIf($config->replaces, LicenseFiller::make(data: $item)),
+                };
+            }
+        );
+    }
+
+    protected function pushIf(Collection $items, mixed $value): void
+    {
+        if ($value) {
+            $items->push($value);
+        }
+    }
+
+    protected function confirmChanges(ConfigData $config): bool
+    {
+        intro(PHP_EOL . 'Check the data before continuing' . PHP_EOL);
+
+        PreviewHelper::show($config, $this->components);
+
+        return confirm('Do you confirm generation?');
+    }
+
+    protected function debugMessage(string $message): void
+    {
+        $this->output->writeln($message, OutputInterface::VERBOSITY_DEBUG);
     }
 }

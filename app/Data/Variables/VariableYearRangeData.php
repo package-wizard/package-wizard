@@ -14,7 +14,7 @@ class VariableYearRangeData extends Data
     public TypeEnum $type = TypeEnum::YearRange;
 
     #[WithCast(ArrayWrapCast::class)]
-    public array $replace = [':year:'];
+    public array $replace = [':yearRange:'];
 
     public int $start = 1970;
 }

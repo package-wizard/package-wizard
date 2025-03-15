@@ -17,8 +17,6 @@ class ConfigData extends Data
 
     public WizardData $wizard;
 
-    public ProjectData $project;
-
     #[DataCollectionOf(AuthorData::class)]
     public Collection $authors;
 

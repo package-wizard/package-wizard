@@ -25,13 +25,9 @@ class ConfigHelper
      */
     public static function data(string $directory, string $package = 'default'): ConfigData
     {
-        $data = ConfigData::from(
+        return ConfigData::from(
             static::getConfig($directory, $package)
         );
-
-        $data->project->directory = $directory;
-
-        return $data;
     }
 
     public static function search(string $directory, string $package): ?string

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Enums;
 
-enum PromptType: string
+enum PromptEnum: string
 {
-    case Text = 'text';
+    case Text   = 'text';
+    case Select = 'select';
 }

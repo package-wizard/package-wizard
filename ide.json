@@ -40,6 +40,26 @@
                     }
                 }
             ]
+        },
+        {
+            "id": "app.contract",
+            "name": "Create Contract",
+            "classSuffix": "Contract",
+            "regex": ".+",
+            "files": [
+                {
+                    "appNamespace": "Contract",
+                    "name": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}.php",
+                    "template": {
+                        "type": "stub",
+                        "path": "stubs/contract.stub",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
         }
     ],
     "completions": [
@@ -60,6 +80,24 @@
             "options": {
                 "directory": "tests/Fixtures/Rules",
                 "suffixToClear": ".json",
+                "recursive": true
+            }
+        },
+        {
+            "complete": "directoryFiles",
+            "condition": [
+                {
+                    "functionNames": [
+                        "vendor_path"
+                    ],
+                    "place": "parameter",
+                    "parameters": [
+                        1
+                    ]
+                }
+            ],
+            "options": {
+                "directory": "vendor",
                 "recursive": true
             }
         }

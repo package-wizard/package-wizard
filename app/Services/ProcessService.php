@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Services;
 
+use Illuminate\Support\Arr;
 use Laravel\Prompts\Output\ConsoleOutput;
 use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,6 +16,7 @@ use function implode;
 use function is_array;
 use function is_readable;
 use function Laravel\Prompts\warning;
+use function trim;
 
 class ProcessService
 {
@@ -25,7 +27,7 @@ class ProcessService
         return static::$output ??= new ConsoleOutput();
     }
 
-    public function run(array|string $command, string $directory): void
+    public function runWithInteract(array|string $command, string $directory): void
     {
         $process = $this->process(
             $this->prepareCommand($command),
@@ -37,6 +39,17 @@ class ProcessService
         $process->run(
             fn ($type, $line) => static::output()->write('    ' . $line)
         );
+    }
+
+    public function runWithOutput(array|string $command): ?string
+    {
+        $process = new Process(Arr::wrap($command));
+
+        $process->run();
+
+        $output = trim($process->getOutput());
+
+        return $process->isSuccessful() && $output ? $output : null;
     }
 
     protected function process(string $command, string $path): Process

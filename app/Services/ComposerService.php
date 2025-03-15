@@ -27,7 +27,7 @@ readonly class ComposerService
             $this->ansi($ansi),
         ]);
 
-        $this->process->run($command, $directory);
+        $this->process->runWithInteract($command, $directory);
     }
 
     protected function stability(bool $dev): string

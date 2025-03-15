@@ -5,6 +5,8 @@ declare(strict_types=1);
 use PackageWizard\Installer\Enums\TypeEnum;
 
 return [
+    'filename' => 'wizard.json',
+    
     'default' => [
         'wizard' => [
             'install' => true,

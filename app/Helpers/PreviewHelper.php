@@ -10,7 +10,6 @@ use PackageWizard\Installer\Data\ReplaceData;
 
 use function collect;
 use function count;
-use function Laravel\Prompts\info;
 use function ob_end_clean;
 use function ob_get_contents;
 use function ob_start;
@@ -25,8 +24,6 @@ class PreviewHelper
      */
     public static function replaces(Collection $items): void
     {
-        info('Replaces:');
-
         foreach ($items as $item) {
             if (! $item->asked) {
                 continue;

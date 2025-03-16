@@ -56,7 +56,7 @@ class ComparatorService
             return true;
         }
 
-        return (bool) ($comparator === ComparatorEnum::NotEqualTo && $haystack !== $needle);
+        return $comparator === ComparatorEnum::NotEqualTo && $haystack !== $needle;
     }
 
     protected function array(ComparatorEnum $comparator, array $haystack, int|string $needle): bool
@@ -67,7 +67,7 @@ class ComparatorService
             return true;
         }
 
-        return (bool) ($comparator === ComparatorEnum::NotInList && $compare === false);
+        return $comparator === ComparatorEnum::NotInList && $compare === false;
     }
 
     protected function numbers(ComparatorEnum $comparator, int $haystack, int $needle): bool
@@ -84,7 +84,7 @@ class ComparatorService
             return true;
         }
 
-        return (bool) ($comparator === ComparatorEnum::GreaterThanOrEqualTo && $needle >= $haystack);
+        return $comparator === ComparatorEnum::GreaterThanOrEqualTo && $needle >= $haystack;
     }
 
     protected function strings(ComparatorEnum $comparator, mixed $haystack, mixed $needle): bool
@@ -101,6 +101,6 @@ class ComparatorService
             return true;
         }
 
-        return (bool) ($comparator === ComparatorEnum::DoesntContainAll && ! Str::containsAll($needle, $haystack));
+        return $comparator === ComparatorEnum::DoesntContainAll && ! Str::containsAll($needle, $haystack);
     }
 }

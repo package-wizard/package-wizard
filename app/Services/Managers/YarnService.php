@@ -2,14 +2,13 @@
 
 declare(strict_types=1);
 
-namespace PackageWizard\Installer\Services;
+namespace PackageWizard\Installer\Services\Managers;
 
 use PackageWizard\Installer\Support\Yarn;
 
-class YarnService
+class YarnService extends Manager
 {
     public function __construct(
-        protected ProcessService $process,
         protected Yarn $yarn,
     ) {}
 
@@ -20,32 +19,28 @@ class YarnService
             $directory,
         ]);
 
-        $this->process->runWithInteract($command, $directory);
+        $this->perform($command, $directory);
     }
 
-    public function require(string $directory, iterable $packages, bool $dev = false): void
+    public function add(string $directory, iterable $packages, bool $dev = false): void
     {
-        $names = collect($packages)->join(' ');
-
         $command = vsprintf('%s add %s %s', [
             $this->yarn->find(),
-            $names,
+            collect($packages)->join(' '),
             $dev ? '--dev' : '',
         ]);
 
-        $this->process->runWithInteract($command, $directory);
+        $this->perform($command, $directory);
     }
 
     public function remove(string $directory, iterable $packages, bool $dev = false): void
     {
-        $names = collect($packages)->join(' ');
-
         $command = vsprintf('%s remove %s %s', [
             $this->yarn->find(),
-            $names,
+            collect($packages)->join(' '),
             $dev ? '--dev' : '',
         ]);
 
-        $this->process->runWithInteract($command, $directory);
+        $this->perform($command, $directory);
     }
 }

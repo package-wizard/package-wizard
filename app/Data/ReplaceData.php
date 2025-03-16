@@ -10,6 +10,8 @@ use Spatie\LaravelData\Data;
 
 class ReplaceData extends Data
 {
+    public ?string $id = null;
+
     #[WithCast(ArrayWrapCast::class)]
     public array $replace;
 

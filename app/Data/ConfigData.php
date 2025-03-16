@@ -13,7 +13,6 @@ use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\ProvidedNameMapper;
 
-// TODO: conditions
 class ConfigData extends Data
 {
     #[MapName(new ProvidedNameMapper('$schema'))]
@@ -47,7 +46,7 @@ class ConfigData extends Data
         $properties['authors']   ??= [];
         $properties['variables'] ??= [];
         $properties['renames']   ??= [];
-        $properties['copies']   ??= [];
+        $properties['copies']    ??= [];
         $properties['removes']   ??= [];
         $properties['replaces']  ??= [];
         $properties['questions'] ??= [];

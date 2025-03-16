@@ -13,6 +13,7 @@ use JsonException;
 use PackageWizard\Installer\Data\AuthorData;
 use PackageWizard\Installer\Data\ConfigData;
 use PackageWizard\Installer\Data\CopyData;
+use PackageWizard\Installer\Data\ReplaceData;
 use PackageWizard\Installer\Enums\RenameEnum;
 use PackageWizard\Installer\Enums\TypeEnum;
 use PackageWizard\Installer\Fillers\AskFiller;
@@ -26,6 +27,7 @@ use PackageWizard\Installer\Replacers\AskReplacer;
 use PackageWizard\Installer\Replacers\AuthorReplacer;
 use PackageWizard\Installer\Replacers\LicenseReplacer;
 use PackageWizard\Installer\Replacers\VariableReplacer;
+use PackageWizard\Installer\Services\ComparatorService;
 use PackageWizard\Installer\Services\ComposerService;
 use PackageWizard\Installer\Services\FilesystemService;
 use PackageWizard\Installer\Services\NpmService;
@@ -56,6 +58,7 @@ class NewCommand extends Command
         protected ComposerService $composer,
         protected NpmService $npm,
         protected YarnService $yarn,
+        protected ComparatorService $comparator,
     ) {
         parent::__construct();
 
@@ -311,6 +314,23 @@ class NewCommand extends Command
         $config->questions->each(
             function (Data $item, int $index) use ($config) {
                 $this->debugMessage("    Question #$index...");
+
+                if ($item->condition !== true) {
+                    /** @var ReplaceData $from */
+                    $from = $config->replaces
+                        ->where('id', $item->condition->for)
+                        ->firstOrFail();
+
+                    if (
+                        $this->comparator->disallow(
+                            $item->condition->comparator,
+                            $item->condition->value,
+                            $from->with,
+                        )
+                    ) {
+                        return;
+                    }
+                }
 
                 $value = match ($item->type) {
                     TypeEnum::Ask     => AskReplacer::get(AskFiller::make(data: $item), true),

@@ -14,6 +14,6 @@ class ReplaceData extends Data
     public array $replace;
 
     public int|string $with;
-    
+
     public bool $asked = false;
 }

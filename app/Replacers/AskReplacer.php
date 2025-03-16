@@ -16,5 +16,8 @@ class AskReplacer extends Replacer
         return $this->data;
     }
 
-    protected function with(): int|string {}
+    protected function with(): int|string
+    {
+        return 0;
+    }
 }

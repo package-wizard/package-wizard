@@ -8,6 +8,7 @@ use DragonCode\Support\Facades\Filesystem\Directory;
 use DragonCode\Support\Facades\Filesystem\File;
 use Illuminate\Filesystem\Filesystem;
 
+use function dirname;
 use function is_dir;
 
 class FilesystemService
@@ -36,10 +37,34 @@ class FilesystemService
         $this->filesystem->move($source, $target);
     }
 
+    public function copy(string $source, string $target): void
+    {
+        if (! $this->filesystem->exists($source)) {
+            return;
+        }
+
+        $this->delete($target);
+
+        if ($this->filesystem->isFile($source)) {
+            $this->filesystem->ensureDirectoryExists(dirname($target));
+        }
+
+        $this->filesystem->isFile($source)
+            ? $this->filesystem->copy($source, $target)
+            : $this->filesystem->copyDirectory($source, $target);
+    }
+
     public function remove(string $path): void
     {
         is_dir($path)
             ? Directory::ensureDelete($path)
             : File::ensureDelete($path);
+    }
+
+    public function delete(string $path): void
+    {
+        $this->filesystem->isFile($path)
+            ? File::ensureDelete($path)
+            : Directory::ensureDelete($path);
     }
 }

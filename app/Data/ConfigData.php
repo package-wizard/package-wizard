@@ -13,7 +13,6 @@ use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelData\Mappers\ProvidedNameMapper;
 
-// TODO: copies + questions
 // TODO: conditions
 class ConfigData extends Data
 {
@@ -31,10 +30,13 @@ class ConfigData extends Data
     #[DataCollectionOf(RenameData::class)]
     public Collection $renames;
 
+    #[DataCollectionOf(CopyData::class)]
+    public Collection $copies;
+
+    public Collection $removes;
+
     #[DataCollectionOf(ReplaceData::class)]
     public Collection $replaces;
-    
-    public Collection $removes;
 
     #[WithCast(QuestionsCast::class)]
     public Collection $questions;
@@ -45,6 +47,8 @@ class ConfigData extends Data
         $properties['authors']   ??= [];
         $properties['variables'] ??= [];
         $properties['renames']   ??= [];
+        $properties['copies']   ??= [];
+        $properties['removes']   ??= [];
         $properties['replaces']  ??= [];
         $properties['questions'] ??= [];
 

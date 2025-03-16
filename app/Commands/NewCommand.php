@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use JsonException;
 use PackageWizard\Installer\Data\AuthorData;
 use PackageWizard\Installer\Data\ConfigData;
+use PackageWizard\Installer\Data\CopyData;
 use PackageWizard\Installer\Enums\RenameEnum;
 use PackageWizard\Installer\Enums\TypeEnum;
 use PackageWizard\Installer\Fillers\AskFiller;
@@ -128,13 +129,23 @@ class NewCommand extends Command
 
             $this->withProgressBar(
                 $config->removes,
-                static fn (string $path) => $filesystem->remove($path)
+                static fn (string $path) => $filesystem->remove($directory . '/' . $path)
             );
 
             $this->newLine();
         }
 
-        $this->newLine();
+        if ($config->copies->isNotEmpty()) {
+            info('Copy...');
+
+            $this->withProgressBar(
+                $config->copies,
+                static fn (CopyData $item) => $filesystem->copy(
+                    source: $directory . '/' . $item->source,
+                    target: $directory . '/' . $item->target
+                )
+            );
+        }
 
         $this->installDependencies($config, $directory);
         $this->cleanUp($config, $directory);

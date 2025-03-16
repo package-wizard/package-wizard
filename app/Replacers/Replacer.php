@@ -12,13 +12,14 @@ abstract class Replacer
     abstract protected function with(): int|string;
 
     public function __construct(
-        protected ?Data $data
+        protected ?Data $data,
+        protected bool $asked = false
     ) {}
 
-    public static function get(?Data $data): ?ReplaceData
+    public static function get(?Data $data, bool $asked = false): ?ReplaceData
     {
         if ($data) {
-            return (new static($data))->make();
+            return (new static($data, $asked))->make();
         }
 
         return null;
@@ -29,6 +30,7 @@ abstract class Replacer
         return ReplaceData::from([
             'replace' => $this->data->replace,
             'with'    => $this->with(),
+            'asked'   => $this->asked,
         ]);
     }
 }

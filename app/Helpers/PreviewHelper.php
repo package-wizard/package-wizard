@@ -28,6 +28,10 @@ class PreviewHelper
         info('Replaces:');
 
         foreach ($items as $item) {
+            if (! $item->asked) {
+                continue;
+            }
+
             static::twoColumnDetail(
                 static::compactReplace($item->replace),
                 static::compactValue($item->with)

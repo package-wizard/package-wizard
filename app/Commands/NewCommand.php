@@ -254,9 +254,9 @@ class NewCommand extends Command
                 $this->debugMessage("    Question #$index...");
 
                 $value = match ($item->type) {
-                    TypeEnum::Ask     => AskReplacer::get(AskFiller::make(data: $item)),
-                    TypeEnum::Author  => AuthorReplacer::get(AuthorFiller::make(data: $item)),
-                    TypeEnum::License => LicenseReplacer::get(LicenseFiller::make(data: $item)),
+                    TypeEnum::Ask     => AskReplacer::get(AskFiller::make(data: $item), true),
+                    TypeEnum::Author  => AuthorReplacer::get(AuthorFiller::make(data: $item), true),
+                    TypeEnum::License => LicenseReplacer::get(LicenseFiller::make(data: $item), true),
                 };
 
                 if ($value) {

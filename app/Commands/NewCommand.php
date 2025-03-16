@@ -13,6 +13,7 @@ use JsonException;
 use PackageWizard\Installer\Data\AuthorData;
 use PackageWizard\Installer\Data\ConfigData;
 use PackageWizard\Installer\Data\CopyData;
+use PackageWizard\Installer\Data\Questions\QuestionData;
 use PackageWizard\Installer\Data\ReplaceData;
 use PackageWizard\Installer\Enums\RenameEnum;
 use PackageWizard\Installer\Enums\TypeEnum;
@@ -312,7 +313,7 @@ class NewCommand extends Command
         $this->debugMessage('We ask questions to the user...');
 
         $config->questions->each(
-            function (Data $item, int $index) use ($config) {
+            function (QuestionData $item, int $index) use ($config) {
                 $this->debugMessage("    Question #$index...");
 
                 if ($item->condition !== true) {

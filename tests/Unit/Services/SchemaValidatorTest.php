@@ -2,18 +2,9 @@
 
 declare(strict_types=1);
 
-use PackageWizard\Installer\Data\SomeData;
 use PackageWizard\Installer\Exceptions\JsonSchemaException;
 
 test('correct', function () {
-    $data = SomeData::from([
-        'foo' => 'qwe',
-    ]);
-
-    dd(
-        $data->foo
-    );
-
     validateSchema('correct-1');
 
     expect(true)->toBeTrue();

@@ -4,18 +4,24 @@
     "title": "Package Wizard configuration",
     "description": "Package Wizard configuration",
     "type": "object",
+    "additionalProperties": false,
     "properties": {
         "wizard": {
             "$ref": "#/definitions/wizard"
-        },
-        "project": {
-            "$ref": "#/definitions/project"
         },
         "authors": {
             "type": "array",
             "items": {
                 "$ref": "#/definitions/author"
             }
+        },
+        "variables": {
+            "type": "array",
+            "anyOf": [
+                { "$ref": "#/definitions/variableYear" },
+                { "$ref": "#/definitions/variableYearRange" },
+                { "$ref": "#/definitions/variableDate" }
+            ]
         },
         "renames": {
             "type": "array",
@@ -29,24 +35,25 @@
                 "$ref": "#/definitions/copy"
             }
         },
-        "dependencies": {
+        "removes": {
             "type": "array",
             "items": {
-                "$ref": "#/definitions/dependency"
+                "$ref": "#/definitions/remove"
             }
         },
-        "variables": {
+        "replaces": {
+            "type": "object",
+            "items": {
+                "$ref": "#/definitions/replace"
+            }
+        },
+        "questions": {
             "type": "array",
             "anyOf": [
-                {
-                    "$ref": "#/definitions/variableYear"
-                },
-                {
-                    "$ref": "#/definitions/variableYearRange"
-                },
-                {
-                    "$ref": "#/definitions/variableDate"
-                }
+                { "$ref": "#/definitions/questionAuthor" },
+                { "$ref": "#/definitions/questionLicense" },
+                { "$ref": "#/definitions/questionAskSelect" },
+                { "$ref": "#/definitions/questionAskText" }
             ]
         }
     },
@@ -55,79 +62,132 @@
             "type": "object",
             "properties": {
                 "install": {
-                    "type": "boolean",
-                    "default": true
+                    "$ref": "#/definitions/wizardInstall"
                 },
                 "clean": {
                     "type": "boolean",
                     "default": true
                 }
-            }
+            },
+            "additionalProperties": false
         },
-        "project": {
+        "wizardInstall": {
             "type": "object",
             "properties": {
-                "title": {
-                    "type": "string"
+                "composer": {
+                    "type": "boolean",
+                    "default": true
                 },
-                "description": {
-                    "type": "string"
+                "npm": {
+                    "type": "boolean",
+                    "default": false
                 },
-                "url": {
-                    "type": "string"
+                "yarn": {
+                    "type": "boolean",
+                    "default": false
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "author": {
             "type": "object",
             "properties": {
                 "name": {
-                    "type": "string"
+                    "oneOf": [
+                        { "type": "string" },
+                        { "type": "null" }
+                    ],
+                    "default": null
                 },
                 "email": {
-                    "type": "string"
+                    "oneOf": [
+                        { "type": "string" },
+                        { "type": "null" }
+                    ],
+                    "format": "email",
+                    "default": null
+                },
+                "replace": {
+                    "$ref": "#/definitions/valueReplace",
+                    "default": ":author:"
+                },
+                "format": {
+                    "type": "string",
+                    "default": ":name: <:email:>"
                 }
-            }
+            },
+            "additionalProperties": false
         },
         "rename": {
             "type": "object",
             "properties": {
                 "type": {
                     "type": "string",
-                    "enum": [
-                        "path",
-                        "name"
-                    ]
+                    "default": "rename",
+                    "const": true
                 },
-                "source": {
-                    "type": "string"
+                "what": {
+                    "type": "string",
+                    "enum": ["path", "name"]
                 },
-                "target": {
-                    "type": "string"
-                }
+                "source": { "type": "string" },
+                "target": { "type": "string" }
             },
             "required": [
                 "type",
+                "what",
                 "source",
                 "target"
             ],
-            "uniqueItems": true
+            "uniqueItems": true,
+            "additionalProperties": false
         },
         "copy": {
             "type": "object",
             "properties": {
-                "source": {
-                    "type": "string"
-                },
-                "target": {
-                    "type": "string"
-                }
+                "source": { "type": "string" },
+                "target": { "type": "string" }
             },
             "required": [
                 "source",
                 "target"
             ],
-            "uniqueItems": true
+            "uniqueItems": true,
+            "additionalProperties": false
+        },
+        "remove": {
+            "items": [
+                { "type": "string" }
+            ],
+            "uniqueItems": true,
+            "additionalProperties": false
+        },
+        "replace": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "oneOf": [
+                        { "type": "string" },
+                        { "type": "null" }
+                    ]
+                },
+
+                "replace": {
+                    "$ref": "#/definitions/valueReplace"
+                },
+                "with": {
+                    "oneOf": [
+                        { "type": "string" },
+                        { "type": "integer" }
+                    ]
+                }
+            },
+            "required": [
+                "replace",
+                "with"
+            ],
+            "uniqueItems": true,
+            "additionalProperties": false
         },
         "dependency": {
             "type": "object",
@@ -142,68 +202,61 @@
             "required": [
                 "name"
             ],
-            "uniqueItems": true
+            "uniqueItems": true,
+            "additionalProperties": false
         },
         "variableYear": {
             "type": "object",
             "properties": {
                 "type": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "year",
+                    "const": true
                 },
                 "replace": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "default": ":year:",
-                        "uniqueItems": true
-                    },
-                    "minItems": 1
+                    "$ref": "#/definitions/valueReplace",
+                    "default": ":year:"
                 }
             },
             "required": [
-                "type",
-                "replace"
-            ]
+                "type"
+            ],
+            "additionalProperties": false
         },
         "variableYearRange": {
             "type": "object",
             "properties": {
                 "type": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "yearRange",
+                    "const": true
                 },
                 "replace": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "default": ":yearRange:",
-                        "uniqueItems": true
-                    },
-                    "minItems": 1
+                    "$ref": "#/definitions/valueReplace",
+                    "default": ":yearRange:"
                 },
                 "start": {
-                    "type": "number"
+                    "type": "number",
+                    "default": 1970
                 }
             },
             "required": [
                 "type",
-                "replace",
                 "start"
-            ]
+            ],
+            "additionalProperties": false
         },
         "variableDate": {
             "type": "object",
             "properties": {
                 "type": {
-                    "type": "string"
+                    "type": "string",
+                    "default": "date",
+                    "const": true
                 },
                 "replace": {
-                    "type": "array",
-                    "items": {
-                        "type": "string",
-                        "default": ":yearRange:",
-                        "uniqueItems": true
-                    },
-                    "minItems": 1
+                    "$ref": "#/definitions/valueReplace",
+                    "default": ":date:"
                 },
                 "format": {
                     "type": "string",
@@ -211,10 +264,199 @@
                 }
             },
             "required": [
+                "type"
+            ],
+            "additionalProperties": false
+        },
+        "questionAuthor": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "default": "author",
+                    "const": true
+                },
+                "author": {
+                    "$ref": "#/definitions/author"
+                },
+                "replace": {
+                    "$ref": "#/definitions/valueReplace",
+                    "default": ":author:"
+                },
+                "format": {
+                    "type": "string",
+                    "default": ":name: <:email:>"
+                }
+            },
+            "required": [
+                "type"
+            ],
+            "additionalProperties": false
+        },
+        "questionLicense": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "default": "license",
+                    "const": true
+                },
+                "default": {
+                    "type": "string",
+                    "default": "MIT License"
+                },
+                "replace": {
+                    "$ref": "#/definitions/valueReplace",
+                    "default": ":license:"
+                },
+                "filename": {
+                    "type": "string",
+                    "default": "LICENSE"
+                }
+            },
+            "required": [
                 "type",
+                "default"
+            ],
+            "additionalProperties": false
+        },
+        "questionAskSelect": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "default": "ask",
+                    "const": true
+                },
+                "prompt": {
+                    "type": "string",
+                    "default": "select",
+                    "const": true
+                },
+                "replace": {
+                    "$ref": "#/definitions/valueReplace"
+                },
+                "question": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "options": {
+                    "type": "array",
+                    "anyOf": [
+                        { "type": "string" },
+                        { "type": "integer" },
+                        {
+                            "type": "object",
+                            "minProperties": 1,
+                            "maxProperties": 1,
+                            "propertyNames": { "type": "string" },
+                            "additionalProperties": { "type": "string" }
+                        }
+                    ],
+                    "minItems": 1,
+                    "uniqueItems": true,
+                    "additionalProperties": false
+                },
+                "default": {
+                    "oneOf": [
+                        { "type": "string" },
+                        { "type": "integer" },
+                        { "type": "null" }
+                    ]
+                },
+                "required": {
+                    "oneOf": [
+                        { "type": "boolean" },
+                        { "type": "string" }
+                    ]
+                }
+            },
+            "required": [
+                "type",
+                "prompt",
                 "replace",
-                "format"
+                "question",
+                "options"
             ]
+        },
+        "questionAskText": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "default": "ask",
+                    "const": true
+                },
+                "prompt": {
+                    "type": "string",
+                    "default": "text",
+                    "const": true
+                },
+                "replace": {
+                    "$ref": "#/definitions/valueReplace"
+                },
+                "question": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "default": {
+                    "oneOf": [
+                        { "type": "string" },
+                        { "type": "integer" },
+                        { "type": "null" }
+                    ],
+                    "default": null
+                },
+                "placeholder": {
+                    "oneOf": [
+                        { "type": "string" },
+                        { "type": "null" }
+                    ],
+                    "default": null,
+                    "minLength": 0
+                },
+                "regex": {
+                    "oneOf": [
+                        { "type": "string" },
+                        { "type": "null" }
+                    ],
+                    "default": null
+                },
+                "trim": {
+                    "type": "boolean",
+                    "default": true
+                },
+                "required": {
+                    "oneOf": [
+                        { "type": "boolean" },
+                        { "type": "string" }
+                    ],
+                    "default": true
+                }
+            },
+            "required": [
+                "type",
+                "prompt",
+                "replace",
+                "question"
+            ],
+            "additionalProperties": false
+        },
+        "valueReplace": {
+            "oneOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 1,
+                    "uniqueItems": true
+                }
+            ],
+            "additionalProperties": false
         }
     }
 }

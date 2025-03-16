@@ -10,7 +10,7 @@ class WizardData extends Data
 {
     public WizardInstallData $install;
 
-    public bool $clean;
+    public bool $clean = true;
 
     public static function prepareForPipeline(array $properties): array
     {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PackageWizard\Installer\Data\Questions;
 
 use PackageWizard\Installer\Data\Casts\ArrayWrapCast;
+use PackageWizard\Installer\Data\Casts\ToStringCast;
 use PackageWizard\Installer\Enums\PromptEnum;
 use PackageWizard\Installer\Enums\TypeEnum;
 use Spatie\LaravelData\Attributes\WithCast;
@@ -20,8 +21,10 @@ class QuestionAskTextData extends QuestionData
 
     public string $question;
 
+    #[WithCast(ToStringCast::class)]
     public string $default = '';
 
+    #[WithCast(ToStringCast::class)]
     public string $placeholder = '';
 
     public ?string $regex = null;

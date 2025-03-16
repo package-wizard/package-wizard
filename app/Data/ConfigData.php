@@ -32,6 +32,7 @@ class ConfigData extends Data
     // TODO: renames + questions
     // TODO: removes + questions
     // TODO: copies + questions
+    // TODO: conditions
 
     #[WithCast(QuestionsCast::class)]
     public Collection $questions;

@@ -30,7 +30,7 @@ return [
                 'type'        => TypeEnum::Ask,
                 'replace'     => ':app-name:',
                 'question'    => 'Which name of your project?',
-                'placeholder' => 'E.g. Laravel Deploy Operations',
+                'placeholder' => 'E.g. Deploy Operations',
             ],
             [
                 'type'        => TypeEnum::Ask,
@@ -40,10 +40,17 @@ return [
             ],
             [
                 'type'        => TypeEnum::Ask,
-                'replace'     => 'dragon-code/laravel-deploy-operations',
+                'replace'     => ':package:',
                 'question'    => 'Which name of your package?',
                 'placeholder' => 'E.g. dragon-code/laravel-deploy-operations',
                 'regex'       => '#^[a-z0-9]([_.-]?[a-z0-9]+)*/[a-z0-9](([_.]|-{1,2})?[a-z0-9]+)*$#',
+            ],
+            [
+                'type'        => TypeEnum::Ask,
+                'replace'     => ':repository:',
+                'question'    => 'Which link to your repository?',
+                'placeholder' => 'E.g. https://github.com/foo/bar',
+                'regex'       => '#^https:\/\/[a-zA-Z\d_\-.]+\/[a-zA-Z\d_\-.]+\/[a-zA-Z\d_\-.]+$#',
             ],
             [
                 'type'     => TypeEnum::Ask,

@@ -47,7 +47,7 @@ class ConfigData extends Data
         $properties['authors']   ??= [];
         $properties['variables'] ??= [];
         $properties['renames']   ??= [];
-        $properties['copies']   ??= [];
+        $properties['copies']    ??= [];
         $properties['removes']   ??= [];
         $properties['replaces']  ??= [];
         $properties['questions'] ??= [];

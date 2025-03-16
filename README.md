@@ -17,12 +17,12 @@ composer global require package-wizard/installer:*
 
 ## Using
 
-Once in the folder, call the `package` console command and follow the prompts.
+Once in the folder, call the `paw` console command and follow the prompts.
 
 The wizard will ask some questions and generate initial files for your project.
 
 ```bash
-package new
+paw new
 ```
 
 ## Documentation
@@ -34,12 +34,12 @@ See the [documentation](https://package-wizard.com) for detailed installation in
 For detailed information while the application is running, run it with the `-vvv` parameter:
 
 ```bash
-package new -vvv
+paw new -vvv
 ```
 
 ## License
 
-This package is licensed under the [MIT License](LICENSE).
+The `Package Wizard` is licensed under the [MIT License](LICENSE).
 
 
 [badge_downloads]:      https://img.shields.io/packagist/dt/package-wizard/installer.svg?style=flat-square

@@ -65,7 +65,7 @@
             "target": "qwerty"
         },
         {
-            "type": "name",
+            "type": "path",
             "source": "foo/some.stub",
             "target": "foo/some.json"
         },

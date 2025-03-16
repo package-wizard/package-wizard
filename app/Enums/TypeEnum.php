@@ -10,6 +10,7 @@ enum TypeEnum: string
     case Author    = 'author';
     case Date      = 'date';
     case License   = 'license';
+    case Rename    = 'rename';
     case Year      = 'year';
     case YearRange = 'yearRange';
 }

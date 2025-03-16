@@ -18,13 +18,18 @@ class FilesystemService
         return File::allPaths($directory, recursive: true);
     }
 
-    public function content(string $filename): string
+    public function content(string $path): string
     {
-        return $this->filesystem->get($filename);
+        return $this->filesystem->get($path);
     }
 
-    public function store(string $filename, string $content): void
+    public function store(string $path, string $content): void
     {
-        $this->filesystem->put($filename, $content);
+        $this->filesystem->put($path, $content);
+    }
+
+    public function rename(string $source, string $target): void
+    {
+        $this->filesystem->move($source, $target);
     }
 }

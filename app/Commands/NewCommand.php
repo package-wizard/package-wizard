@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use JsonException;
 use PackageWizard\Installer\Data\AuthorData;
 use PackageWizard\Installer\Data\ConfigData;
+use PackageWizard\Installer\Enums\RenameEnum;
 use PackageWizard\Installer\Enums\TypeEnum;
 use PackageWizard\Installer\Fillers\AskFiller;
 use PackageWizard\Installer\Fillers\DirectoryFiller;
@@ -81,10 +82,44 @@ class NewCommand extends Command
 
         $this->newLine();
 
+        info('Replace...');
+
         $this->withProgressBar(
             $filesystem->allFiles($directory),
-            static fn (string $filename) => $replacer->replace($filename, $config->replaces)
+            static fn (string $path) => $replacer->replace($path, $config->replaces)
         );
+
+        $this->newLine();
+
+        if ($config->renames->isNotEmpty()) {
+            info('Rename...');
+
+            $this->withProgressBar(
+                $filesystem->allFiles($directory),
+                static function (string $path) use ($filesystem, $directory, $config) {
+                    $basename = Str::of(realpath($path))
+                        ->after(realpath($directory))
+                        ->replace('\\', '/')
+                        ->ltrim('/')
+                        ->toString();
+
+                    foreach ($config->renames as $rename) {
+                        if ($rename->what === RenameEnum::Path && $basename === $rename->source) {
+                            $basename = $rename->target;
+                        }
+
+                        if ($rename->what === RenameEnum::Name) {
+                            $basename = Str::of($basename)
+                                ->explode('/')
+                                ->map(static fn (string $name) => $name === $rename->source ? $rename->target : $name)
+                                ->join('/');
+                        }
+                    }
+
+                    $filesystem->rename($path, $directory . '/' . $basename);
+                }
+            );
+        }
 
         $this->newLine();
 

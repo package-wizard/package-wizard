@@ -53,6 +53,15 @@
                 "$ref": "#/definitions/replace"
             }
         },
+        "dependencies": {
+            "type": "array",
+            "items": [
+                {
+                    "$ref": "#/definitions/dependency"
+                }
+            ],
+            "uniqueItems": true
+        },
         "questions": {
             "type": "array",
             "anyOf": [
@@ -234,11 +243,26 @@
         "dependency": {
             "type": "object",
             "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "composer",
+                        "npm",
+                        "yarn"
+                    ],
+                    "default": "composer"
+                },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 3
+                },
+                "dev": {
+                    "type": "boolean",
+                    "default": false
                 },
                 "remove": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "default": false
                 }
             },
             "required": [

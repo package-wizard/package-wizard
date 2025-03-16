@@ -6,6 +6,8 @@ namespace PackageWizard\Installer\Services;
 
 use Illuminate\Support\Composer;
 
+use function array_merge;
+use function collect;
 use function implode;
 
 readonly class ComposerService
@@ -41,6 +43,36 @@ readonly class ComposerService
         $this->process->runWithInteract($command, $directory);
     }
 
+    public function require(string $directory, iterable $packages, bool $dev, bool $ansi): void
+    {
+        $names = collect($packages)->join(' ');
+
+        $command = vsprintf('%s require %s %s %s %s --no-interaction', [
+            $this->find(),
+            $names,
+            $this->options(),
+            $this->ansi($ansi),
+            $dev ? '--dev' : '',
+        ]);
+
+        $this->process->runWithInteract($command, $directory);
+    }
+
+    public function remove(string $directory, iterable $packages, bool $ansi): void
+    {
+        $names = collect($packages)->join(' ');
+
+        $command = vsprintf('%s require %s %s %s %s --no-interaction', [
+            $this->find(),
+            $names,
+            $this->options(['--no-interaction']),
+            $this->ansi($ansi),
+        ]);
+
+        $this->process->runWithInteract($command, $directory);
+        $this->process->runWithInteract($command . ' --dev', $directory);
+    }
+
     protected function stability(bool $dev): string
     {
         if ($dev) {
@@ -55,13 +87,13 @@ readonly class ComposerService
         return $enabled ? '--ansi' : '--no-ansi';
     }
 
-    protected function options(): string
+    protected function options(array $options = []): string
     {
-        return implode(' ', [
+        return implode(' ', array_merge([
             '--ignore-platform-reqs',
             '--no-scripts',
             '--prefer-dist',
-        ]);
+        ], $options));
     }
 
     protected function find(): string

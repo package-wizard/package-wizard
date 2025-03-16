@@ -15,6 +15,7 @@ use PackageWizard\Installer\Data\ConfigData;
 use PackageWizard\Installer\Data\CopyData;
 use PackageWizard\Installer\Data\Questions\QuestionData;
 use PackageWizard\Installer\Data\ReplaceData;
+use PackageWizard\Installer\Enums\DependencyTypeEnum;
 use PackageWizard\Installer\Enums\RenameEnum;
 use PackageWizard\Installer\Enums\TypeEnum;
 use PackageWizard\Installer\Fillers\AskFiller;
@@ -370,10 +371,123 @@ class NewCommand extends Command
             command: fn () => $this->npm->install($directory),
             what   : 'npm'
         );
+
         $this->installDependency(
             when   : $config->wizard->install->yarn,
             command: fn () => $this->yarn->install($directory),
             what   : 'yarn'
+        );
+
+        if ($config->dependencies->isEmpty()) {
+            return;
+        }
+
+        $composerInstall = $config->dependencies
+            ->where('type', DependencyTypeEnum::Composer)
+            ->where('remove', false)
+            ->where('dev', false)
+            ->pluck('name');
+
+        $composerInstallDev = $config->dependencies
+            ->where('type', DependencyTypeEnum::Composer)
+            ->where('remove', false)
+            ->where('dev', true)
+            ->pluck('name');
+
+        $composerRemove = $config->dependencies
+            ->where('type', DependencyTypeEnum::Composer)
+            ->where('remove', true)
+            ->pluck('name');
+
+        $npmInstall = $config->dependencies
+            ->where('type', DependencyTypeEnum::Npm)
+            ->where('remove', false)
+            ->where('dev', false)
+            ->pluck('name');
+
+        $npmInstallDev = $config->dependencies
+            ->where('type', DependencyTypeEnum::Npm)
+            ->where('remove', false)
+            ->where('dev', true)
+            ->pluck('name');
+
+        $npmRemove = $config->dependencies
+            ->where('type', DependencyTypeEnum::Npm)
+            ->where('remove', true)
+            ->pluck('name');
+
+        $yarnInstall = $config->dependencies
+            ->where('type', DependencyTypeEnum::Yarn)
+            ->where('remove', false)
+            ->where('dev', false)
+            ->pluck('name');
+
+        $yarnInstallDev = $config->dependencies
+            ->where('type', DependencyTypeEnum::Yarn)
+            ->where('remove', false)
+            ->where('dev', true)
+            ->pluck('name');
+
+        $yarnRemove = $config->dependencies
+            ->where('type', DependencyTypeEnum::Yarn)
+            ->where('remove', true)
+            ->pluck('name');
+
+        $this->installDependency(
+            $composerInstall->isNotEmpty(),
+            fn () => $this->composer->require($directory, $composerInstall, false, $this->hasAnsi()),
+            'composer'
+        );
+
+        $this->installDependency(
+            $composerInstallDev->isNotEmpty(),
+            fn () => $this->composer->require($directory, $composerInstallDev, true, $this->hasAnsi()),
+            'composer'
+        );
+
+        $this->installDependency(
+            $composerRemove->isNotEmpty(),
+            fn () => $this->composer->remove($directory, $composerRemove, $this->hasAnsi()),
+            'composer',
+            'remove'
+        );
+
+        $this->installDependency(
+            $npmInstall->isNotEmpty(),
+            fn () => $this->npm->require($directory, $npmInstall),
+            'npm'
+        );
+
+        $this->installDependency(
+            $npmInstallDev->isNotEmpty(),
+            fn () => $this->npm->require($directory, $npmInstallDev, true),
+            'npm'
+        );
+
+        $this->installDependency(
+            $npmRemove->isNotEmpty(),
+            fn () => $this->npm->remove($directory, $npmRemove),
+            'npm',
+            'remove'
+        );
+
+        $this->installDependency(
+            $yarnInstall->isNotEmpty(),
+            fn () => $this->yarn->require($directory, $yarnInstall),
+            'yarn'
+        );
+
+        $this->installDependency(
+            $yarnInstallDev->isNotEmpty(),
+            fn () => $this->yarn->require($directory, $yarnInstallDev),
+            'yarn'
+        );
+
+        $this->installDependency(
+            $yarnRemove->isNotEmpty(),
+            fn () => $this->yarn->remove($directory, $yarnRemove),
+            'yarn',
+            'remove'
         );
     }
 
@@ -390,15 +504,15 @@ class NewCommand extends Command
         File::ensureDelete($directory . '/' . config('wizard.filename'));
     }
 
-    protected function installDependency(bool $when, Closure $command, string $what): void
+    protected function installDependency(bool $when, Closure $command, string $what, string $action = 'install'): void
     {
         if ($when) {
-            info('Install ' . $what . ' dependencies...');
+            info(Str::ucfirst($action) . ' ' . $what . ' dependencies...');
 
             $command();
         }
         else {
-            $this->debugMessage(Str::ucfirst($what) . ' dependencies installation skipped.');
+            $this->debugMessage(Str::ucfirst($what) . ' dependencies ' . $action . ' skipped.');
         }
     }
 

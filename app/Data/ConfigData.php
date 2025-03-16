@@ -33,7 +33,7 @@ class ConfigData extends Data
 
     #[DataCollectionOf(ReplaceData::class)]
     public Collection $replaces;
-    
+
     public Collection $removes;
 
     #[WithCast(QuestionsCast::class)]

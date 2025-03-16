@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Services;
 
+use DragonCode\Support\Facades\Filesystem\Directory;
 use DragonCode\Support\Facades\Filesystem\File;
 use Illuminate\Filesystem\Filesystem;
+
+use function is_dir;
 
 class FilesystemService
 {
@@ -31,5 +34,12 @@ class FilesystemService
     public function rename(string $source, string $target): void
     {
         $this->filesystem->move($source, $target);
+    }
+
+    public function remove(string $path): void
+    {
+        is_dir($path)
+            ? Directory::ensureDelete($path)
+            : File::ensureDelete($path);
     }
 }

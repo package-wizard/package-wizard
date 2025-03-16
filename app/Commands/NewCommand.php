@@ -119,6 +119,19 @@ class NewCommand extends Command
                     $filesystem->rename($path, $directory . '/' . $basename);
                 }
             );
+
+            $this->newLine();
+        }
+
+        if ($config->removes->isNotEmpty()) {
+            info('Remove...');
+
+            $this->withProgressBar(
+                $config->removes,
+                static fn (string $path) => $filesystem->remove($path)
+            );
+
+            $this->newLine();
         }
 
         $this->newLine();

@@ -61,7 +61,6 @@ readonly class ComposerService
             '--ignore-platform-reqs',
             '--no-scripts',
             '--prefer-dist',
-            '--remove-vcs',
         ]);
     }
 

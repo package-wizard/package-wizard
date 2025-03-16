@@ -11,6 +11,8 @@ class AskReplacer extends Replacer
 {
     protected function make(): ReplaceData
     {
+        $this->data->asked = $this->asked;
+
         return $this->data;
     }
 

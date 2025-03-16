@@ -18,9 +18,15 @@
         "variables": {
             "type": "array",
             "anyOf": [
-                { "$ref": "#/definitions/variableYear" },
-                { "$ref": "#/definitions/variableYearRange" },
-                { "$ref": "#/definitions/variableDate" }
+                {
+                    "$ref": "#/definitions/variableYear"
+                },
+                {
+                    "$ref": "#/definitions/variableYearRange"
+                },
+                {
+                    "$ref": "#/definitions/variableDate"
+                }
             ]
         },
         "renames": {
@@ -49,16 +55,28 @@
         },
         "dependencies": {
             "type": "array",
-            "items": [{ "$ref": "#/definitions/dependency" }],
+            "items": [
+                {
+                    "$ref": "#/definitions/dependency"
+                }
+            ],
             "uniqueItems": true
         },
         "questions": {
             "type": "array",
             "anyOf": [
-                { "$ref": "#/definitions/questionAuthor" },
-                { "$ref": "#/definitions/questionLicense" },
-                { "$ref": "#/definitions/questionAskSelect" },
-                { "$ref": "#/definitions/questionAskText" }
+                {
+                    "$ref": "#/definitions/questionAuthor"
+                },
+                {
+                    "$ref": "#/definitions/questionLicense"
+                },
+                {
+                    "$ref": "#/definitions/questionAskSelect"
+                },
+                {
+                    "$ref": "#/definitions/questionAskText"
+                }
             ]
         }
     },
@@ -99,15 +117,23 @@
             "properties": {
                 "name": {
                     "oneOf": [
-                        { "type": "string" },
-                        { "type": "null" }
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
                     ],
                     "default": null
                 },
                 "email": {
                     "oneOf": [
-                        { "type": "string" },
-                        { "type": "null" }
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
                     ],
                     "format": "email",
                     "default": null
@@ -133,10 +159,17 @@
                 },
                 "what": {
                     "type": "string",
-                    "enum": ["path", "name"]
+                    "enum": [
+                        "path",
+                        "name"
+                    ]
                 },
-                "source": { "type": "string" },
-                "target": { "type": "string" }
+                "source": {
+                    "type": "string"
+                },
+                "target": {
+                    "type": "string"
+                }
             },
             "required": [
                 "type",
@@ -150,8 +183,12 @@
         "copy": {
             "type": "object",
             "properties": {
-                "source": { "type": "string" },
-                "target": { "type": "string" }
+                "source": {
+                    "type": "string"
+                },
+                "target": {
+                    "type": "string"
+                }
             },
             "required": [
                 "source",
@@ -162,7 +199,9 @@
         },
         "remove": {
             "items": [
-                { "type": "string" }
+                {
+                    "type": "string"
+                }
             ],
             "uniqueItems": true,
             "additionalProperties": false
@@ -172,18 +211,25 @@
             "properties": {
                 "id": {
                     "oneOf": [
-                        { "type": "string" },
-                        { "type": "null" }
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
                     ]
                 },
-
                 "replace": {
                     "$ref": "#/definitions/valueReplace"
                 },
                 "with": {
                     "oneOf": [
-                        { "type": "string" },
-                        { "type": "integer" }
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        }
                     ]
                 }
             },
@@ -199,7 +245,11 @@
             "properties": {
                 "type": {
                     "type": "string",
-                    "enum": ["composer", "npm", "yarn"],
+                    "enum": [
+                        "composer",
+                        "npm",
+                        "yarn"
+                    ],
                     "default": "composer"
                 },
                 "name": {
@@ -359,14 +409,22 @@
                 "options": {
                     "type": "array",
                     "anyOf": [
-                        { "type": "string" },
-                        { "type": "integer" },
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        },
                         {
                             "type": "object",
                             "minProperties": 1,
                             "maxProperties": 1,
-                            "propertyNames": { "type": "string" },
-                            "additionalProperties": { "type": "string" }
+                            "propertyNames": {
+                                "type": "string"
+                            },
+                            "additionalProperties": {
+                                "type": "string"
+                            }
                         }
                     ],
                     "minItems": 1,
@@ -375,15 +433,25 @@
                 },
                 "default": {
                     "oneOf": [
-                        { "type": "string" },
-                        { "type": "integer" },
-                        { "type": "null" }
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
                     ]
                 },
                 "required": {
                     "oneOf": [
-                        { "type": "boolean" },
-                        { "type": "string" }
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "string"
+                        }
                     ]
                 }
             },
@@ -417,24 +485,38 @@
                 },
                 "default": {
                     "oneOf": [
-                        { "type": "string" },
-                        { "type": "integer" },
-                        { "type": "null" }
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "null"
+                        }
                     ],
                     "default": null
                 },
                 "placeholder": {
                     "oneOf": [
-                        { "type": "string" },
-                        { "type": "null" }
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
                     ],
                     "default": null,
                     "minLength": 0
                 },
                 "regex": {
                     "oneOf": [
-                        { "type": "string" },
-                        { "type": "null" }
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "null"
+                        }
                     ],
                     "default": null
                 },
@@ -444,8 +526,12 @@
                 },
                 "required": {
                     "oneOf": [
-                        { "type": "boolean" },
-                        { "type": "string" }
+                        {
+                            "type": "boolean"
+                        },
+                        {
+                            "type": "string"
+                        }
                     ],
                     "default": true
                 }

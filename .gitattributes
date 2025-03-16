@@ -4,6 +4,8 @@
 *.php diff=php
 *.json diff=json
 
+/build/paw.phar binary
+
 /.github export-ignore
 /stubs export-ignore
 /tests export-ignore
@@ -12,9 +14,9 @@
 /.gitattributes export-ignore
 /.gitignore export-ignore
 
-/box.json
-/ide.json
-/composer.lock
+/box.json export-ignore
+/ide.json export-ignore
+/composer.lock export-ignore
 
 /phpunit.xml export-ignore
 

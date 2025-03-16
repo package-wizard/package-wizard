@@ -22,4 +22,30 @@ class YarnService
 
         $this->process->runWithInteract($command, $directory);
     }
+
+    public function require(string $directory, iterable $packages, bool $dev = false): void
+    {
+        $names = collect($packages)->join(' ');
+
+        $command = vsprintf('%s add %s %s', [
+            $this->yarn->find(),
+            $names,
+            $dev ? '--dev' : '',
+        ]);
+
+        $this->process->runWithInteract($command, $directory);
+    }
+
+    public function remove(string $directory, iterable $packages, bool $dev = false): void
+    {
+        $names = collect($packages)->join(' ');
+
+        $command = vsprintf('%s remove %s %s', [
+            $this->yarn->find(),
+            $names,
+            $dev ? '--dev' : '',
+        ]);
+
+        $this->process->runWithInteract($command, $directory);
+    }
 }

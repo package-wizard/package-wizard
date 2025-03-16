@@ -27,6 +27,34 @@ class NpmService
         $this->process->runWithInteract($command, $directory);
     }
 
+    public function require(string $directory, iterable $packages, bool $dev = false): void
+    {
+        $names = collect($packages)->join(' ');
+
+        $command = vsprintf('%s install %s %s %s', [
+            $this->npm->find(),
+            $names,
+            $dev ? '--save-dev' : '--save',
+            $this->options(),
+        ]);
+
+        $this->process->runWithInteract($command, $directory);
+    }
+
+    public function remove(string $directory, iterable $packages, bool $dev = false): void
+    {
+        $names = collect($packages)->join(' ');
+
+        $command = vsprintf('%s uninstall %s %s %s', [
+            $this->npm->find(),
+            $names,
+            $dev ? '--save-dev' : '--save',
+            $this->options(),
+        ]);
+
+        $this->process->runWithInteract($command, $directory);
+    }
+
     protected function options(): string
     {
         return implode(' ', [

@@ -38,19 +38,23 @@ class ConfigData extends Data
     #[DataCollectionOf(ReplaceData::class)]
     public Collection $replaces;
 
+    #[DataCollectionOf(DependencyData::class)]
+    public Collection $dependencies;
+
     #[WithCast(QuestionsCast::class)]
     public Collection $questions;
 
     public static function prepareForPipeline(array $properties): array
     {
-        $properties['wizard']    ??= [];
-        $properties['authors']   ??= [];
-        $properties['variables'] ??= [];
-        $properties['renames']   ??= [];
-        $properties['copies']    ??= [];
-        $properties['removes']   ??= [];
-        $properties['replaces']  ??= [];
-        $properties['questions'] ??= [];
+        $properties['wizard']       ??= [];
+        $properties['authors']      ??= [];
+        $properties['variables']    ??= [];
+        $properties['renames']      ??= [];
+        $properties['copies']       ??= [];
+        $properties['removes']      ??= [];
+        $properties['replaces']     ??= [];
+        $properties['dependencies'] ??= [];
+        $properties['questions']    ??= [];
 
         return $properties;
     }

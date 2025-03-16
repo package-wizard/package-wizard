@@ -71,7 +71,7 @@ return [
             ],
             [
                 'type'     => TypeEnum::License,
-                'default'  => 'mit',
+                'default'  => 'MIT License',
                 'replace'  => ':license:',
                 'filename' => 'LICENSE',
             ],

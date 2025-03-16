@@ -62,7 +62,7 @@
         }
     },
     "bin": [
-        "bin/package"
+        "bin/paw"
     ],
     "config": {
         "allow-plugins": {

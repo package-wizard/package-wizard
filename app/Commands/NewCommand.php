@@ -4,49 +4,41 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Commands;
 
-use Closure;
 use DragonCode\Support\Facades\Filesystem\Directory;
-use DragonCode\Support\Facades\Filesystem\File;
 use Illuminate\Console\Command;
-use Illuminate\Support\Str;
 use JsonException;
-use PackageWizard\Installer\Data\AuthorData;
+use PackageWizard\Installer\Actions\Action;
+use PackageWizard\Installer\Actions\AuthorsAction;
+use PackageWizard\Installer\Actions\CleanUpAction;
+use PackageWizard\Installer\Actions\CopyFilesAction;
+use PackageWizard\Installer\Actions\Dependencies\InstallDependenciesAction;
+use PackageWizard\Installer\Actions\Dependencies\SyncDependenciesAction;
+use PackageWizard\Installer\Actions\DownloadProjectAction;
+use PackageWizard\Installer\Actions\QuestionsAction;
+use PackageWizard\Installer\Actions\RemoveFilesAction;
+use PackageWizard\Installer\Actions\RenameFilesAction;
+use PackageWizard\Installer\Actions\ReplaceContentAction;
+use PackageWizard\Installer\Actions\VariablesAction;
 use PackageWizard\Installer\Data\ConfigData;
-use PackageWizard\Installer\Data\CopyData;
-use PackageWizard\Installer\Data\Questions\QuestionData;
-use PackageWizard\Installer\Data\ReplaceData;
 use PackageWizard\Installer\Enums\DependencyTypeEnum;
-use PackageWizard\Installer\Enums\RenameEnum;
-use PackageWizard\Installer\Enums\TypeEnum;
-use PackageWizard\Installer\Fillers\AskFiller;
 use PackageWizard\Installer\Fillers\DirectoryFiller;
 use PackageWizard\Installer\Fillers\PackageFiller;
-use PackageWizard\Installer\Fillers\Questions\AuthorFiller;
-use PackageWizard\Installer\Fillers\Questions\LicenseFiller;
 use PackageWizard\Installer\Helpers\ConfigHelper;
 use PackageWizard\Installer\Helpers\PreviewHelper;
-use PackageWizard\Installer\Replacers\AskReplacer;
-use PackageWizard\Installer\Replacers\AuthorReplacer;
-use PackageWizard\Installer\Replacers\LicenseReplacer;
-use PackageWizard\Installer\Replacers\VariableReplacer;
-use PackageWizard\Installer\Services\ComparatorService;
-use PackageWizard\Installer\Services\ComposerService;
-use PackageWizard\Installer\Services\FilesystemService;
-use PackageWizard\Installer\Services\NpmService;
-use PackageWizard\Installer\Services\ReplaceService;
-use PackageWizard\Installer\Services\YarnService;
-use Spatie\LaravelData\Data;
+use PackageWizard\Installer\Support\Console;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function config;
+use function file_get_contents;
 use function getcwd;
 use function is_readable;
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\intro;
+use function Laravel\Prompts\spin;
 use function Laravel\Prompts\warning;
+use function PackageWizard\Installer\resource_path;
 use function realpath;
 use function Termwind\renderUsing;
 
@@ -56,104 +48,84 @@ class NewCommand extends Command
 
     protected $description = 'Create new project';
 
-    public function __construct(
-        protected ComposerService $composer,
-        protected NpmService $npm,
-        protected YarnService $yarn,
-        protected ComparatorService $comparator,
-    ) {
-        parent::__construct();
-
-        renderUsing($this->output);
-    }
-
     /**
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws JsonException
      */
-    public function handle(FilesystemService $filesystem, ReplaceService $replacer): int
+    public function handle(?string $directory = null): int
     {
         $config = $this->getConfig(
-            $directory = $this->projectDirectory()
+            $directory ??= $this->projectDirectory()
         );
 
-        $this->authors($config);
-        $this->variables($config);
-        $this->questions($config);
+        AuthorsAction::run($this->getOutput(), [
+            Action::Config => $config,
+        ]);
+
+        VariablesAction::run($this->getOutput(), [
+            Action::Config => $config,
+        ]);
+
+        QuestionsAction::run($this->getOutput(), [
+            Action::Config => $config,
+        ]);
 
         if (! $this->confirmChanges($config)) {
-            return $this->handle($filesystem, $replacer);
+            return $this->handle($directory);
         }
 
-        $this->newLine();
+        ReplaceContentAction::run($this->getOutput(), [
+            Action::Directory => $directory,
+            Action::Config    => $config,
+        ]);
 
-        info('Replace...');
+        RenameFilesAction::run($this->getOutput(), [
+            Action::Directory => $directory,
+            Action::Config    => $config,
+        ]);
 
-        $this->withProgressBar(
-            $filesystem->allFiles($directory),
-            static fn (string $path) => $replacer->replace($path, $config->replaces)
-        );
+        RemoveFilesAction::run($this->getOutput(), [
+            Action::Directory => $directory,
+            Action::Config    => $config,
+        ]);
 
-        $this->newLine();
+        CopyFilesAction::run($this->getOutput(), [
+            Action::Directory => $directory,
+            Action::Config    => $config,
+        ]);
 
-        if ($config->renames->isNotEmpty()) {
-            info('Rename...');
+        InstallDependenciesAction::run($this->getOutput(), [
+            Action::Directory => $directory,
+            Action::Config    => $config,
+        ]);
 
-            $this->withProgressBar(
-                $filesystem->allFiles($directory),
-                static function (string $path) use ($filesystem, $directory, $config) {
-                    $basename = Str::of(realpath($path))
-                        ->after(realpath($directory))
-                        ->replace('\\', '/')
-                        ->ltrim('/')
-                        ->toString();
+        SyncDependenciesAction::run($this->getOutput(), [
+            SyncDependenciesAction::Type => DependencyTypeEnum::Composer,
+            Action::Directory            => $directory,
+            Action::Config               => $config,
+        ]);
 
-                    foreach ($config->renames as $rename) {
-                        if ($rename->what === RenameEnum::Path && $basename === $rename->source) {
-                            $basename = $rename->target;
-                        }
+        SyncDependenciesAction::run($this->getOutput(), [
+            SyncDependenciesAction::Type => DependencyTypeEnum::Npm,
+            Action::Directory            => $directory,
+            Action::Config               => $config,
+        ]);
 
-                        if ($rename->what === RenameEnum::Name) {
-                            $basename = Str::of($basename)
-                                ->explode('/')
-                                ->map(static fn (string $name) => $name === $rename->source ? $rename->target : $name)
-                                ->join('/');
-                        }
-                    }
+        SyncDependenciesAction::run($this->getOutput(), [
+            SyncDependenciesAction::Type => DependencyTypeEnum::Yarn,
+            Action::Directory            => $directory,
+            Action::Config               => $config,
+        ]);
 
-                    $filesystem->rename($path, $directory . '/' . $basename);
-                }
-            );
+        CleanUpAction::run($this->getOutput(), [
+            Action::Directory => $directory,
+            Action::Config    => $config,
+        ]);
 
-            $this->newLine();
-        }
-
-        if ($config->removes->isNotEmpty()) {
-            info('Remove...');
-
-            $this->withProgressBar(
-                $config->removes,
-                static fn (string $path) => $filesystem->remove($directory . '/' . $path)
-            );
-
-            $this->newLine();
-        }
-
-        if ($config->copies->isNotEmpty()) {
-            info('Copy...');
-
-            $this->withProgressBar(
-                $config->copies,
-                static fn (CopyData $item) => $filesystem->copy(
-                    source: $directory . '/' . $item->source,
-                    target: $directory . '/' . $item->target
-                )
-            );
-        }
-
-        $this->installDependencies($config, $directory);
-        $this->cleanUp($config, $directory);
+        $this->output->writeln('');
+        $this->components->success('  Congratulations! <options=bold>Build something amazing!</>');
+        $this->output->writeln('');
 
         return static::SUCCESS;
     }
@@ -180,22 +152,19 @@ class NewCommand extends Command
      */
     protected function interact(InputInterface $input, OutputInterface $output): void
     {
-        $output->writeln('');
+        renderUsing($this->output);
 
-        $output->writeln(
-            <<<'TEXT'
-                <fg=blue>
-                  ____            _                     __        ___                  _ 
-                 |  _ \ __ _  ___| | ____ _  __ _  ___  \ \      / (_)______ _ _ __ __| |
-                 | |_) / _` |/ __| |/ / _` |/ _` |/ _ \  \ \ /\ / /| |_  / _` | '__/ _` |
-                 |  __/ (_| | (__|   < (_| | (_| |  __/   \ V  V / | |/ / (_| | | | (_| |
-                 |_|   \__,_|\___|_|\_\__,_|\__, |\___|    \_/\_/  |_/___\__,_|_|  \__,_|
-                                            |___/                                        
-                </>
-                TEXT
+        Console::setAnsi(
+            enabled: $this->option('ansi') || ! $this->option('no-ansi')
         );
 
-        $output->writeln('');
+        Console::setVerbose(
+            enabled: $this->option('verbose')
+        );
+
+        $this->newLine();
+        $output->writeln(file_get_contents(resource_path('stubs/logotype.stub')));
+        $this->newLine();
 
         if (! $input->getArgument('name')) {
             $input->setArgument('name', DirectoryFiller::make(local: $input->getOption('local')));
@@ -222,13 +191,14 @@ class NewCommand extends Command
         );
 
         if (! $this->option('local')) {
-            $package = $this->argument('search');
-            $version = $this->option('package-version');
-            $dev     = $this->option('dev');
-
             $this->ensureDirectory($directory);
 
-            $this->composer->createProject($directory, $package, $version, (bool) $dev, $this->hasAnsi());
+            DownloadProjectAction::run($this->getOutput(), [
+                DownloadProjectAction::Package => $this->argument('search'),
+                DownloadProjectAction::Version => $this->option('package-version'),
+                DownloadProjectAction::Dev     => (bool) $this->option('dev'),
+                Action::Directory              => $directory,
+            ]);
         }
         elseif (Directory::doesntExist($directory)) {
             warning('The directory does not exist: ' . $directory);
@@ -270,80 +240,15 @@ class NewCommand extends Command
      */
     protected function getConfig(string $directory): ConfigData
     {
-        $this->debugMessage('Configuration loading...');
-
         if (! $this->option('local')) {
             $this->debugMessage('Searching for a package...');
 
             $package = $this->argument('search');
         }
 
-        $this->debugMessage('Build configuration data object...');
-
-        return ConfigHelper::data($directory, $package ?? 'default');
-    }
-
-    protected function authors(ConfigData $config): void
-    {
-        $this->debugMessage('Processing of authors...');
-
-        $config->authors->each(function (AuthorData $item, int $index) use ($config) {
-            $this->debugMessage("    Author #$index...");
-
-            $author = AuthorReplacer::get($item);
-
-            $config->replaces->push($author);
-        });
-    }
-
-    protected function variables(ConfigData $config): void
-    {
-        $this->debugMessage('Processing of variables...');
-
-        $config->variables->each(function (Data $item, int $index) use ($config) {
-            $this->debugMessage("    Variable #$index...");
-
-            $variable = VariableReplacer::get($item);
-
-            $config->replaces->push($variable);
-        });
-    }
-
-    protected function questions(ConfigData $config): void
-    {
-        $this->debugMessage('We ask questions to the user...');
-
-        $config->questions->each(
-            function (QuestionData $item, int $index) use ($config) {
-                $this->debugMessage("    Question #$index...");
-
-                if ($item->condition !== true) {
-                    /** @var ReplaceData $from */
-                    $from = $config->replaces
-                        ->where('id', $item->condition->for)
-                        ->firstOrFail();
-
-                    if (
-                        $this->comparator->disallow(
-                            $item->condition->comparator,
-                            $item->condition->value,
-                            $from->with,
-                        )
-                    ) {
-                        return;
-                    }
-                }
-
-                $value = match ($item->type) {
-                    TypeEnum::Ask     => AskReplacer::get(AskFiller::make(data: $item), true),
-                    TypeEnum::Author  => AuthorReplacer::get(AuthorFiller::make(data: $item), true),
-                    TypeEnum::License => LicenseReplacer::get(LicenseFiller::make(data: $item), true),
-                };
-
-                if ($value) {
-                    $config->replaces->push($value);
-                }
-            }
+        return spin(
+            callback: fn () => ConfigHelper::data($directory, $package ?? 'default'),
+            message : 'Build configuration...'
         );
     }
 
@@ -358,171 +263,10 @@ class NewCommand extends Command
         return confirm('Do you confirm generation?');
     }
 
-    protected function installDependencies(ConfigData $config, string $directory): void
-    {
-        $this->installDependency(
-            when   : $config->wizard->install->composer,
-            command: fn () => $this->composer->update($directory, $this->hasAnsi()),
-            what   : 'composer'
-        );
-
-        $this->installDependency(
-            when   : $config->wizard->install->npm,
-            command: fn () => $this->npm->install($directory),
-            what   : 'npm'
-        );
-
-        $this->installDependency(
-            when   : $config->wizard->install->yarn,
-            command: fn () => $this->yarn->install($directory),
-            what   : 'yarn'
-        );
-
-        if ($config->dependencies->isEmpty()) {
-            return;
-        }
-
-        $composerInstall = $config->dependencies
-            ->where('type', DependencyTypeEnum::Composer)
-            ->where('remove', false)
-            ->where('dev', false)
-            ->pluck('name');
-
-        $composerInstallDev = $config->dependencies
-            ->where('type', DependencyTypeEnum::Composer)
-            ->where('remove', false)
-            ->where('dev', true)
-            ->pluck('name');
-
-        $composerRemove = $config->dependencies
-            ->where('type', DependencyTypeEnum::Composer)
-            ->where('remove', true)
-            ->pluck('name');
-
-        $npmInstall = $config->dependencies
-            ->where('type', DependencyTypeEnum::Npm)
-            ->where('remove', false)
-            ->where('dev', false)
-            ->pluck('name');
-
-        $npmInstallDev = $config->dependencies
-            ->where('type', DependencyTypeEnum::Npm)
-            ->where('remove', false)
-            ->where('dev', true)
-            ->pluck('name');
-
-        $npmRemove = $config->dependencies
-            ->where('type', DependencyTypeEnum::Npm)
-            ->where('remove', true)
-            ->pluck('name');
-
-        $yarnInstall = $config->dependencies
-            ->where('type', DependencyTypeEnum::Yarn)
-            ->where('remove', false)
-            ->where('dev', false)
-            ->pluck('name');
-
-        $yarnInstallDev = $config->dependencies
-            ->where('type', DependencyTypeEnum::Yarn)
-            ->where('remove', false)
-            ->where('dev', true)
-            ->pluck('name');
-
-        $yarnRemove = $config->dependencies
-            ->where('type', DependencyTypeEnum::Yarn)
-            ->where('remove', true)
-            ->pluck('name');
-
-        $this->installDependency(
-            $composerInstall->isNotEmpty(),
-            fn () => $this->composer->require($directory, $composerInstall, false, $this->hasAnsi()),
-            'composer'
-        );
-
-        $this->installDependency(
-            $composerInstallDev->isNotEmpty(),
-            fn () => $this->composer->require($directory, $composerInstallDev, true, $this->hasAnsi()),
-            'composer'
-        );
-
-        $this->installDependency(
-            $composerRemove->isNotEmpty(),
-            fn () => $this->composer->remove($directory, $composerRemove, $this->hasAnsi()),
-            'composer',
-            'remove'
-        );
-
-        $this->installDependency(
-            $npmInstall->isNotEmpty(),
-            fn () => $this->npm->require($directory, $npmInstall),
-            'npm'
-        );
-
-        $this->installDependency(
-            $npmInstallDev->isNotEmpty(),
-            fn () => $this->npm->require($directory, $npmInstallDev, true),
-            'npm'
-        );
-
-        $this->installDependency(
-            $npmRemove->isNotEmpty(),
-            fn () => $this->npm->remove($directory, $npmRemove),
-            'npm',
-            'remove'
-        );
-
-        $this->installDependency(
-            $yarnInstall->isNotEmpty(),
-            fn () => $this->yarn->require($directory, $yarnInstall),
-            'yarn'
-        );
-
-        $this->installDependency(
-            $yarnInstallDev->isNotEmpty(),
-            fn () => $this->yarn->require($directory, $yarnInstallDev),
-            'yarn'
-        );
-
-        $this->installDependency(
-            $yarnRemove->isNotEmpty(),
-            fn () => $this->yarn->remove($directory, $yarnRemove),
-            'yarn',
-            'remove'
-        );
-    }
-
-    protected function cleanUp(ConfigData $config, string $directory): void
-    {
-        if (! $config->wizard->clean) {
-            $this->debugMessage('Clean up is disabled.');
-
-            return;
-        }
-
-        $this->debugMessage('Removing wizard.json file from the project');
-
-        File::ensureDelete($directory . '/' . config('wizard.filename'));
-    }
-
-    protected function installDependency(bool $when, Closure $command, string $what, string $action = 'install'): void
-    {
-        if ($when) {
-            info(Str::ucfirst($action) . ' ' . $what . ' dependencies...');
-
-            $command();
-        }
-        else {
-            $this->debugMessage(Str::ucfirst($what) . ' dependencies ' . $action . ' skipped.');
-        }
-    }
-
     protected function debugMessage(string $message): void
     {
-        $this->output->writeln($message, OutputInterface::VERBOSITY_DEBUG);
-    }
-
-    protected function hasAnsi(): bool
-    {
-        return $this->option('ansi') || ! $this->option('no-ansi');
+        if (Console::verbose()) {
+            $this->output->writeln($message, OutputInterface::VERBOSITY_DEBUG);
+        }
     }
 }

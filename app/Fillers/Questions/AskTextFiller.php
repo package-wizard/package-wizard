@@ -11,6 +11,7 @@ use PackageWizard\Installer\Data\ReplaceData;
 use PackageWizard\Installer\Fillers\Filler;
 use Spatie\LaravelData\Data;
 
+use function blank;
 use function is_string;
 use function Laravel\Prompts\text;
 use function trim;
@@ -62,6 +63,10 @@ class AskTextFiller extends Filler
         }
 
         return function (string $value): ?string {
+            if (! $this->data->required && blank($value)) {
+                return null;
+            }
+
             if (Str::isMatch($this->data->regex, $value)) {
                 return null;
             }

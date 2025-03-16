@@ -80,6 +80,26 @@
                     }
                 }
             ]
+        },
+        {
+            "id": "app.action",
+            "name": "Create Action",
+            "classSuffix": "Action",
+            "regex": ".+",
+            "files": [
+                {
+                    "appNamespace": "Actions",
+                    "name": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}.php",
+                    "template": {
+                        "type": "stub",
+                        "path": "stubs/action.stub",
+                        "parameters": {
+                            "DummyNamespace": "${INPUT_FQN|namespace}",
+                            "DummyClass": "${INPUT_CLASS|replace: ,_|className|upperCamelCase}"
+                        }
+                    }
+                }
+            ]
         }
     ],
     "completions": [

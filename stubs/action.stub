@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use PackageWizard\Installer\Actions\Action;
+
+class DummyClass extends Action
+{
+    protected function perform(): void
+    {
+        //
+    }
+}

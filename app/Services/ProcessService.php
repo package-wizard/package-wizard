@@ -6,6 +6,7 @@ namespace PackageWizard\Installer\Services;
 
 use Illuminate\Support\Arr;
 use Laravel\Prompts\Output\ConsoleOutput;
+use PackageWizard\Installer\Support\Console;
 use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
@@ -35,6 +36,10 @@ class ProcessService
         );
 
         $this->tty($process);
+
+        if (Console::quiet()) {
+            $process->disableOutput();
+        }
 
         $process->run(
             fn ($type, $line) => static::output()->write('    ' . $line)

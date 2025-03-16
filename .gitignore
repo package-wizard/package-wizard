@@ -1,7 +1,16 @@
-/.idea
-/.vscode
+.idea
 
 /temp
 /vendor
 
-.phpunit.result.cache
+/.phpunit.cache
+
+*.backup
+*.cache
+*.log
+*.orig
+*.bak
+
+*.BASE
+*.LOCAL
+*.REMOTE

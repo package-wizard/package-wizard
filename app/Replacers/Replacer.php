@@ -28,6 +28,7 @@ abstract class Replacer
     protected function make(): ReplaceData
     {
         return ReplaceData::from([
+            'id'      => $this->data->id ?? null,
             'replace' => $this->data->replace,
             'with'    => $this->with(),
             'asked'   => $this->asked,

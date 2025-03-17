@@ -635,19 +635,22 @@
                 "comparator": {
                     "type": "string",
                     "enum": [
-                        "lessThan",
-                        "lessThanOrEqualTo",
-                        "equalTo",
-                        "notEqualTo",
-                        "greaterThan",
-                        "greaterThanOrEqualTo",
-                        "inList",
-                        "notInList",
+                        "<",
+                        "<=",
+                        "=",
+                        "!=",
+                        ">",
+                        ">=",
+                        "in",
+                        "notIn",
                         "contains",
                         "doesntContain",
                         "containsAll",
-                        "doesntContainAll"
-                    ]
+                        "doesntContainAll",
+                        "pathExists",
+                        "pathDoesNotExist"
+                    ],
+                    "default": "="
                 },
                 "value": {
                     "oneOf": [

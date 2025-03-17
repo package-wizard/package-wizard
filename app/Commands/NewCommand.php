@@ -48,7 +48,7 @@ use function Termwind\renderUsing;
 // TODO: Add license file link replace
 // TODO: Add forced boilerplates list
 // TODO: Make EqualsTo as default for comparing
-// TODO: Rename `comparator` with `operator`, simplify and add existsPath and doesntExistPath to options
+// TODO: Rename `comparator` with `operator`
 // TODO: Rename `wizard.install.*` with `wizard.managers.*`
 // TODO: Extract questions to constant
 // TODO: Fix tests in Ubuntu

@@ -7,10 +7,10 @@ namespace PackageWizard\Installer\Actions;
 use Closure;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
+use PackageWizard\Installer\Concerns\Console\HasOutput;
 use PackageWizard\Installer\Data\ConfigData;
 use PackageWizard\Installer\Services\FilesystemService;
 use PackageWizard\Installer\Services\ProcessService;
-use PackageWizard\Installer\Support\Console;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function app;
@@ -19,10 +19,10 @@ use function Laravel\Prompts\spin;
 
 abstract class Action
 {
+    use HasOutput;
+
     public const Config    = 'config';
     public const Directory = 'directory';
-
-    protected OutputInterface $output;
 
     protected bool $rawOutput = false;
 
@@ -33,31 +33,29 @@ abstract class Action
     abstract protected function perform(): void;
 
     public function __construct(
-        OutputInterface $output,
         protected readonly array $parameters,
         protected readonly ProcessService $process,
         protected readonly FilesystemService $filesystem,
     ) {
-        $this->output = clone $output;
-        $this->output->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
+        static::output(OutputInterface::VERBOSITY_DEBUG);
     }
 
-    public static function run(OutputInterface $output, array $parameters = []): void
+    public static function run(array $parameters = []): void
     {
         $instance = new static(
-            $output,
             $parameters,
             app(ProcessService::class),
             app(FilesystemService::class),
         );
 
-        $instance->verboseInfo(static::class);
+        static::verboseWriteln(static::class);
+
         $instance->start();
     }
 
     protected function start(): void
     {
-        $this->verbose() || $this->rawOutput
+        static::verbose() || $this->rawOutput
             ? $this->progress(fn () => $this->perform())
             : $this->spin(fn () => $this->perform());
     }
@@ -69,7 +67,7 @@ abstract class Action
 
     protected function progress(Closure $callback, ?string $title = null): void
     {
-        $this->verboseInfo($title ?? $this->title());
+        static::verboseWriteln($title ?? $this->title());
 
         $callback();
     }
@@ -84,13 +82,6 @@ abstract class Action
         return $this->filesystem->allFiles(
             $this->parameter(static::Directory)
         );
-    }
-
-    protected function verboseInfo(string $message): void
-    {
-        if ($this->verbose()) {
-            $this->output->writeln($message);
-        }
     }
 
     protected function parameter(string $key): mixed
@@ -119,10 +110,5 @@ abstract class Action
             ->append('...')
             ->ucfirst()
             ->toString();
-    }
-
-    protected function verbose(): bool
-    {
-        return Console::verbose();
     }
 }

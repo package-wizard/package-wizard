@@ -19,12 +19,12 @@ abstract class DependencyAction extends Action
     {
         foreach ($this->managers() as $manager) {
             if (! $manager['when']) {
-                $this->verboseInfo('Skip ' . $manager['who']);
+                static::verboseWriteln('Skip ' . $manager['who']);
 
                 continue;
             }
 
-            $this->verbose() || $this->rawOutput
+            static::verbose() || $this->rawOutput
                 ? $this->progress($manager['callback'], $manager['who'])
                 : $this->spin($manager['callback'], $manager['who']);
         }

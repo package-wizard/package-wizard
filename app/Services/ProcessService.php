@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace PackageWizard\Installer\Services;
 
 use Illuminate\Support\Arr;
-use Laravel\Prompts\Output\ConsoleOutput;
+use PackageWizard\Installer\Concerns\Console\HasOutput;
 use PackageWizard\Installer\Support\Console;
 use RuntimeException;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 use function dirname;
@@ -21,12 +20,7 @@ use function trim;
 
 class ProcessService
 {
-    protected static ?OutputInterface $output = null;
-
-    protected static function output(): OutputInterface
-    {
-        return static::$output ??= new ConsoleOutput();
-    }
+    use HasOutput;
 
     public function runWithInteract(array|string $command, string $directory): void
     {

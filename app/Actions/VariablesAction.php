@@ -12,7 +12,7 @@ class VariablesAction extends Action
     protected function perform(): void
     {
         $this->config()->variables->each(function (Data $item, int $index) {
-            $this->verboseInfo('    Variation index: ' . $index);
+            static::verboseWriteln('    Variation index: ' . $index);
 
             $this->variation($item);
         });

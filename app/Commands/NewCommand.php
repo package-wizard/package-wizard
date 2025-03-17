@@ -47,7 +47,6 @@ use function Termwind\renderUsing;
 // TODO: Add License file copying
 // TODO: Add license file link replace
 // TODO: Add forced boilerplates list
-// TODO: Make EqualsTo as default for comparing
 // TODO: Rename `comparator` with `operator`
 // TODO: Rename `wizard.install.*` with `wizard.managers.*`
 // TODO: Extract questions to constant

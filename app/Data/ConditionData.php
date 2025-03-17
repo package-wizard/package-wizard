@@ -11,7 +11,7 @@ class ConditionData extends Data
 {
     public string $for;
 
-    public ComparatorEnum $comparator;
+    public ComparatorEnum $comparator = ComparatorEnum::EqualTo;
 
     public array|int|string $value;
 }

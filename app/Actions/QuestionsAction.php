@@ -57,7 +57,7 @@ class QuestionsAction extends Action
         }
 
         return $this->comparator()->disallow(
-            $question->condition->comparator,
+            $question->condition->operator,
             $question->condition->value,
             $this->find($question->condition->for)->with
         );

@@ -47,10 +47,10 @@ use function Termwind\renderUsing;
 // TODO: Add License file copying
 // TODO: Add license file link replace
 // TODO: Add forced boilerplates list
-// TODO: Rename `comparator` with `operator`
 // TODO: Rename `wizard.install.*` with `wizard.managers.*`
 // TODO: Extract questions to constant
 // TODO: Fix tests in Ubuntu
+// TODO: Simplify comparator service
 #[AsCommand('new', 'Create new project')]
 class NewCommand extends Command
 {

@@ -39,8 +39,16 @@ jobs:
                     ini-values: error_reporting=E_ALL, memory_limit=512M
                     coverage: none
 
-            -   name: Install Aspell
+            -   name: Install Aspell on Ubuntu
+                if: ${{ matrix.os == 'ubuntu' }}
                 run: sudo apt-get install aspell aspell-en
+
+            -   name: Install Aspell on Windows
+                if: ${{ matrix.os == 'windows' }}
+                run: |
+                    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+                    Invoke-RestMethod -Uri https://get.scoop.sh | Invoke-Expression
+                    scoop install main/aspell
 
             -   name: Remove Peck
                 if: ${{ matrix.php == '8.2' }}

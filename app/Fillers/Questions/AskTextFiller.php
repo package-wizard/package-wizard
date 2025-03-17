@@ -35,7 +35,7 @@ class AskTextFiller extends Filler
         ]);
     }
 
-    protected function answer(): int|string|null
+    protected function answer(): string
     {
         return text(
             label      : $this->data->question,
@@ -44,12 +44,12 @@ class AskTextFiller extends Filler
             required   : $this->data->required,
             validate   : $this->validator(),
             hint       : ! $this->data->required ? 'Press Enter to continue if you want to leave the field blank' : '',
-        ) ?: null;
+        );
     }
 
-    protected function cleanup(mixed $value): mixed
+    protected function cleanup(string $value): string
     {
-        if (is_string($value) && $this->data->trim) {
+        if ($this->data->trim) {
             return trim($value);
         }
 

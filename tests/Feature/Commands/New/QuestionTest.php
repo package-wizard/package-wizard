@@ -22,13 +22,13 @@ it('questions', function () {
         ->expectsChoice('Which is license will be distributed?', 'Boost Software 1', $licenses)
         ->expectsQuestion('What is your email?', 'qwe@example.com')
         ->expectsQuestion('Replace namespace', 'Qwe\\Rty')
-        ->expectsChoice('Replace description', 'foo', ['foo', 'bar', 'baz'])
+        ->expectsChoice('Replace description', 'baz', ['foo', 'bar', 'baz'])
         ->expectsConfirmation('Do you confirm generation?')
         // The second attempt
         ->expectsChoice('Which is license will be distributed?', 'Apache License 2', $licenses)
         ->expectsQuestion('What is your email?', 'some@example.com')
         ->expectsQuestion('Replace namespace', 'Foo\\Bar')
         ->expectsChoice('Replace description', 'bar', ['foo', 'bar', 'baz'])
-        ->expectsConfirmation('Do you confirm generation?', 'Yes')
+        ->expectsConfirmation('Do you confirm generation?', 'yes')
         ->assertSuccessful();
-});
+})->group('question');

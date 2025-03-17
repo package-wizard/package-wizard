@@ -99,7 +99,8 @@
         ],
         "test:unit": [
             "Composer\\Config::disableProcessTimeout",
-            "@php vendor/bin/pest --parallel"
+            "@php vendor/bin/pest --parallel --exclude-group question",
+            "@php vendor/bin/pest --compact --group question"
         ],
         "test:update": [
             "rm -rf tests/.pest/snapshots",

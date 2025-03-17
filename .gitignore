@@ -1,6 +1,7 @@
 .idea
 
 /temp
+/tests/Fixtures/temp
 /vendor
 
 /.phpunit.cache

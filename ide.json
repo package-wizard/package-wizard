@@ -140,6 +140,25 @@
                 "directory": "vendor",
                 "recursive": true
             }
+        },
+        {
+            "complete": "directoryFiles",
+            "condition": [
+                {
+                    "functionNames": [
+                        "prepare_project"
+                    ],
+                    "place": "parameter",
+                    "parameters": [
+                        1
+                    ]
+                }
+            ],
+            "options": {
+                "directory": "tests/Fixtures/Wizards",
+                "suffixToClear": ".json",
+                "recursive": true
+            }
         }
     ]
 }

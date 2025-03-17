@@ -51,6 +51,7 @@ use function Termwind\renderUsing;
 // TODO: Rename `comparator` with `operator`, simplify and add existsPath and doesntExistPath to options
 // TODO: Rename `wizard.install.*` with `wizard.managers.*`
 // TODO: Extract questions to constant
+// TODO: Fix tests in Ubuntu
 #[AsCommand('new', 'Create new project')]
 class NewCommand extends Command
 {

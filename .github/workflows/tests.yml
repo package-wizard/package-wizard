@@ -39,8 +39,20 @@ jobs:
                     ini-values: error_reporting=E_ALL, memory_limit=512M
                     coverage: none
 
-            -   name: Install dependencies
-                run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
+            -   name: Install Aspell
+                run: sudo apt-get install aspell aspell-en
 
-            -   name: Execute tests
-                run: composer test
+            -   name: Install dependencies
+                run: composer install --no-progress --no-scripts --optimize-autoloader --no-interaction --ansi
+
+            -   name: Coverage tests
+                run: composer test:coverage
+
+            -   name: Types tests
+                run: composer test:types
+
+            -   name: Misspelling tests
+                run: composer test:misspelling
+
+            -   name: Unit tests
+                run: composer test:unit

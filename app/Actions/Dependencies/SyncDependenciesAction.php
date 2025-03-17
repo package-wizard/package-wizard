@@ -25,22 +25,22 @@ class SyncDependenciesAction extends DependencyAction
             [
                 'who'      => sprintf('[%s] Dependency installation...', $this->type()->value),
                 'when'     => $toInstall->isNotEmpty(),
-                'callback' => fn () => $this->service()->add($this->directory(), $toInstall),
+                'callback' => fn () => $this->service()->add($this->directory(), $toInstall->all()),
             ],
             [
                 'who'      => sprintf('[%s] Installing dev dependencies...', $this->type()->value),
                 'when'     => $toInstallDev->isNotEmpty(),
-                'callback' => fn () => $this->service()->add($this->directory(), $toInstall, true),
+                'callback' => fn () => $this->service()->add($this->directory(), $toInstallDev->all(), true),
             ],
             [
                 'who'      => sprintf('[%s] Removing dependencies...', $this->type()->value),
                 'when'     => $toRemove->isNotEmpty(),
-                'callback' => fn () => $this->service()->remove($this->directory(), $toRemove),
+                'callback' => fn () => $this->service()->remove($this->directory(), $toRemove->all()),
             ],
             [
                 'who'      => sprintf('[%s] Removing dev dependencies...', $this->type()->value),
                 'when'     => $toRemoveDev->isNotEmpty(),
-                'callback' => fn () => $this->service()->remove($this->directory(), $toRemoveDev, true),
+                'callback' => fn () => $this->service()->remove($this->directory(), $toRemoveDev->all(), true),
             ],
         ];
     }

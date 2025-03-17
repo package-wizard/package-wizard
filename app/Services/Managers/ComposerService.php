@@ -13,9 +13,9 @@ use function implode;
 class ComposerService extends Manager
 {
     protected array $options = [
-        '--ignore-platform-reqs',
-        '--no-scripts',
-        '--prefer-dist',
+        '--ignore-platform-reqs' => true,
+        '--no-scripts'           => true,
+        '--prefer-dist'          => true,
     ];
 
     public function __construct(
@@ -46,7 +46,7 @@ class ComposerService extends Manager
         $command = vsprintf('%s update %s %s', [
             $this->find(),
             $this->options([
-                '--working-dir'    => $directory,
+                '--working-dir'    => $this->spaced($directory),
                 '--quiet'          => Console::quiet(),
                 '--no-interaction' => Console::quiet(),
             ]),
@@ -56,15 +56,16 @@ class ComposerService extends Manager
         $this->perform($command, $directory);
     }
 
-    public function add(string $directory, iterable $packages, bool $dev = false): void
+    public function add(string $directory, array $packages, bool $dev = false): void
     {
         $command = vsprintf('%s require %s %s %s', [
             $this->find(),
             collect($packages)->join(' '),
             $this->options([
-                '--working-dir'    => $directory,
+                '--working-dir'    => $this->spaced($directory),
                 '--quiet'          => Console::quiet(),
                 '--no-interaction' => Console::quiet(),
+                '--no-install',
 
                 '--dev' => $dev,
             ]),
@@ -74,15 +75,17 @@ class ComposerService extends Manager
         $this->perform($command, $directory);
     }
 
-    public function remove(string $directory, iterable $packages, bool $dev = false): void
+    public function remove(string $directory, array $packages, bool $dev = false): void
     {
-        $command = vsprintf('%s require %s %s %s', [
+        $command = vsprintf('%s remove %s %s %s', [
             $this->find(),
             collect($packages)->join(' '),
             $this->options([
-                '--working-dir'    => $directory,
+                '--working-dir'    => $this->spaced($directory),
                 '--quiet'          => Console::quiet(),
                 '--no-interaction' => Console::quiet(),
+                '--prefer-dist'    => false,
+                '--no-install',
 
                 '--dev' => $dev,
             ]),

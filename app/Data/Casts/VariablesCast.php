@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Data\Casts;
 
-use PackageWizard\Installer\ChoiceableData;
+use PackageWizard\Installer\ChoiceData;
 use PackageWizard\Installer\Data\Variables\VariableDateData;
 use PackageWizard\Installer\Data\Variables\VariableYearData;
 use PackageWizard\Installer\Data\Variables\VariableYearRangeData;
@@ -14,7 +14,7 @@ use Spatie\LaravelData\Data;
 
 class VariablesCast implements Cast
 {
-    use ChoiceableData;
+    use ChoiceData;
 
     protected function map(string|TypeEnum $type, array $item): Data
     {

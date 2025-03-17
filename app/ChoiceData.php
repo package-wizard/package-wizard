@@ -12,7 +12,7 @@ use Spatie\LaravelData\Support\Creation\CreationContext;
 use Spatie\LaravelData\Support\DataProperty;
 use UnexpectedValueException;
 
-trait ChoiceableData
+trait ChoiceData
 {
     abstract protected function map(string|TypeEnum $type, array $item): Data;
 

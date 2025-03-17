@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Data\Casts;
 
-use PackageWizard\Installer\ChoiceableData;
+use PackageWizard\Installer\ChoiceData;
 use PackageWizard\Installer\Data\Questions\QuestionAskSelectData;
 use PackageWizard\Installer\Data\Questions\QuestionAskTextData;
 use PackageWizard\Installer\Data\Questions\QuestionAuthorData;
@@ -16,7 +16,7 @@ use Spatie\LaravelData\Data;
 
 class QuestionsCast implements Cast
 {
-    use ChoiceableData;
+    use ChoiceData;
 
     protected function map(string|TypeEnum $type, array $item): Data
     {

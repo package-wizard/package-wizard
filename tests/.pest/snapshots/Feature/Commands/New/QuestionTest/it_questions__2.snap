@@ -1,0 +1,29 @@
+{
+    "name": "andrey-helldar/test",
+    "description": "Some description",
+    "type": "template",
+    "require": {
+        "php": "^8.2",
+        "doctrine/dbal": "*"
+    },
+    "require-dev": {
+        "laravel/pail": "*"
+    },
+    "license": "Apache License 2",
+    "autoload": {
+        "psr-4": {
+            "Foo\\Bar\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "John Doe",
+            "email": "john@example.com"
+        },
+        {
+            "name": "Package Wizard",
+            "homepage": "https://package-wizard.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}

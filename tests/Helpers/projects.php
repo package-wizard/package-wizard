@@ -9,7 +9,7 @@ use function PackageWizard\Installer\base_path;
 
 function prepare_project(string $wizard, bool $withWizard = true): void
 {
-    $path = base_path('tests/Fixtures/temp');
+    $path = temp_path();
 
     Directory::ensureDelete($path);
 

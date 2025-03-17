@@ -1,0 +1,27 @@
+{
+    "$schema": "../../../resources/schemas/schema-v2.json",
+    "wizard": {
+        "install": {
+            "composer": false,
+            "npm": false,
+            "yarn": false
+        },
+        "clean": true
+    },
+    "variables": [
+        {
+            "type": "year",
+            "replace": "%year%"
+        },
+        {
+            "type": "yearRange",
+            "replace": "%year-range%",
+            "start": 2021
+        },
+        {
+            "type": "date",
+            "replace": "%date%",
+            "format": "d M Y"
+        }
+    ]
+}

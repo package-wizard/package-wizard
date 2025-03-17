@@ -7,7 +7,6 @@ namespace PackageWizard\Installer\Helpers;
 use JsonException;
 use PackageWizard\Installer\Data\ConfigData;
 
-use function array_merge;
 use function config;
 use function file_exists;
 use function file_get_contents;
@@ -27,7 +26,19 @@ class ConfigHelper
         );
     }
 
-    public static function search(string $directory, string $package): ?string
+    /**
+     * @throws JsonException
+     */
+    protected static function getConfig(string $directory, string $package): array
+    {
+        if ($payload = static::search($directory, $package)) {
+            return static::decode($payload);
+        }
+
+        return config('wizard.default');
+    }
+
+    protected static function search(string $directory, string $package): ?string
     {
         if ($path = static::path($directory, config('wizard.filename'))) {
             return $path;
@@ -52,14 +63,5 @@ class ConfigHelper
         }
 
         return null;
-    }
-
-    protected static function getConfig(string $directory, string $package): array
-    {
-        if ($payload = static::search($directory, $package)) {
-            $payload = static::decode($payload);
-        }
-
-        return array_merge(config('wizard.default'), $payload ?? []);
     }
 }

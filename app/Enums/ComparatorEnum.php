@@ -6,16 +6,16 @@ namespace PackageWizard\Installer\Enums;
 
 enum ComparatorEnum: string
 {
-    case LessThan             = 'lt';
-    case LessThanOrEqualTo    = 'lte';
-    case EqualTo              = 'eq';
-    case NotEqualTo           = 'neq';
-    case GreaterThan          = 'gt';
-    case GreaterThanOrEqualTo = 'gte';
-    case InList               = 'il';
-    case NotInList            = 'nil';
-    case Contains             = 'ct';
-    case DoesntContain        = 'dc';
-    case ContainsAll          = 'cta';
-    case DoesntContainAll     = 'dca';
+    case LessThan             = 'lessThan';
+    case LessThanOrEqualTo    = 'lessThanOrEqualTo';
+    case EqualTo              = 'equalTo';
+    case NotEqualTo           = 'notEqualTo';
+    case GreaterThan          = 'greaterThan';
+    case GreaterThanOrEqualTo = 'greaterThanOrEqualTo';
+    case InList               = 'inList';
+    case NotInList            = 'notInList';
+    case Contains             = 'contains';
+    case DoesntContain        = 'doesntContain';
+    case ContainsAll          = 'containsAll';
+    case DoesntContainAll     = 'doesntContainAll';
 }

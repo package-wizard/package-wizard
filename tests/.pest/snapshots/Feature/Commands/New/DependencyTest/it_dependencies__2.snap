@@ -1,0 +1,29 @@
+{
+    "name": "andrey-helldar/test",
+    "description": "Some description",
+    "type": "template",
+    "require": {
+        "php": "^8.2",
+        "dragon-code/laravel-deploy-operations": "^6.4"
+    },
+    "require-dev": {
+        "dragon-code/benchmark": "^3.1"
+    },
+    "license": ":license:",
+    "autoload": {
+        "psr-4": {
+            "AndreyHelldar\\Test\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Andrey Helldar",
+            "email": "helldar@dragon-code.pro"
+        },
+        {
+            "name": "The Dragon Code",
+            "homepage": "https://dragon-code.pro"
+        }
+    ],
+    "minimum-stability": "stable"
+}

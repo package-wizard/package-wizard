@@ -45,6 +45,10 @@ use function Termwind\renderUsing;
 // TODO: Add schema validator
 // TODO: Add License file copying
 // TODO: Add license file link replace
+// TODO: Add confirmation to questions
+// TODO: Fix field titles
+// TODO: Make EqualsTo as default for comparing
+// TOOD: Add forced boilerplates list
 class NewCommand extends Command
 {
     protected $signature = 'new';

@@ -11,7 +11,8 @@
             "packagist",
             "replacer",
             "replacers",
-            "tty"
+            "tty",
+            "writeln"
         ],
         "paths": [
             "resources/licenses"

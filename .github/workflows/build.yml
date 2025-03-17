@@ -22,13 +22,13 @@ jobs:
                 run: |
                     if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
                       GITHUB_REF=${{ github.event.inputs.tag }}
-                      
+                    
                       echo "tag=${GITHUB_REF##*}" >> "$GITHUB_OUTPUT"
                     fi
                     
                     if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
                       GITHUB_REF=${{ github.event.client_payload.tag }}
-                      
+                    
                       echo "tag=${GITHUB_REF}" >> "$GITHUB_OUTPUT"
                     fi
 
@@ -43,7 +43,10 @@ jobs:
                     ini-values: error_reporting=E_ALL
                     coverage: none
 
-            -   name: Install the dependencies
+            -   name: Remove Peck
+                run: composer remove peckphp/peck --dev --no-progress --no-scripts --no-install --ignore-platform-reqs --no-interaction --ansi
+
+            -   name: Install dependencies
                 run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
 
             -   name: Execute unit/feature tests

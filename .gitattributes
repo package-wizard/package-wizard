@@ -15,6 +15,7 @@
 /.gitignore export-ignore
 
 /box.json export-ignore
+/peck.json export-ignore
 /ide.json export-ignore
 /composer.lock export-ignore
 

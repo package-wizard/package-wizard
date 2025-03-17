@@ -22,6 +22,10 @@ abstract class Manager implements DependencyManager
                     return $value ? $key : null;
                 }
 
+                if (is_string($value) && is_string($key)) {
+                    return $key . '=' . $value;
+                }
+
                 return $value;
             })
             ->filter()
@@ -31,5 +35,10 @@ abstract class Manager implements DependencyManager
     protected function perform(string $command, string $directory): void
     {
         app(ProcessService::class)->runWithInteract($command, $directory);
+    }
+
+    protected function spaced(string $value): string
+    {
+        return '"' . $value . '"';
     }
 }

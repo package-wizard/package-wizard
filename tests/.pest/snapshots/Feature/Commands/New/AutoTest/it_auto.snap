@@ -1,0 +1,17 @@
+# Test Readme
+
+> my description for package
+
+## Installation
+
+```bash
+composer require my/package
+```
+
+## License
+
+%year% (c) :author:
+%year-range%
+%date%
+
+The `Package Wizard` is licensed under the [MIT License](:licenseFilename:).

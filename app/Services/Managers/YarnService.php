@@ -22,7 +22,7 @@ class YarnService extends Manager
         $this->perform($command, $directory);
     }
 
-    public function add(string $directory, iterable $packages, bool $dev = false): void
+    public function add(string $directory, array $packages, bool $dev = false): void
     {
         $command = vsprintf('%s add %s %s', [
             $this->yarn->find(),
@@ -33,7 +33,7 @@ class YarnService extends Manager
         $this->perform($command, $directory);
     }
 
-    public function remove(string $directory, iterable $packages, bool $dev = false): void
+    public function remove(string $directory, array $packages, bool $dev = false): void
     {
         $command = vsprintf('%s remove %s %s', [
             $this->yarn->find(),

@@ -34,7 +34,7 @@ abstract class Action
 
     public function __construct(
         OutputInterface $output,
-        protected readonly array $parameters = [],
+        protected readonly array $parameters,
         protected readonly ProcessService $process,
         protected readonly FilesystemService $filesystem,
     ) {

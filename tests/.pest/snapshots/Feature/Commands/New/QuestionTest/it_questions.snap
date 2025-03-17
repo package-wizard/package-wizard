@@ -1,0 +1,17 @@
+# Test Readme
+
+> bar
+
+## Installation
+
+```bash
+composer require andrey-helldar/test
+```
+
+## License
+
+%year% (c) :author:
+%year-range%
+%date%
+
+The `Package Wizard` is licensed under the [Apache License 2](:licenseFilename:).

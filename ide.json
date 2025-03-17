@@ -159,6 +159,24 @@
                 "suffixToClear": ".json",
                 "recursive": true
             }
+        },
+        {
+            "complete": "directoryFiles",
+            "condition": [
+                {
+                    "functionNames": [
+                        "temp_path"
+                    ],
+                    "place": "parameter",
+                    "parameters": [
+                        1
+                    ]
+                }
+            ],
+            "options": {
+                "directory": "temp",
+                "recursive": true
+            }
         }
     ]
 }

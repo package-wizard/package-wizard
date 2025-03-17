@@ -11,8 +11,8 @@ use function vsprintf;
 class NpmService extends Manager
 {
     protected array $options = [
-        '--ignore-scripts',
-        '--no-audit',
+        '--ignore-scripts' => true,
+        '--no-audit'       => true,
     ];
 
     public function __construct(
@@ -30,7 +30,7 @@ class NpmService extends Manager
         $this->perform($command, $directory);
     }
 
-    public function add(string $directory, iterable $packages, bool $dev = false): void
+    public function add(string $directory, array $packages, bool $dev = false): void
     {
         $command = vsprintf('%s install %s %s', [
             $this->npm->find(),
@@ -44,7 +44,7 @@ class NpmService extends Manager
         $this->perform($command, $directory);
     }
 
-    public function remove(string $directory, iterable $packages, bool $dev = false): void
+    public function remove(string $directory, array $packages, bool $dev = false): void
     {
         $command = vsprintf('%s uninstall %s %s', [
             $this->npm->find(),

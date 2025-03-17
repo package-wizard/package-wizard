@@ -54,7 +54,7 @@ class AuthorFiller extends Filler
         }
 
         return text(
-            label  : 'Enter your email address:',
+            label  : 'What is your email?',
             default: $this->git->userEmail(),
         );
     }

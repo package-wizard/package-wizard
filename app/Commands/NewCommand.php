@@ -45,10 +45,12 @@ use function Termwind\renderUsing;
 // TODO: Add schema validator
 // TODO: Add License file copying
 // TODO: Add license file link replace
-// TODO: Add confirmation to questions
 // TODO: Fix field titles
 // TODO: Make EqualsTo as default for comparing
 // TODO: Add forced boilerplates list
+// TODO: Rename `comparator` with `operator`, simplify and add existsPath and doesntExistPath to options
+// TODO: Rename `wizard.install.*` with `wizard.managers.*`
+// TODO: Extract questions to language files
 class NewCommand extends Command
 {
     protected $signature = 'new';
@@ -102,11 +104,6 @@ class NewCommand extends Command
             Action::Config    => $config,
         ]);
 
-        InstallDependenciesAction::run($this->getOutput(), [
-            Action::Directory => $directory,
-            Action::Config    => $config,
-        ]);
-
         SyncDependenciesAction::run($this->getOutput(), [
             SyncDependenciesAction::Type => DependencyTypeEnum::Composer,
             Action::Directory            => $directory,
@@ -123,6 +120,11 @@ class NewCommand extends Command
             SyncDependenciesAction::Type => DependencyTypeEnum::Yarn,
             Action::Directory            => $directory,
             Action::Config               => $config,
+        ]);
+
+        InstallDependenciesAction::run($this->getOutput(), [
+            Action::Directory => $directory,
+            Action::Config    => $config,
         ]);
 
         CleanUpAction::run($this->getOutput(), [
@@ -184,6 +186,10 @@ class NewCommand extends Command
 
     protected function getInstallationDirectory(string $name): string
     {
+        if ($path = realpath($name)) {
+            return $path;
+        }
+
         return $name !== '.' ? getcwd() . '/' . $name : '.';
     }
 
@@ -262,6 +268,12 @@ class NewCommand extends Command
     protected function confirmChanges(ConfigData $config): bool
     {
         intro(PHP_EOL . 'Check the data before continuing' . PHP_EOL);
+
+        $doesntAsk = $config->replaces->where('asked', true)->isEmpty();
+
+        if ($doesntAsk) {
+            return true;
+        }
 
         PreviewHelper::replaces($config->replaces);
 

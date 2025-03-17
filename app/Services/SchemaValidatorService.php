@@ -17,14 +17,9 @@ class SchemaValidatorService
         protected Validator $schema = new Validator()
     ) {}
 
-    /**
-     * @throws JsonSchemaException
-     */
-    public function validate(array $data): void
+    public function validate(stdClass $data): void
     {
-        $resolved = (object) $data;
-
-        $this->schema->validate($resolved, $this->reference());
+        $this->schema->validate($data, $this->reference());
 
         if (! $this->schema->isValid()) {
             $this->throw();

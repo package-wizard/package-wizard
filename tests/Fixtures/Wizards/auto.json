@@ -1,0 +1,37 @@
+{
+    "$schema": "../../../resources/schemas/schema-v2.json",
+    "wizard": {
+        "install": {
+            "composer": false,
+            "npm": false,
+            "yarn": false
+        },
+        "clean": true
+    },
+    "replaces": [
+        {
+            "replace": "andrey-helldar/test",
+            "with": "my/package"
+        },
+        {
+            "replace": "Some description",
+            "with": "my description"
+        },
+        {
+            "replace": ":license:",
+            "with": "MIT License"
+        },
+        {
+            "replace": "AndreyHelldar\\Test",
+            "with": "My\\Package"
+        },
+        {
+            "replace": "Andrey Helldar",
+            "with": "John Doe"
+        },
+        {
+            "replace": "helldar@dragon-code.pro",
+            "with": "john@example.com"
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{
+    "name": "andrey-helldar/test",
+    "description": "Some description",
+    "type": "template",
+    "require": {
+        "php": "^8.2"
+    },
+    "license": ":license:",
+    "autoload": {
+        "psr-4": {
+            "AndreyHelldar\\Test\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Andrey Helldar",
+            "email": "helldar@dragon-code.pro"
+        }
+    ],
+    "minimum-stability": "stable"
+}

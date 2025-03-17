@@ -1,9 +1,9 @@
 {
-    "$schema": "https://package-wizard.com/schemas/schema-v2.json",
+    "$schema": "../../../resources/schemas/schema-v2.json",
     "variables": [
         {
             "type": "year",
-            "replace": "%year%"
+            "replace": ":year:"
         }
     ]
 }

@@ -632,7 +632,7 @@
                 "for": {
                     "type": "string"
                 },
-                "comparator": {
+                "operator": {
                     "type": "string",
                     "enum": [
                         "<",

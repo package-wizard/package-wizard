@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Enums;
 
-enum ComparatorEnum: string
+enum ConditionOperatorEnum: string
 {
     case LessThan             = '<';
     case LessThanOrEqualTo    = '<=';

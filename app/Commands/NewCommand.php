@@ -42,6 +42,9 @@ use function PackageWizard\Installer\resource_path;
 use function realpath;
 use function Termwind\renderUsing;
 
+// TODO: Add schema validator
+// TODO: Add License file copying
+// TODO: Add license file link replace
 class NewCommand extends Command
 {
     protected $signature = 'new';

@@ -17,17 +17,20 @@
         },
         "variables": {
             "type": "array",
-            "anyOf": [
-                {
-                    "$ref": "#/definitions/variableYear"
-                },
-                {
-                    "$ref": "#/definitions/variableYearRange"
-                },
-                {
-                    "$ref": "#/definitions/variableDate"
-                }
-            ]
+            "items": {
+                "anyOf": [
+                    {
+                        "$ref": "#/definitions/variableYear"
+                    },
+                    {
+                        "$ref": "#/definitions/variableYearRange"
+                    },
+                    {
+                        "$ref": "#/definitions/variableDate"
+                    }
+                ]
+            },
+            "additionalProperties": false
         },
         "renames": {
             "type": "array",
@@ -48,7 +51,7 @@
             }
         },
         "replaces": {
-            "type": "object",
+            "type": "array",
             "items": {
                 "$ref": "#/definitions/replace"
             }
@@ -64,20 +67,23 @@
         },
         "questions": {
             "type": "array",
-            "anyOf": [
-                {
-                    "$ref": "#/definitions/questionAuthor"
-                },
-                {
-                    "$ref": "#/definitions/questionLicense"
-                },
-                {
-                    "$ref": "#/definitions/questionAskSelect"
-                },
-                {
-                    "$ref": "#/definitions/questionAskText"
-                }
-            ]
+            "items": {
+                "anyOf": [
+                    {
+                        "$ref": "#/definitions/questionAuthor"
+                    },
+                    {
+                        "$ref": "#/definitions/questionLicense"
+                    },
+                    {
+                        "$ref": "#/definitions/questionAskSelect"
+                    },
+                    {
+                        "$ref": "#/definitions/questionAskText"
+                    }
+                ]
+            },
+            "additionalProperties": false
         }
     },
     "definitions": {
@@ -154,8 +160,7 @@
             "properties": {
                 "type": {
                     "type": "string",
-                    "default": "rename",
-                    "const": true
+                    "const": "rename"
                 },
                 "what": {
                     "type": "string",
@@ -276,8 +281,7 @@
             "properties": {
                 "type": {
                     "type": "string",
-                    "default": "year",
-                    "const": true
+                    "const": "year"
                 },
                 "replace": {
                     "$ref": "#/definitions/valueReplace",
@@ -294,8 +298,7 @@
             "properties": {
                 "type": {
                     "type": "string",
-                    "default": "yearRange",
-                    "const": true
+                    "const": "yearRange"
                 },
                 "replace": {
                     "$ref": "#/definitions/valueReplace",
@@ -317,8 +320,7 @@
             "properties": {
                 "type": {
                     "type": "string",
-                    "default": "date",
-                    "const": true
+                    "const": "date"
                 },
                 "replace": {
                     "$ref": "#/definitions/valueReplace",
@@ -339,8 +341,7 @@
             "properties": {
                 "type": {
                     "type": "string",
-                    "default": "author",
-                    "const": true
+                    "const": "author"
                 },
                 "author": {
                     "$ref": "#/definitions/author"
@@ -364,8 +365,7 @@
             "properties": {
                 "type": {
                     "type": "string",
-                    "default": "license",
-                    "const": true
+                    "const": "license"
                 },
                 "default": {
                     "type": "string",
@@ -391,13 +391,11 @@
             "properties": {
                 "type": {
                     "type": "string",
-                    "default": "ask",
-                    "const": true
+                    "const": "ask"
                 },
                 "prompt": {
                     "type": "string",
-                    "default": "select",
-                    "const": true
+                    "const": "select"
                 },
                 "replace": {
                     "$ref": "#/definitions/valueReplace"
@@ -408,25 +406,27 @@
                 },
                 "options": {
                     "type": "array",
-                    "anyOf": [
-                        {
-                            "type": "string"
-                        },
-                        {
-                            "type": "integer"
-                        },
-                        {
-                            "type": "object",
-                            "minProperties": 1,
-                            "maxProperties": 1,
-                            "propertyNames": {
+                    "items": {
+                        "anyOf": [
+                            {
                                 "type": "string"
                             },
-                            "additionalProperties": {
-                                "type": "string"
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "object",
+                                "minProperties": 1,
+                                "maxProperties": 1,
+                                "propertyNames": {
+                                    "type": "string"
+                                },
+                                "additionalProperties": {
+                                    "type": "string"
+                                }
                             }
-                        }
-                    ],
+                        ]
+                    },
                     "minItems": 1,
                     "uniqueItems": true,
                     "additionalProperties": false
@@ -468,13 +468,11 @@
             "properties": {
                 "type": {
                     "type": "string",
-                    "default": "ask",
-                    "const": true
+                    "const": "ask"
                 },
                 "prompt": {
                     "type": "string",
-                    "default": "text",
-                    "const": true
+                    "const": "text"
                 },
                 "replace": {
                     "$ref": "#/definitions/valueReplace"
@@ -546,18 +544,15 @@
         },
         "valueReplace": {
             "oneOf": [
-                {
-                    "type": "string"
-                },
+                { "type": "string" },
                 {
                     "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "minItems": 1,
-                    "uniqueItems": true
+                    "items": [{ "type": "string" }],
+                    "uniqueItems": true,
+                    "additionalProperties": false
                 }
             ],
+            "uniqueItems": true,
             "additionalProperties": false
         }
     }

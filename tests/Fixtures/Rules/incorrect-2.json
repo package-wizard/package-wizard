@@ -1,4 +1,5 @@
 {
+    "$schema": "../../../resources/schemas/schema-v2.json",
     "variables": [
         {
             "type111": "year",

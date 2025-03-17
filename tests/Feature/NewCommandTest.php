@@ -2,10 +2,15 @@
 
 declare(strict_types=1);
 
-use Symfony\Component\Console\Command\Command;
+use PackageWizard\Installer\Commands\NewCommand;
+
+use function PackageWizard\Installer\base_path;
 
 it('new artisans', function () {
-    expect(artisan('new'))->toBe(
-        Command::SUCCESS
-    );
+    prepare_project('auto');
+
+    $this->artisan(NewCommand::class, [
+        'name'    => base_path('tests/Fixtures/temp'),
+        '--local' => true,
+    ])->assertSuccessfull();
 });

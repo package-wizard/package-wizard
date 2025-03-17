@@ -48,7 +48,7 @@ use function Termwind\renderUsing;
 // TODO: Add confirmation to questions
 // TODO: Fix field titles
 // TODO: Make EqualsTo as default for comparing
-// TOOD: Add forced boilerplates list
+// TODO: Add forced boilerplates list
 class NewCommand extends Command
 {
     protected $signature = 'new';

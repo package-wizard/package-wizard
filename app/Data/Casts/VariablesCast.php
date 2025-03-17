@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Data\Casts;
 
-use PackageWizard\Installer\ChoiceData;
+use PackageWizard\Installer\Concerns\Data\ChoiceData;
 use PackageWizard\Installer\Data\Variables\VariableDateData;
 use PackageWizard\Installer\Data\Variables\VariableYearData;
 use PackageWizard\Installer\Data\Variables\VariableYearRangeData;

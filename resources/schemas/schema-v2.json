@@ -339,12 +339,45 @@
         "questionAuthor": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "string",
+                    "default": null
+                },
+                "condition": {
+                    "$ref": "#/definitions/condition"
+                },
                 "type": {
                     "type": "string",
                     "const": "author"
                 },
                 "author": {
-                    "$ref": "#/definitions/author"
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "oneOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "default": null
+                        },
+                        "email": {
+                            "oneOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "format": "email",
+                            "default": null
+                        }
+                    },
+                    "additionalProperties": false
                 },
                 "replace": {
                     "$ref": "#/definitions/valueReplace",
@@ -363,6 +396,13 @@
         "questionLicense": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "string",
+                    "default": null
+                },
+                "condition": {
+                    "$ref": "#/definitions/condition"
+                },
                 "type": {
                     "type": "string",
                     "const": "license"
@@ -389,6 +429,13 @@
         "questionAskSelect": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "string",
+                    "default": null
+                },
+                "condition": {
+                    "$ref": "#/definitions/condition"
+                },
                 "type": {
                     "type": "string",
                     "const": "ask"
@@ -466,6 +513,13 @@
         "questionAskText": {
             "type": "object",
             "properties": {
+                "id": {
+                    "type": "string",
+                    "default": null
+                },
+                "condition": {
+                    "$ref": "#/definitions/condition"
+                },
                 "type": {
                     "type": "string",
                     "const": "ask"
@@ -559,6 +613,62 @@
                 }
             ],
             "uniqueItems": true,
+            "additionalProperties": false
+        },
+        "condition": {
+            "oneOf": [
+                {
+                    "type": "boolean",
+                    "const": true
+                },
+                {
+                    "$ref": "#/definitions/comparator"
+                }
+            ]
+        },
+        "comparator": {
+            "type": "object",
+            "properties": {
+                "for": {
+                    "type": "string"
+                },
+                "comparator": {
+                    "type": "string",
+                    "enum": [
+                        "lessThan",
+                        "lessThanOrEqualTo",
+                        "equalTo",
+                        "notEqualTo",
+                        "greaterThan",
+                        "greaterThanOrEqualTo",
+                        "inList",
+                        "notInList",
+                        "contains",
+                        "doesntContain",
+                        "containsAll",
+                        "doesntContainAll"
+                    ]
+                },
+                "value": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "array"
+                        }
+                    ],
+                    "additionalProperties": false
+                }
+            },
+            "required": [
+                "for",
+                "comparator",
+                "value"
+            ],
             "additionalProperties": false
         }
     }

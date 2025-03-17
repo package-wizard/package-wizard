@@ -50,7 +50,7 @@ use function Termwind\renderUsing;
 // TODO: Add forced boilerplates list
 // TODO: Rename `comparator` with `operator`, simplify and add existsPath and doesntExistPath to options
 // TODO: Rename `wizard.install.*` with `wizard.managers.*`
-// TODO: Extract questions to language files
+// TODO: Extract questions to constant
 class NewCommand extends Command
 {
     protected $signature = 'new';

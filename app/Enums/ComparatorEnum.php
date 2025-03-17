@@ -18,4 +18,6 @@ enum ComparatorEnum: string
     case DoesntContain        = 'doesntContain';
     case ContainsAll          = 'containsAll';
     case DoesntContainAll     = 'doesntContainAll';
+    case ExistsPath           = 'pathExists';
+    case DoesNotExistPath     = 'pathDoesNotExist';
 }

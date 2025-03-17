@@ -50,6 +50,7 @@ use function Termwind\renderUsing;
 // TODO: Rename `comparator` with `operator`, simplify and add existsPath and doesntExistPath to options
 // TODO: Rename `wizard.install.*` with `wizard.managers.*`
 // TODO: Extract questions to constant
+// TODO: Architecture tests
 class NewCommand extends Command
 {
     protected $signature = 'new';

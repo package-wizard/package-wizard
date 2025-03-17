@@ -12,7 +12,6 @@ use PackageWizard\Installer\Fillers\Filler;
 use Spatie\LaravelData\Data;
 
 use function blank;
-use function is_string;
 use function Laravel\Prompts\text;
 use function trim;
 

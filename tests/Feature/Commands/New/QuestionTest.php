@@ -31,4 +31,4 @@ it('questions', function () {
         ->expectsChoice('Replace description', 'bar', ['foo', 'bar', 'baz'])
         ->expectsConfirmation('Do you confirm generation?', 'yes')
         ->assertSuccessful();
-})->group('question');
+});

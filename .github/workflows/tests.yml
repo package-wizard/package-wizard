@@ -19,7 +19,7 @@ jobs:
                 os: [ ubuntu, windows ]
                 php: [ 8.2, 8.3, 8.4 ]
 
-        name: OS ${{ matrix.os }} - PHP ${{ matrix.php }}
+        name: ${{ matrix.os }} - php ${{ matrix.php }}
 
         steps:
             -   name: Set git to use LF
@@ -42,6 +42,10 @@ jobs:
             -   name: Install Aspell
                 run: sudo apt-get install aspell aspell-en
 
+            -   name: Remove Peck
+                if: ${{ matrix.php == '8.2' }}
+                run: composer remove peckphp/peck --dev --no-progress --no-scripts --no-install --ignore-platform-reqs --no-interaction --ansi
+
             -   name: Install dependencies
                 run: composer install --no-progress --no-scripts --optimize-autoloader --no-interaction --ansi
 
@@ -52,6 +56,7 @@ jobs:
                 run: composer test:types
 
             -   name: Misspelling tests
+                if: ${{ matrix.php != '8.2' }}
                 run: composer test:misspelling
 
             -   name: Unit tests

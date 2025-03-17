@@ -26,6 +26,7 @@ use PackageWizard\Installer\Fillers\PackageFiller;
 use PackageWizard\Installer\Helpers\ConfigHelper;
 use PackageWizard\Installer\Helpers\PreviewHelper;
 use PackageWizard\Installer\Support\Console;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -50,7 +51,7 @@ use function Termwind\renderUsing;
 // TODO: Rename `comparator` with `operator`, simplify and add existsPath and doesntExistPath to options
 // TODO: Rename `wizard.install.*` with `wizard.managers.*`
 // TODO: Extract questions to constant
-// TODO: Architecture tests
+#[AsCommand('new', 'Create new project')]
 class NewCommand extends Command
 {
     protected $signature = 'new';

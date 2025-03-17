@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace PackageWizard\Installer;
+namespace PackageWizard\Installer\Concerns\Data;
 
 use BackedEnum;
 use Illuminate\Support\Collection;

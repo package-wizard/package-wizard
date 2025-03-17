@@ -45,9 +45,8 @@ use function Termwind\renderUsing;
 // TODO: Add schema validator
 // TODO: Add License file copying
 // TODO: Add license file link replace
-// TODO: Fix field titles
-// TODO: Make EqualsTo as default for comparing
 // TODO: Add forced boilerplates list
+// TODO: Make EqualsTo as default for comparing
 // TODO: Rename `comparator` with `operator`, simplify and add existsPath and doesntExistPath to options
 // TODO: Rename `wizard.install.*` with `wizard.managers.*`
 // TODO: Extract questions to constant
@@ -68,66 +67,58 @@ class NewCommand extends Command
             $directory ??= $this->projectDirectory()
         );
 
-        AuthorsAction::run($this->getOutput(), [
-            Action::Config => $config,
-        ]);
-
-        VariablesAction::run($this->getOutput(), [
-            Action::Config => $config,
-        ]);
-
-        QuestionsAction::run($this->getOutput(), [
-            Action::Config => $config,
-        ]);
+        AuthorsAction::run([Action::Config => $config]);
+        VariablesAction::run([Action::Config => $config]);
+        QuestionsAction::run([Action::Config => $config]);
 
         if (! $this->confirmChanges($config)) {
             return $this->handle($directory);
         }
 
-        ReplaceContentAction::run($this->getOutput(), [
+        ReplaceContentAction::run([
             Action::Directory => $directory,
             Action::Config    => $config,
         ]);
 
-        RenameFilesAction::run($this->getOutput(), [
+        RenameFilesAction::run([
             Action::Directory => $directory,
             Action::Config    => $config,
         ]);
 
-        RemoveFilesAction::run($this->getOutput(), [
+        RemoveFilesAction::run([
             Action::Directory => $directory,
             Action::Config    => $config,
         ]);
 
-        CopyFilesAction::run($this->getOutput(), [
+        CopyFilesAction::run([
             Action::Directory => $directory,
             Action::Config    => $config,
         ]);
 
-        SyncDependenciesAction::run($this->getOutput(), [
+        SyncDependenciesAction::run([
             SyncDependenciesAction::Type => DependencyTypeEnum::Composer,
             Action::Directory            => $directory,
             Action::Config               => $config,
         ]);
 
-        SyncDependenciesAction::run($this->getOutput(), [
+        SyncDependenciesAction::run([
             SyncDependenciesAction::Type => DependencyTypeEnum::Npm,
             Action::Directory            => $directory,
             Action::Config               => $config,
         ]);
 
-        SyncDependenciesAction::run($this->getOutput(), [
+        SyncDependenciesAction::run([
             SyncDependenciesAction::Type => DependencyTypeEnum::Yarn,
             Action::Directory            => $directory,
             Action::Config               => $config,
         ]);
 
-        InstallDependenciesAction::run($this->getOutput(), [
+        InstallDependenciesAction::run([
             Action::Directory => $directory,
             Action::Config    => $config,
         ]);
 
-        CleanUpAction::run($this->getOutput(), [
+        CleanUpAction::run([
             Action::Directory => $directory,
             Action::Config    => $config,
         ]);
@@ -206,7 +197,7 @@ class NewCommand extends Command
         if (! $this->option('local')) {
             $this->ensureDirectory($directory);
 
-            DownloadProjectAction::run($this->getOutput(), [
+            DownloadProjectAction::run([
                 DownloadProjectAction::Package => $this->argument('search'),
                 DownloadProjectAction::Version => $this->option('package-version'),
                 DownloadProjectAction::Dev     => (bool) $this->option('dev'),

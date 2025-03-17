@@ -13,10 +13,15 @@ class AuthorsAction extends Action
     protected function perform(): void
     {
         $this->config()->authors->each(function (AuthorData $author, int $index) {
-            $this->verboseInfo('    Author index: ' . $index);
+            static::verboseWriteln('    Author index: ' . $index);
 
             $this->author($author);
         });
+    }
+
+    protected function steps(): int
+    {
+        return $this->config()->authors->count();
     }
 
     protected function author(AuthorData|Data $author): void
@@ -24,10 +29,5 @@ class AuthorsAction extends Action
         $author = AuthorReplacer::get($author);
 
         $this->config()->replaces->push($author);
-    }
-
-    protected function steps(): int
-    {
-        return $this->config()->authors->count();
     }
 }

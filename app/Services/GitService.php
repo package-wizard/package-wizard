@@ -10,12 +10,12 @@ class GitService
         protected ProcessService $process
     ) {}
 
-    public function userName(): string
+    public function userName(): ?string
     {
         return $this->process->runWithOutput(['git', 'config', '--global', 'user.name']);
     }
 
-    public function userEmail(): string
+    public function userEmail(): ?string
     {
         return $this->process->runWithOutput(['git', 'config', '--global', 'user.email']);
     }

@@ -50,7 +50,6 @@ use function Termwind\renderUsing;
 // TODO: Add forced boilerplates list
 // TODO: Rename `wizard.install.*` with `wizard.managers.*`
 // TODO: Extract questions to constant
-// TODO: Fix tests in Ubuntu
 #[AsCommand('new', 'Create new project')]
 class NewCommand extends Command
 {

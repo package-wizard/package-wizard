@@ -156,7 +156,7 @@ class NewCommand extends Command
     /**
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
-     * @throws \JsonException
+     * @throws JsonException
      */
     protected function interact(InputInterface $input, OutputInterface $output): void
     {

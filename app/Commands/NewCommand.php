@@ -58,8 +58,6 @@ class NewCommand extends Command
 
     protected $description = 'Create new project';
 
-    protected ?ConfigData $config = null;
-
     protected ?string $directory = null;
 
     /**
@@ -75,59 +73,64 @@ class NewCommand extends Command
             return static::FAILURE;
         }
 
-        if (! $this->confirmChanges($this->config)) {
+        $config = $this->getConfig(
+            $this->directory ??= $this->projectDirectory()
+        );
+
+        AuthorsAction::run([Action::Config => $config]);
+        VariablesAction::run([Action::Config => $config]);
+        QuestionsAction::run([Action::Config => $config]);
+
+        if (! $this->confirmChanges($config)) {
             return $this->handle();
         }
 
-        AuthorsAction::run([Action::Config => $this->config]);
-        VariablesAction::run([Action::Config => $this->config]);
-
         ReplaceContentAction::run([
             Action::Directory => $this->directory,
-            Action::Config    => $this->config,
+            Action::Config    => $config,
         ]);
 
         RenameFilesAction::run([
             Action::Directory => $this->directory,
-            Action::Config    => $this->config,
+            Action::Config    => $config,
         ]);
 
         RemoveFilesAction::run([
             Action::Directory => $this->directory,
-            Action::Config    => $this->config,
+            Action::Config    => $config,
         ]);
 
         CopyFilesAction::run([
             Action::Directory => $this->directory,
-            Action::Config    => $this->config,
+            Action::Config    => $config,
         ]);
 
         SyncDependenciesAction::run([
             SyncDependenciesAction::Type => DependencyTypeEnum::Composer,
             Action::Directory            => $this->directory,
-            Action::Config               => $this->config,
+            Action::Config               => $config,
         ]);
 
         SyncDependenciesAction::run([
             SyncDependenciesAction::Type => DependencyTypeEnum::Npm,
             Action::Directory            => $this->directory,
-            Action::Config               => $this->config,
+            Action::Config               => $config,
         ]);
 
         SyncDependenciesAction::run([
             SyncDependenciesAction::Type => DependencyTypeEnum::Yarn,
             Action::Directory            => $this->directory,
-            Action::Config               => $this->config,
+            Action::Config               => $config,
         ]);
 
         InstallDependenciesAction::run([
             Action::Directory => $this->directory,
-            Action::Config    => $this->config,
+            Action::Config    => $config,
         ]);
 
         CleanUpAction::run([
             Action::Directory => $this->directory,
-            Action::Config    => $this->config,
+            Action::Config    => $config,
         ]);
 
         $this->output->writeln('');
@@ -181,12 +184,6 @@ class NewCommand extends Command
         if (! $input->getArgument('search') && ! $input->getOption('local')) {
             $input->setArgument('search', PackageFiller::make());
         }
-
-        $this->config ??= $this->getConfig(
-            $this->directory ??= $this->projectDirectory()
-        );
-
-        QuestionsAction::run([Action::Config => $this->config]);
     }
 
     protected function getInstallationDirectory(string $name): string

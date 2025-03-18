@@ -1,7 +1,6 @@
-<?php
-
-declare(strict_types=1);
-
-namespace AndreyHelldar\Test;
-
-class SomeClass {}
+[
+    "README.md",
+    "composer.json",
+    "composer.lock",
+    "src\/SomeClass.php"
+]

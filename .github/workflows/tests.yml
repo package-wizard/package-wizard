@@ -40,7 +40,7 @@ jobs:
                     coverage: none
 
             -   name: Install Aspell
-                if: ${{ matrix.os == 'ubuntu' && matrix.php != '8.2'}}
+                if: ${{ matrix.os == 'ubuntu' && matrix.php != '8.2' }}
                 run: sudo apt-get install aspell aspell-en
 
             -   name: Remove Peck
@@ -51,13 +51,15 @@ jobs:
                 run: composer install --no-progress --no-scripts --optimize-autoloader --no-interaction --ansi
 
             -   name: Coverage tests
+                if: ${{ matrix.os == 'ubuntu' }}
                 run: composer test:coverage
 
             -   name: Types tests
+                if: ${{ matrix.os == 'ubuntu' }}
                 run: composer test:types
 
             -   name: Misspelling tests
-                if: ${{ matrix.os == 'ubuntu' && matrix.php != '8.2'}}
+                if: ${{ matrix.os == 'ubuntu' && matrix.php != '8.2' }}
                 run: composer test:misspelling
 
             -   name: Unit tests

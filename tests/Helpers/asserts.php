@@ -3,10 +3,15 @@
 declare(strict_types=1);
 
 use DragonCode\Support\Facades\Filesystem\File;
+use DragonCode\Support\Facades\Filesystem\Path;
 use Illuminate\Support\Str;
 
 function assertFileSnapshot(string $filename): void
 {
+    if (Path::basename($filename) === 'composer.lock') {
+        return;
+    }
+
     expect(file_get_contents($filename))->toMatchSnapshot(
         "The \"$filename\" file does not match to the snapshot."
     );

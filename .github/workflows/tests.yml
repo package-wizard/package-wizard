@@ -10,6 +10,75 @@ on:
 permissions: read-all
 
 jobs:
+    types:
+        runs-on: ubuntu-latest
+
+        name: Types
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    extensions: dom, curl, libxml, mbstring, zip, fileinfo
+                    ini-values: error_reporting=E_ALL, memory_limit=512M
+                    coverage: none
+
+            -   name: Install dependencies
+                run: composer install --no-progress --no-scripts --optimize-autoloader --no-interaction --ansi
+
+            -   name: Types tests
+                run: composer test:types
+
+    coverage:
+        runs-on: ubuntu-latest
+
+        name: Coverage
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    extensions: dom, curl, libxml, mbstring, zip, fileinfo
+                    ini-values: error_reporting=E_ALL, memory_limit=512M
+                    coverage: xdebug
+
+            -   name: Install dependencies
+                run: composer install --no-progress --no-scripts --optimize-autoloader --no-interaction --ansi
+
+            -   name: Types tests
+                run: composer test:coverage
+
+    misspelling:
+        runs-on: ubuntu-latest
+
+        name: Misspelling
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    extensions: dom, curl, libxml, mbstring, zip, fileinfo
+                    ini-values: error_reporting=E_ALL, memory_limit=512M
+                    coverage: none
+
+            -   name: Install Aspell
+                run: sudo apt-get install aspell aspell-en
+
+            -   name: Install dependencies
+                run: composer install --no-progress --no-scripts --optimize-autoloader --no-interaction --ansi
+
+            -   name: Misspelling tests
+                run: composer test:misspelling
+
     unit:
         runs-on: ${{ matrix.os }}-latest
 
@@ -39,28 +108,11 @@ jobs:
                     ini-values: error_reporting=E_ALL, memory_limit=512M
                     coverage: none
 
-            -   name: Install Aspell
-                if: ${{ matrix.os == 'ubuntu' && matrix.php != '8.2' }}
-                run: sudo apt-get install aspell aspell-en
-
             -   name: Remove Peck
-                if: ${{ matrix.php == '8.2' }}
                 run: composer remove peckphp/peck --dev --no-progress --no-scripts --no-install --ignore-platform-reqs --no-interaction --ansi
 
             -   name: Install dependencies
                 run: composer install --no-progress --no-scripts --optimize-autoloader --no-interaction --ansi
-
-            -   name: Coverage tests
-                if: ${{ matrix.os == 'ubuntu' }}
-                run: composer test:coverage
-
-            -   name: Types tests
-                if: ${{ matrix.os == 'ubuntu' }}
-                run: composer test:types
-
-            -   name: Misspelling tests
-                if: ${{ matrix.os == 'ubuntu' && matrix.php != '8.2' }}
-                run: composer test:misspelling
 
             -   name: Unit tests
                 run: composer test:unit

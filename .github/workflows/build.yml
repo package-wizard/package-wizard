@@ -50,16 +50,16 @@ jobs:
                 run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
 
             -   name: Execute unit/feature tests
-                run: php ./bin/package --test
+                run: composer test:unit
 
             -   name: Create the PHAR file
-                run: php ./bin/package app:build package --build-version=${{ steps.tag.outputs.tag }} --ansi
+                run: php ./bin/paw app:build paw --build-version=${{ steps.tag.outputs.tag }} --ansi
 
             -   name: Upload artifact
                 uses: actions/upload-artifact@v4
                 with:
-                    name: package
-                    path: builds/package
+                    name: paw
+                    path: builds/paw
                     retention-days: 1
 
     checks:

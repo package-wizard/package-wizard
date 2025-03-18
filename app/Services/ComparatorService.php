@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Services;
 
+use DragonCode\Support\Facades\Filesystem\Directory;
+use DragonCode\Support\Facades\Filesystem\File;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use PackageWizard\Installer\Enums\ConditionOperatorEnum;
 
@@ -11,96 +14,101 @@ use function in_array;
 
 class ComparatorService
 {
-    protected array $default = [
-        ConditionOperatorEnum::EqualTo,
-        ConditionOperatorEnum::NotEqualTo,
-    ];
-
-    protected array $array = [
-        ConditionOperatorEnum::InList,
-        ConditionOperatorEnum::NotInList,
-    ];
-
-    protected array $numbers = [
-        ConditionOperatorEnum::LessThan,
-        ConditionOperatorEnum::LessThanOrEqualTo,
-        ConditionOperatorEnum::GreaterThan,
-        ConditionOperatorEnum::GreaterThanOrEqualTo,
-    ];
-
-    protected array $strings = [
-        ConditionOperatorEnum::Contains,
-        ConditionOperatorEnum::DoesntContainAll,
-        ConditionOperatorEnum::ContainsAll,
-        ConditionOperatorEnum::DoesntContain,
-    ];
-
-    public function disallow(ConditionOperatorEnum $comparator, array|int|string $haystack, array|int|string $needle): bool
-    {
-        return ! $this->allow($comparator, $haystack, $needle);
+    public function disallow(
+        ConditionOperatorEnum $comparator,
+        array|int|string $needle,
+        array|int|string $haystack
+    ): bool {
+        return ! $this->allow($comparator, $needle, $haystack);
     }
 
-    public function allow(ConditionOperatorEnum $comparator, array|int|string $haystack, array|int|string $needle): bool
+    public function allow(ConditionOperatorEnum $comparator, array|int|string $needle, array|int|string $haystack): bool
     {
-        return match (true) {
-            in_array($comparator, $this->default, true) => $this->default($comparator, $haystack, $needle),
-            in_array($comparator, $this->array, true)   => $this->array($comparator, (array) $haystack, $needle),
-            in_array($comparator, $this->numbers, true) => $this->numbers($comparator, (int) $haystack, (int) $needle),
-            in_array($comparator, $this->strings, true) => $this->strings($comparator, $haystack, $needle),
+        return match ($comparator) {
+            ConditionOperatorEnum::LessThan             => $this->lessThan($needle, $haystack),
+            ConditionOperatorEnum::LessThanOrEqualTo    => $this->lessThanOrEqualTo($needle, $haystack),
+            ConditionOperatorEnum::EqualTo              => $this->equalTo($needle, $haystack),
+            ConditionOperatorEnum::NotEqualTo           => $this->notEqualTo($needle, $haystack),
+            ConditionOperatorEnum::GreaterThan          => $this->greaterThan($needle, $haystack),
+            ConditionOperatorEnum::GreaterThanOrEqualTo => $this->greaterThanOrEqualTo($needle, $haystack),
+            ConditionOperatorEnum::InList               => $this->inList($needle, $haystack),
+            ConditionOperatorEnum::NotInList            => $this->notInList($needle, $haystack),
+            ConditionOperatorEnum::Contains             => $this->contains($needle, $haystack),
+            ConditionOperatorEnum::DoesntContain        => $this->doesntContain($needle, $haystack),
+            ConditionOperatorEnum::ContainsAll          => $this->containsAll($needle, $haystack),
+            ConditionOperatorEnum::DoesntContainAll     => $this->doesntContainAll($needle, $haystack),
+            ConditionOperatorEnum::ExistsPath           => $this->existsPath($haystack),
+            ConditionOperatorEnum::DoesNotExistPath     => $this->doesNotExistPath($haystack),
         };
     }
 
-    protected function default(ConditionOperatorEnum $comparator, array|int|string $haystack, array|int|string $needle): bool
+    protected function lessThan(array|int|string $needle, array|int|string $haystack): bool
     {
-        if ($comparator === ConditionOperatorEnum::EqualTo && $haystack === $needle) {
-            return true;
-        }
-
-        return $comparator === ConditionOperatorEnum::NotEqualTo && $haystack !== $needle;
+        return $needle < $haystack;
     }
 
-    protected function array(ConditionOperatorEnum $comparator, array $haystack, int|string $needle): bool
+    protected function lessThanOrEqualTo(array|int|string $needle, array|int|string $haystack): bool
     {
-        $compare = in_array($needle, $haystack, true);
-
-        if ($comparator === ConditionOperatorEnum::InList && $compare === true) {
-            return true;
-        }
-
-        return $comparator === ConditionOperatorEnum::NotInList && $compare === false;
+        return $needle <= $haystack;
     }
 
-    protected function numbers(ConditionOperatorEnum $comparator, int $haystack, int $needle): bool
+    protected function equalTo(array|int|string $needle, array|int|string $haystack): bool
     {
-        if ($comparator === ConditionOperatorEnum::LessThan && $needle < $haystack) {
-            return true;
-        }
-
-        if ($comparator === ConditionOperatorEnum::LessThanOrEqualTo && $needle <= $haystack) {
-            return true;
-        }
-
-        if ($comparator === ConditionOperatorEnum::GreaterThan && $needle > $haystack) {
-            return true;
-        }
-
-        return $comparator === ConditionOperatorEnum::GreaterThanOrEqualTo && $needle >= $haystack;
+        return $needle === $haystack;
     }
 
-    protected function strings(ConditionOperatorEnum $comparator, mixed $haystack, mixed $needle): bool
+    protected function notEqualTo(array|int|string $needle, array|int|string $haystack): bool
     {
-        if ($comparator === ConditionOperatorEnum::Contains && Str::contains($needle, $haystack)) {
-            return true;
-        }
+        return $needle !== $haystack;
+    }
 
-        if ($comparator === ConditionOperatorEnum::ContainsAll && Str::containsAll($needle, $haystack)) {
-            return true;
-        }
+    protected function greaterThan(array|int|string $needle, array|int|string $haystack): bool
+    {
+        return $needle > $haystack;
+    }
 
-        if ($comparator === ConditionOperatorEnum::DoesntContain && ! Str::contains($needle, $haystack)) {
-            return true;
-        }
+    protected function greaterThanOrEqualTo(array|int|string $needle, array|int|string $haystack): bool
+    {
+        return $needle >= $haystack;
+    }
 
-        return $comparator === ConditionOperatorEnum::DoesntContainAll && ! Str::containsAll($needle, $haystack);
+    protected function inList(int|string $needle, array|int|string $haystack): bool
+    {
+        return in_array($needle, Arr::wrap($haystack), true);
+    }
+
+    protected function notInList(int|string $needle, array|int|string $haystack): bool
+    {
+        return ! in_array($needle, Arr::wrap($haystack), true);
+    }
+
+    protected function contains(int|string $needle, array|int|string $haystack): bool
+    {
+        return Str::contains($needle, $haystack);
+    }
+
+    protected function doesntContain(int|string $needle, array|int|string $haystack): bool
+    {
+        return Str::doesntContain($needle, $haystack);
+    }
+
+    protected function containsAll(int|string $needle, array|int|string $haystack): bool
+    {
+        return Str::containsAll($needle, $haystack);
+    }
+
+    protected function doesntContainAll(array|int|string $needle, array|int|string $haystack): bool
+    {
+        return ! Str::containsAll($needle, $haystack);
+    }
+
+    protected function existsPath(string $haystack): bool
+    {
+        return File::exists($haystack) || Directory::exists($haystack);
+    }
+
+    protected function doesNotExistPath(string $haystack): bool
+    {
+        return ! File::exists($haystack) && ! Directory::exists($haystack);
     }
 }

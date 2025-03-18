@@ -36,6 +36,7 @@ use function file_get_contents;
 use function getcwd;
 use function is_readable;
 use function Laravel\Prompts\confirm;
+use function Laravel\Prompts\error;
 use function Laravel\Prompts\intro;
 use function Laravel\Prompts\spin;
 use function Laravel\Prompts\warning;
@@ -57,71 +58,76 @@ class NewCommand extends Command
 
     protected $description = 'Create new project';
 
+    protected ?ConfigData $config = null;
+
+    protected ?string $directory = null;
+
     /**
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws JsonException
      */
-    public function handle(?string $directory = null): int
+    public function handle(): int
     {
-        $config = $this->getConfig(
-            $directory ??= $this->projectDirectory()
-        );
+        if (! $this->input->isInteractive()) {
+            error('Interactive mode is a must.');
 
-        AuthorsAction::run([Action::Config => $config]);
-        VariablesAction::run([Action::Config => $config]);
-        QuestionsAction::run([Action::Config => $config]);
-
-        if (! $this->confirmChanges($config)) {
-            return $this->handle($directory);
+            return static::FAILURE;
         }
 
+        if (! $this->confirmChanges($this->config)) {
+            return $this->handle();
+        }
+
+        AuthorsAction::run([Action::Config => $this->config]);
+        VariablesAction::run([Action::Config => $this->config]);
+
         ReplaceContentAction::run([
-            Action::Directory => $directory,
-            Action::Config    => $config,
+            Action::Directory => $this->directory,
+            Action::Config    => $this->config,
         ]);
 
         RenameFilesAction::run([
-            Action::Directory => $directory,
-            Action::Config    => $config,
+            Action::Directory => $this->directory,
+            Action::Config    => $this->config,
         ]);
 
         RemoveFilesAction::run([
-            Action::Directory => $directory,
-            Action::Config    => $config,
+            Action::Directory => $this->directory,
+            Action::Config    => $this->config,
         ]);
 
         CopyFilesAction::run([
-            Action::Directory => $directory,
-            Action::Config    => $config,
+            Action::Directory => $this->directory,
+            Action::Config    => $this->config,
         ]);
 
         SyncDependenciesAction::run([
             SyncDependenciesAction::Type => DependencyTypeEnum::Composer,
-            Action::Directory            => $directory,
-            Action::Config               => $config,
+            Action::Directory            => $this->directory,
+            Action::Config               => $this->config,
         ]);
 
         SyncDependenciesAction::run([
             SyncDependenciesAction::Type => DependencyTypeEnum::Npm,
-            Action::Directory            => $directory,
-            Action::Config               => $config,
+            Action::Directory            => $this->directory,
+            Action::Config               => $this->config,
         ]);
 
         SyncDependenciesAction::run([
             SyncDependenciesAction::Type => DependencyTypeEnum::Yarn,
-            Action::Directory            => $directory,
-            Action::Config               => $config,
+            Action::Directory            => $this->directory,
+            Action::Config               => $this->config,
         ]);
 
         InstallDependenciesAction::run([
-            Action::Directory => $directory,
-            Action::Config    => $config,
+            Action::Directory => $this->directory,
+            Action::Config    => $this->config,
         ]);
 
         CleanUpAction::run([
-            Action::Directory => $directory,
-            Action::Config    => $config,
+            Action::Directory => $this->directory,
+            Action::Config    => $this->config,
         ]);
 
         $this->output->writeln('');
@@ -150,6 +156,7 @@ class NewCommand extends Command
     /**
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \JsonException
      */
     protected function interact(InputInterface $input, OutputInterface $output): void
     {
@@ -174,6 +181,12 @@ class NewCommand extends Command
         if (! $input->getArgument('search') && ! $input->getOption('local')) {
             $input->setArgument('search', PackageFiller::make());
         }
+
+        $this->config ??= $this->getConfig(
+            $this->directory ??= $this->projectDirectory()
+        );
+
+        QuestionsAction::run([Action::Config => $this->config]);
     }
 
     protected function getInstallationDirectory(string $name): string
@@ -185,10 +198,6 @@ class NewCommand extends Command
         return $name !== '.' ? getcwd() . '/' . $name : '.';
     }
 
-    /**
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     */
     protected function projectDirectory(): string
     {
         $directory = $this->getInstallationDirectory(

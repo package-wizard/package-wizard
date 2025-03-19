@@ -4,7 +4,7 @@
 *.php diff=php
 *.json diff=json
 
-/build/paw.phar binary
+/build/paw binary
 
 /.github export-ignore
 /stubs export-ignore

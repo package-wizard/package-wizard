@@ -32,7 +32,7 @@ jobs:
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
-                    extensions: curl, mbstring, zip, pcntl, pdo, pdo_sqlite, iconv, json, dom, curl, libxml, fileinfo, tokenizer, xml
+                    extensions: curl, mbstring, zip, iconv, json, dom, fileinfo, tokenizer
                     ini-values: error_reporting=E_ALL
                     coverage: none
 

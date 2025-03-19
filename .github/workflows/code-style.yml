@@ -19,7 +19,7 @@ jobs:
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
-                    extensions: curl, mbstring, zip, pcntl, pdo, pdo_sqlite, iconv, json
+                    extensions: curl, mbstring, zip, iconv, json, dom, fileinfo, tokenizer
                     coverage: none
 
             -   name: Install dependency
@@ -39,7 +39,7 @@ jobs:
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
-                    extensions: curl, mbstring, zip, pcntl, pdo, pdo_sqlite, iconv, json
+                    extensions: curl, mbstring, zip, iconv, json, dom, fileinfo, tokenizer
                     coverage: none
 
             -   name: Setup Composer

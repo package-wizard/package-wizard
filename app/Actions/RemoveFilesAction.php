@@ -8,7 +8,7 @@ class RemoveFilesAction extends Action
 {
     protected function title(): string
     {
-        return 'Removing files and folders...';
+        return __('info.removing_files');
     }
 
     protected function perform(): void

@@ -13,7 +13,7 @@ class AuthorsAction extends Action
     protected function perform(): void
     {
         $this->config()->authors->each(function (AuthorData $author, int $index) {
-            static::verboseWriteln('    Author index: ' . $index);
+            static::verboseWriteln(__('info.index_number', ['name' => 'author', 'index' => $index]), 4);
 
             $this->author($author);
         });

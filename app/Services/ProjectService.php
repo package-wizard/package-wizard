@@ -12,17 +12,20 @@ use function PackageWizard\Installer\resource_path;
 
 class ProjectService
 {
-    public const Search = 'Search on Packagist';
+    public static function searchOn(): string
+    {
+        return __('info.packagist');
+    }
 
     public function list(): array
     {
-        return collect($this->search())
+        return collect($this->rules())
             ->map(static fn (string $name) => Str::before($name, '.json'))
-            ->push(static::Search)
+            ->push(static::searchOn())
             ->all();
     }
 
-    protected function search(): array
+    protected function rules(): array
     {
         return File::names(resource_path('rules'), recursive: true);
     }

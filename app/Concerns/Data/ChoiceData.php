@@ -40,6 +40,6 @@ trait ChoiceData
     {
         $name = $type->value ?? $type;
 
-        throw new UnexpectedValueException('Unsupported type: ' . $name);
+        throw new UnexpectedValueException(__('validation.unsupported.type', ['type' => $name]));
     }
 }

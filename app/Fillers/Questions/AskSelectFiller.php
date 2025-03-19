@@ -34,7 +34,7 @@ class AskSelectFiller extends Filler
             options : $this->data->options,
             default : $this->data->default,
             scroll  : 20,
-            hint    : ! $this->data->required ? 'Press Enter to continue if you want to leave the field blank' : '',
+            hint    : ! $this->data->required ? __('form.hint.continue') : '',
             required: $this->data->required
         );
     }

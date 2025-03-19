@@ -32,6 +32,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function __;
 use function file_get_contents;
 use function getcwd;
 use function is_readable;
@@ -48,7 +49,7 @@ use function Termwind\renderUsing;
 // TODO: Add License file copying
 // TODO: Add license file link replace
 // TODO: Add forced boilerplates list
-// TODO: Extract questions to constant
+// TODO: Rename `search` with `template` and reorder with `name`
 #[AsCommand('new', 'Create new project')]
 class NewCommand extends Command
 {
@@ -66,7 +67,7 @@ class NewCommand extends Command
     public function handle(): int
     {
         if (! $this->input->isInteractive()) {
-            error('Interactive mode is a must.');
+            error(__('validation.interactive'));
 
             return static::FAILURE;
         }
@@ -132,7 +133,7 @@ class NewCommand extends Command
         ]);
 
         $this->output->writeln('');
-        $this->components->success('  Congratulations! <options=bold>Build something amazing!</>');
+        $this->components->success(__('info.congratulations'));
         $this->output->writeln('');
 
         return static::SUCCESS;
@@ -142,15 +143,10 @@ class NewCommand extends Command
     {
         $this
             ->addArgument('name', InputArgument::OPTIONAL, 'Directory where the files should be created')
-            ->addArgument('search', InputArgument::OPTIONAL, 'Package name to be installed')
+            ->addArgument('search', InputArgument::OPTIONAL, 'Template name to be installed')
             ->addOption('package-version', null, InputOption::VALUE_OPTIONAL, 'Version, will default to latest')
-            ->addOption('dev', 'd', InputOption::VALUE_NONE, 'Install the latest "development" release')
-            ->addOption(
-                'local',
-                'l',
-                InputOption::VALUE_NONE,
-                'Specifies that the "name" parameter specifies the path to the local project'
-            )
+            ->addOption('dev', 'd', InputOption::VALUE_NONE, 'Install the development version')
+            ->addOption('local', 'l', InputOption::VALUE_NONE, 'Uses a template from the local folder')
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Forces install even if the directory already exists');
     }
 
@@ -210,14 +206,14 @@ class NewCommand extends Command
             ]);
         }
         elseif (Directory::doesntExist($directory)) {
-            warning('The directory does not exist: ' . $directory);
+            warning(__('validation.doesnt_exist.directory', ['path' => $directory]));
 
             $directory = $this->getInstallationDirectory(
                 DirectoryFiller::make(local: true)
             );
         }
         elseif (! is_readable($directory)) {
-            warning('No access to the specified directory: ' . $directory);
+            warning(__('validation.no_access', ['path' => $directory]));
 
             $directory = $this->getInstallationDirectory(
                 DirectoryFiller::make(local: true)
@@ -230,12 +226,12 @@ class NewCommand extends Command
     protected function ensureDirectory(string $directory): void
     {
         if (! $this->option('force') && Directory::exists($directory)) {
-            warning('Application already exists.');
+            warning(__('validation.exists.app'));
 
             $path = realpath($directory);
 
-            if (! confirm("Do you want to overwrite the \"$path\" directory?")) {
-                warning('It\'s impossible to continue.');
+            if (! confirm(__('info.overwrite', ['path' => $path]))) {
+                warning(__('info.impossible'));
 
                 exit(static::FAILURE);
             }
@@ -250,20 +246,20 @@ class NewCommand extends Command
     protected function getConfig(string $directory): ConfigData
     {
         if (! $this->option('local')) {
-            $this->debugMessage('Searching for a package...');
+            $this->debugMessage(__('info.searching'));
 
             $package = $this->argument('search');
         }
 
         return spin(
             callback: fn () => ConfigHelper::data($directory, $package ?? 'default'),
-            message : 'Build configuration...'
+            message : __('info.build_config')
         );
     }
 
     protected function confirmChanges(ConfigData $config): bool
     {
-        intro(PHP_EOL . 'Check the data before continuing' . PHP_EOL);
+        intro(PHP_EOL . __('info.check_data') . PHP_EOL);
 
         $doesntAsk = $config->replaces->where('asked', true)->isEmpty();
 
@@ -275,7 +271,7 @@ class NewCommand extends Command
 
         $this->newLine();
 
-        return confirm('Do you confirm generation?');
+        return confirm(__('info.accept'));
     }
 
     protected function debugMessage(string $message): void

@@ -24,7 +24,10 @@ class ConfigHelper
     {
         $data = static::getConfig($directory, $package);
 
-        return ConfigData::from(array_merge($data, ['directory' => $directory]));
+        return ConfigData::from(array_merge($data, [
+            'schema'    => config('wizard.schema'),
+            'directory' => $directory,
+        ]));
     }
 
     /**

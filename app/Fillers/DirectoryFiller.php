@@ -22,17 +22,17 @@ class DirectoryFiller extends Filler
     {
         if ($this->local) {
             return text(
-                label      : 'What is the place of your project?',
-                placeholder: 'E.g. ./example-app',
-                required   : 'The project path is required.',
+                label      : __('form.field.located'),
+                placeholder: __('form.hint.eg', ['example' => './example-app']),
+                required   : __('validation.required', ['attribute' => __('validation.attributes.project_path')]),
                 validate   : $this->localValidator()
             );
         }
 
         return text(
-            label      : 'What is the name of your project?',
-            placeholder: 'E.g. example-app',
-            required   : 'The project name is required.',
+            label      : __('form.field.place'),
+            placeholder: __('form.hint.eg', ['example' => './example-app']),
+            required   : __('validation.required', ['attribute' => __('validation.attributes.project_path')]),
             validate   : $this->remoteValidator()
         );
     }
@@ -41,7 +41,7 @@ class DirectoryFiller extends Filler
     {
         return static function (string $path): ?string {
             if (file_exists($path) && ! is_dir($path)) {
-                return 'The object at the specified path is not a folder.';
+                return __('validation.doesnt_folder');
             }
 
             return null;
@@ -52,7 +52,7 @@ class DirectoryFiller extends Filler
     {
         return static function (string $value): ?string {
             if (preg_match('/[^\pL\pN\-_.]/', $value) !== 0) {
-                return 'The name may only contain letters, numbers, dashes, underscores, and periods.';
+                return __('validation.alpha_dash');
             }
 
             return null;

@@ -4,28 +4,30 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Actions\Dependencies;
 
+use function __;
+
 class InstallDependenciesAction extends DependencyAction
 {
     protected function title(): string
     {
-        return 'Dependency installing...';
+        return __('info.dependencies');
     }
 
     protected function managers(): array
     {
         return [
             [
-                'who'      => '[composer] Dependency installation...',
+                'who'      => __('dependency.install', ['name' => 'composer']),
                 'when'     => $this->config()->wizard?->manager?->composer ?? true,
                 'callback' => fn () => $this->composer()->install($this->directory()),
             ],
             [
-                'who'      => '[npm] Dependency installation...',
+                'who'      => __('dependency.install', ['name' => 'npm']),
                 'when'     => $this->config()->wizard?->manager?->npm ?? false,
                 'callback' => fn () => $this->npm()->install($this->directory()),
             ],
             [
-                'who'      => '[yarn] Dependency installation...',
+                'who'      => __('dependency.install', ['name' => 'yarn']),
                 'when'     => $this->config()->wizard?->manager?->yarn ?? false,
                 'callback' => fn () => $this->yarn()->install($this->directory()),
             ],

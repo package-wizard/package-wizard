@@ -14,7 +14,7 @@ class WizardData extends Data
 
     public static function prepareForPipeline(array $properties): array
     {
-        $properties['install'] ??= [];
+        $properties['manager'] ??= [];
 
         return $properties;
     }

@@ -20,7 +20,7 @@ class PackageFiller extends Filler
 
     public function get(): string
     {
-        if (($name = $this->local()) !== ProjectService::Search) {
+        if (($name = $this->local()) !== ProjectService::searchOn()) {
             return $name;
         }
 
@@ -30,20 +30,20 @@ class PackageFiller extends Filler
     protected function local(): ?string
     {
         return select(
-            label   : 'Select a project:',
+            label   : __('form.field.template'),
             options : $this->project->list(),
             scroll  : 20,
-            required: 'The project is required.',
+            required: __('validation.required', ['attribute' => __('validation.attributes.template')]),
         );
     }
 
     protected function packagist(): string
     {
         return search(
-            label      : 'What is the name of project?',
+            label      : __('form.field.template'),
             options    : fn (string $value) => $this->packagist->search($value),
-            placeholder: 'E.g. monolog/monolog',
-            required   : 'The project name is required.',
+            placeholder: __('form.hint.eg', ['example' => 'monolog/monolog']),
+            required   : __('validation.required', ['attribute' => __('validation.attributes.template')]),
         );
     }
 }

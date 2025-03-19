@@ -17,8 +17,8 @@ class ReplaceContentAction extends Action
 
     protected function perform(): void
     {
-        foreach ($this->files() as $filename) {
-            $this->replacer()->replace($filename, $this->config()->replaces);
+        foreach ($this->files() as $file) {
+            $this->replacer()->replace($file->getRealPath(), $this->config()->replaces);
         }
     }
 

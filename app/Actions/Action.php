@@ -72,6 +72,9 @@ abstract class Action
         return 1;
     }
 
+    /**
+     * @return array<\Symfony\Component\Finder\SplFileInfo>
+     */
     protected function files(): array
     {
         return $this->filesystem->allFiles(

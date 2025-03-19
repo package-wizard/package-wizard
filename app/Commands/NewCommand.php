@@ -26,6 +26,7 @@ use PackageWizard\Installer\Enums\DependencyTypeEnum;
 use PackageWizard\Installer\Fillers\DirectoryFiller;
 use PackageWizard\Installer\Fillers\PackageFiller;
 use PackageWizard\Installer\Helpers\ConfigHelper;
+use PackageWizard\Installer\Helpers\PackageHelper;
 use PackageWizard\Installer\Helpers\PreviewHelper;
 use PackageWizard\Installer\Support\Console;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -47,7 +48,6 @@ use function PackageWizard\Installer\resource_path;
 use function realpath;
 use function Termwind\renderUsing;
 
-// TODO: Add forced boilerplates list
 #[AsCommand('new', 'Create new project')]
 class NewCommand extends Command
 {
@@ -209,10 +209,12 @@ class NewCommand extends Command
         if (! $this->option('local')) {
             $this->ensureDirectory($directory);
 
+            $isDev = $this->option('dev') || PackageHelper::isDev($this->argument('template'));
+
             DownloadProjectAction::run([
                 DownloadProjectAction::Package => $this->argument('template'),
                 DownloadProjectAction::Version => $this->option('package-version'),
-                DownloadProjectAction::Dev     => (bool) $this->option('dev'),
+                DownloadProjectAction::Dev     => $isDev,
                 Action::Directory              => $directory,
             ]);
         }
@@ -267,14 +269,14 @@ class NewCommand extends Command
 
     protected function confirmChanges(ConfigData $config): bool
     {
-        intro(PHP_EOL . __('info.check_data') . PHP_EOL);
-
         $doesntReplaces = $config->replaces->where('asked', true)->isEmpty();
         $doesntCopies   = $config->copies->where('asked', true)->isEmpty();
 
         if ($doesntReplaces && $doesntCopies) {
             return true;
         }
+
+        intro(PHP_EOL . __('info.check_data') . PHP_EOL);
 
         PreviewHelper::replaces($config->replaces);
         PreviewHelper::copies($config->copies);

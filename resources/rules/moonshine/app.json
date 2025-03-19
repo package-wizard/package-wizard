@@ -1,0 +1,35 @@
+{
+    "$schema1": "https://package-wizard.com/schemas/schema-v2.json",
+    "wizard": {
+        "manager": {
+            "composer": true,
+            "npm": true
+        }
+    },
+    "removes": [
+        "app/Http/Controllers/Controller.php",
+        "app/Providers/AppServiceProvider.php",
+        "public/.htaccess"
+    ],
+    "replaces": [
+        {
+            "replace": "\n    App\\Providers\\AppServiceProvider::class,",
+            "with": ""
+        },
+        {
+            "replace": "\"@php artisan vendor:publish --tag=laravel-assets --ansi --force\"",
+            "with": "\"@php artisan vendor:publish --tag=laravel-assets --ansi --force\",\n            \"@php artisan lang:update\""
+        },
+        {
+            "replace": "\n    \"extra\": {\n        \"laravel\": {\n            \"dont-discover\": []\n        }\n    },",
+            "with": ""
+        }
+    ],
+    "dependencies": [
+        {
+            "type": "composer",
+            "name": "laravel-lang/moonshine",
+            "dev": true
+        }
+    ]
+}

@@ -25,7 +25,7 @@ it('manual', function () {
 
     artisan(NewCommand::class)
         ->expectsQuestion('What is your name?', 'Ivan Ivanov')
-        ->expectsQuestion(__('form.field.email'), 'ivan@example.com')
+        ->expectsQuestion(__('What is your email?'), 'ivan@example.com')
         ->doesntExpectOutputToContain('Some question #1')
         ->expectsQuestion('Some question #2', 'a2')
         ->expectsConfirmation(__('info.accept'), 'yes')

@@ -1,0 +1,10 @@
+{
+    "What is your name?": "Як вас звати?",
+    "What is your email?": "Який ваш email?",
+    "Which is license will be distributed?": "За якою ліцензією буде розповсюджуватися проект?",
+    "In which folder do you want to place?": "У яку папку ви хочете це помістити?",
+    "In which folder is the project located?": "У якій папці знаходиться проект?",
+    "Which template do you want to use?": "Який шаблон ви хочете використовувати?",
+    "Press Enter to continue if you want to leave the field blank": "Натисніть Enter, щоб продовжити, якщо хочете залишити поле порожнім",
+    "E.g. :example": "Наприклад: :example"
+}

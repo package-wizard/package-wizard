@@ -22,16 +22,16 @@ class DirectoryFiller extends Filler
     {
         if ($this->local) {
             return text(
-                label      : __('form.field.located'),
-                placeholder: __('form.hint.eg', ['example' => './example-app']),
+                label      : __('In which folder is the project located?'),
+                placeholder: __('E.g. :example', ['example' => './example-app']),
                 required   : __('validation.required', ['attribute' => __('validation.attributes.project_path')]),
                 validate   : $this->localValidator()
             );
         }
 
         return text(
-            label      : __('form.field.place'),
-            placeholder: __('form.hint.eg', ['example' => './example-app']),
+            label      : __('In which folder do you want to place?'),
+            placeholder: __('E.g. :example', ['example' => './example-app']),
             required   : __('validation.required', ['attribute' => __('validation.attributes.project_path')]),
             validate   : $this->remoteValidator()
         );

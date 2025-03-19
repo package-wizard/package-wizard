@@ -7,10 +7,11 @@ return [
     'check_data' => 'Überprüfen Sie die Daten, bevor Sie fortfahren',
     'accept'     => 'Bestätigen Sie die Generierung?',
 
-    'dependencies' => 'Abhängigkeiten werden installiert...',
-    'downloading'  => 'Das Projekt wird heruntergeladen...',
-    'searching'    => 'Suche nach einer Vorlage...',
-    'build_config' => 'Konfiguration wird erstellt...',
+    'dependencies'      => 'Abhängigkeiten werden installiert...',
+    'downloading'       => 'Das Projekt wird heruntergeladen...',
+    'searching'         => 'Suche nach einer Vorlage...',
+    'build_config'      => 'Konfiguration wird erstellt...',
+    'validating_schema' => 'Prüfen der Regeln anhand des Schemas...',
 
     'copying_files'  => 'Kopiere Dateien und Ordner...',
     'removing_files' => 'Entferne Dateien und Ordner...',

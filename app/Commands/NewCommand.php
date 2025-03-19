@@ -50,7 +50,6 @@ use function Termwind\renderUsing;
 // TODO: Add License file copying
 // TODO: Add license file link replace
 // TODO: Add forced boilerplates list
-// TODO: Rename `search` with `template` and reorder with `name`
 #[AsCommand('new', 'Create new project')]
 class NewCommand extends Command
 {
@@ -143,8 +142,8 @@ class NewCommand extends Command
     protected function configure(): void
     {
         $this
+            ->addArgument('template', InputArgument::OPTIONAL, 'Template name to be installed')
             ->addArgument('name', InputArgument::OPTIONAL, 'Directory where the files should be created')
-            ->addArgument('search', InputArgument::OPTIONAL, 'Template name to be installed')
             ->addOption('package-version', null, InputOption::VALUE_OPTIONAL, 'Version, will default to latest')
             ->addOption('dev', 'd', InputOption::VALUE_NONE, 'Install the development version')
             ->addOption('local', 'l', InputOption::VALUE_NONE, 'Uses a template from the local folder')
@@ -177,12 +176,12 @@ class NewCommand extends Command
             Locales::set($locale);
         }
 
-        if (! $input->getArgument('name')) {
-            $input->setArgument('name', DirectoryFiller::make(local: $input->getOption('local')));
+        if (! $input->getArgument('template') && ! $input->getOption('local')) {
+            $input->setArgument('template', PackageFiller::make());
         }
 
-        if (! $input->getArgument('search') && ! $input->getOption('local')) {
-            $input->setArgument('search', PackageFiller::make());
+        if (! $input->getArgument('name')) {
+            $input->setArgument('name', DirectoryFiller::make(local: $input->getOption('local')));
         }
     }
 
@@ -205,7 +204,7 @@ class NewCommand extends Command
             $this->ensureDirectory($directory);
 
             DownloadProjectAction::run([
-                DownloadProjectAction::Package => $this->argument('search'),
+                DownloadProjectAction::Package => $this->argument('template'),
                 DownloadProjectAction::Version => $this->option('package-version'),
                 DownloadProjectAction::Dev     => (bool) $this->option('dev'),
                 Action::Directory              => $directory,
@@ -254,7 +253,7 @@ class NewCommand extends Command
         if (! $this->option('local')) {
             $this->debugMessage(__('info.searching'));
 
-            $package = $this->argument('search');
+            $package = $this->argument('template');
         }
 
         return spin(

@@ -9,7 +9,7 @@ return [
 
     'dependencies' => 'Dependencies installing...',
     'downloading'  => 'Downloading the project...',
-    'searching'    => 'Searching for a package...',
+    'searching'    => 'Searching for a template...',
     'build_config' => 'Build configuration...',
 
     'copying_files'  => 'Copying files and folders...',

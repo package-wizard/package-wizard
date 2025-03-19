@@ -1,0 +1,24 @@
+# Test Readme
+
+> Some description for package
+
+## Installation
+
+```bash
+composer require andrey-helldar/test
+```
+
+## License
+
+%year% (c) :author:
+%year-range%
+%date%
+
+The `Package Wizard` is licensed under the [:license:](:licenseFilename:).
+
+## Questions
+
+Question 1 is :q1:
+Question 2 is a2
+Question 3 is :q3:
+Question 4 is :q4:

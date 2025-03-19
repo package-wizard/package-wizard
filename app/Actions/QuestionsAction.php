@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Actions;
 
+use PackageWizard\Installer\Data\ConditionData;
 use PackageWizard\Installer\Data\Questions\QuestionData;
 use PackageWizard\Installer\Data\ReplaceData;
+use PackageWizard\Installer\Enums\ConditionOperatorEnum;
 use PackageWizard\Installer\Enums\TypeEnum;
 use PackageWizard\Installer\Fillers\AskFiller;
 use PackageWizard\Installer\Fillers\Questions\AuthorFiller;
@@ -56,10 +58,17 @@ class QuestionsAction extends Action
             return false;
         }
 
+        if ($this->forPath($question->condition)) {
+            return $this->comparator()->disallow(
+                $question->condition->operator,
+                $this->config()->directory . '/' . $question->condition->value,
+            );
+        }
+
         return $this->comparator()->disallow(
             $question->condition->operator,
             $question->condition->value,
-            $this->find($question->condition->for)->with
+            $this->find($question->condition->for)->with,
         );
     }
 
@@ -68,6 +77,12 @@ class QuestionsAction extends Action
         return $this->config()->replaces
             ->where('id', $id)
             ->firstOrFail();
+    }
+
+    protected function forPath(ConditionData $condition): bool
+    {
+        return $condition->operator === ConditionOperatorEnum::PathExists
+            || $condition->operator === ConditionOperatorEnum::PathDoesNotExist;
     }
 
     protected function comparator(): ComparatorService

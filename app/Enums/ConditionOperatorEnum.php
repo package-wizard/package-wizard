@@ -12,12 +12,12 @@ enum ConditionOperatorEnum: string
     case NotEqualTo           = '!=';
     case GreaterThan          = '>';
     case GreaterThanOrEqualTo = '>=';
-    case InList               = 'in';
-    case NotInList            = 'notIn';
+    case In                   = 'in';
+    case NotIn                = 'notIn';
     case Contains             = 'contains';
     case DoesntContain        = 'doesntContain';
     case ContainsAll          = 'containsAll';
     case DoesntContainAll     = 'doesntContainAll';
-    case ExistsPath           = 'pathExists';
-    case DoesNotExistPath     = 'pathDoesNotExist';
+    case PathExists           = 'pathExists';
+    case PathDoesNotExist     = 'pathDoesNotExist';
 }

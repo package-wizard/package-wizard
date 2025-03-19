@@ -1,0 +1,41 @@
+{
+    "$schema": "../../../resources/schemas/schema-v2.json",
+    "wizard": {
+        "install": {
+            "composer": false,
+            "npm": false,
+            "yarn": false
+        },
+        "clean": true
+    },
+    "questions": [
+        {
+            "id": "author",
+            "type": "author",
+            "author": {
+                "name": "John Doe",
+                "email": "john@example.com"
+            }
+        },
+        {
+            "condition": {
+                "for": "author",
+                "value": "John Doe <john@example.com>"
+            },
+            "type": "ask",
+            "prompt": "text",
+            "question": "Some question #1",
+            "replace": ":q1:"
+        },
+        {
+            "condition": {
+                "for": "author",
+                "value": "Ivan Ivanov <ivan@example.com>"
+            },
+            "type": "ask",
+            "prompt": "text",
+            "question": "Some question #2",
+            "replace": ":q2:"
+        }
+    ]
+}

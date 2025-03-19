@@ -21,6 +21,7 @@ class AskSelectFiller extends Filler
     public function get(): ReplaceData
     {
         return ReplaceData::from([
+            'id'      => $this->data->id,
             'replace' => $this->data->replace,
             'with'    => $this->answer(),
         ]);

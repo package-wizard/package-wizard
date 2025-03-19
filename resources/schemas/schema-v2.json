@@ -622,11 +622,20 @@
                     "const": true
                 },
                 {
-                    "$ref": "#/definitions/comparator"
+                    "$ref": "#/definitions/comparatorDefault"
+                },
+                {
+                    "$ref": "#/definitions/comparatorString"
+                },
+                {
+                    "$ref": "#/definitions/comparatorList"
+                },
+                {
+                    "$ref": "#/definitions/comparatorPath"
                 }
             ]
         },
-        "comparator": {
+        "comparatorDefault": {
             "type": "object",
             "properties": {
                 "for": {
@@ -640,15 +649,7 @@
                         "=",
                         "!=",
                         ">",
-                        ">=",
-                        "in",
-                        "notIn",
-                        "contains",
-                        "doesntContain",
-                        "containsAll",
-                        "doesntContainAll",
-                        "pathExists",
-                        "pathDoesNotExist"
+                        ">="
                     ],
                     "default": "="
                 },
@@ -659,9 +660,6 @@
                         },
                         {
                             "type": "integer"
-                        },
-                        {
-                            "type": "array"
                         }
                     ],
                     "additionalProperties": false
@@ -669,7 +667,109 @@
             },
             "required": [
                 "for",
-                "comparator",
+                "value"
+            ],
+            "additionalProperties": false
+        },
+        "comparatorString": {
+            "type": "object",
+            "properties": {
+                "for": {
+                    "type": "string"
+                },
+                "operator": {
+                    "type": "string",
+                    "enum": [
+                        "contains",
+                        "doesntContain",
+                        "containsAll",
+                        "doesntContainAll"
+                    ]
+                },
+                "value": {
+                    "oneOf": [
+                        {
+                            "type": "string"
+                        },
+                        {
+                            "type": "integer"
+                        },
+                        {
+                            "type": "array",
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "type": "string"
+                                    },
+                                    {
+                                        "type": "number"
+                                    }
+                                ]
+                            },
+                            "additionalProperties": false
+                        }
+                    ],
+                    "additionalProperties": false
+                }
+            },
+            "required": [
+                "for",
+                "operator",
+                "value"
+            ],
+            "additionalProperties": false
+        },
+        "comparatorList": {
+            "type": "object",
+            "properties": {
+                "for": {
+                    "type": "string"
+                },
+                "operator": {
+                    "type": "string",
+                    "enum": [
+                        "in",
+                        "notIn"
+                    ]
+                },
+                "value": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "integer"
+                            }
+                        ],
+                        "additionalProperties": false
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "required": [
+                "for",
+                "operator",
+                "value"
+            ],
+            "additionalProperties": false
+        },
+        "comparatorPath": {
+            "type": "object",
+            "properties": {
+                "operator": {
+                    "type": "string",
+                    "enum": [
+                        "pathExists",
+                        "pathDoesNotExist"
+                    ]
+                },
+                "value": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "operator",
                 "value"
             ],
             "additionalProperties": false

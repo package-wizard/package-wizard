@@ -8,107 +8,120 @@ use DragonCode\Support\Facades\Filesystem\Directory;
 use DragonCode\Support\Facades\Filesystem\File;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use PackageWizard\Installer\Concerns\Values\Normalizer;
 use PackageWizard\Installer\Enums\ConditionOperatorEnum;
 
 use function in_array;
 
 class ComparatorService
 {
+    use Normalizer;
+
     public function disallow(
         ConditionOperatorEnum $comparator,
-        array|int|string $needle,
-        array|int|string $haystack
+        array|int|string|null $first,
+        array|int|string|null $second = null,
     ): bool {
-        return ! $this->allow($comparator, $needle, $haystack);
+        return ! $this->allow($comparator, $first, $second);
     }
 
-    public function allow(ConditionOperatorEnum $comparator, array|int|string $needle, array|int|string $haystack): bool
-    {
+    /**
+     * @param  array|int|string  $first  the value with which you need to compare
+     * @param  array|int|string|null  $second  value from the object received by the identifier
+     */
+    public function allow(
+        ConditionOperatorEnum $comparator,
+        array|int|string $first,
+        array|int|string|null $second = null
+    ): bool {
+        $second = $this->normalize($second);
+        $first  = $this->normalize($first);
+
         return match ($comparator) {
-            ConditionOperatorEnum::LessThan             => $this->lessThan($needle, $haystack),
-            ConditionOperatorEnum::LessThanOrEqualTo    => $this->lessThanOrEqualTo($needle, $haystack),
-            ConditionOperatorEnum::EqualTo              => $this->equalTo($needle, $haystack),
-            ConditionOperatorEnum::NotEqualTo           => $this->notEqualTo($needle, $haystack),
-            ConditionOperatorEnum::GreaterThan          => $this->greaterThan($needle, $haystack),
-            ConditionOperatorEnum::GreaterThanOrEqualTo => $this->greaterThanOrEqualTo($needle, $haystack),
-            ConditionOperatorEnum::InList               => $this->inList($needle, $haystack),
-            ConditionOperatorEnum::NotInList            => $this->notInList($needle, $haystack),
-            ConditionOperatorEnum::Contains             => $this->contains($needle, $haystack),
-            ConditionOperatorEnum::DoesntContain        => $this->doesntContain($needle, $haystack),
-            ConditionOperatorEnum::ContainsAll          => $this->containsAll($needle, $haystack),
-            ConditionOperatorEnum::DoesntContainAll     => $this->doesntContainAll($needle, $haystack),
-            ConditionOperatorEnum::ExistsPath           => $this->existsPath($haystack),
-            ConditionOperatorEnum::DoesNotExistPath     => $this->doesNotExistPath($haystack),
+            ConditionOperatorEnum::LessThan             => $this->lessThan($second, $first),
+            ConditionOperatorEnum::LessThanOrEqualTo    => $this->lessThanOrEqualTo($second, $first),
+            ConditionOperatorEnum::EqualTo              => $this->equalTo($second, $first),
+            ConditionOperatorEnum::NotEqualTo           => $this->notEqualTo($second, $first),
+            ConditionOperatorEnum::GreaterThan          => $this->greaterThan($second, $first),
+            ConditionOperatorEnum::GreaterThanOrEqualTo => $this->greaterThanOrEqualTo($second, $first),
+            ConditionOperatorEnum::In                   => $this->in($second, $first),
+            ConditionOperatorEnum::NotIn                => $this->notIn($second, $first),
+            ConditionOperatorEnum::Contains             => $this->contains($second, $first),
+            ConditionOperatorEnum::DoesntContain        => $this->doesntContain($second, $first),
+            ConditionOperatorEnum::ContainsAll          => $this->containsAll($second, $first),
+            ConditionOperatorEnum::DoesntContainAll     => $this->doesntContainAll($second, $first),
+            ConditionOperatorEnum::PathExists           => $this->existsPath($first),
+            ConditionOperatorEnum::PathDoesNotExist     => $this->doesNotExistPath($first),
         };
     }
 
-    protected function lessThan(array|int|string $needle, array|int|string $haystack): bool
+    protected function lessThan(int|string $second, int|string $first): bool
     {
-        return $needle < $haystack;
+        return $second < $first;
     }
 
-    protected function lessThanOrEqualTo(array|int|string $needle, array|int|string $haystack): bool
+    protected function lessThanOrEqualTo(int|string $second, int|string $first): bool
     {
-        return $needle <= $haystack;
+        return $second <= $first;
     }
 
-    protected function equalTo(array|int|string $needle, array|int|string $haystack): bool
+    protected function equalTo(int|string $second, int|string $first): bool
     {
-        return $needle === $haystack;
+        return $second === $first;
     }
 
-    protected function notEqualTo(array|int|string $needle, array|int|string $haystack): bool
+    protected function notEqualTo(int|string $second, int|string $first): bool
     {
-        return $needle !== $haystack;
+        return $second !== $first;
     }
 
-    protected function greaterThan(array|int|string $needle, array|int|string $haystack): bool
+    protected function greaterThan(int|string $second, int|string $first): bool
     {
-        return $needle > $haystack;
+        return $second > $first;
     }
 
-    protected function greaterThanOrEqualTo(array|int|string $needle, array|int|string $haystack): bool
+    protected function greaterThanOrEqualTo(int|string $second, int|string $first): bool
     {
-        return $needle >= $haystack;
+        return $second >= $first;
     }
 
-    protected function inList(int|string $needle, array|int|string $haystack): bool
+    protected function in(int|string $second, array $first): bool
     {
-        return in_array($needle, Arr::wrap($haystack), true);
+        return in_array($second, $first, true);
     }
 
-    protected function notInList(int|string $needle, array|int|string $haystack): bool
+    protected function notIn(int|string $second, array $first): bool
     {
-        return ! in_array($needle, Arr::wrap($haystack), true);
+        return ! $this->in($second, $first);
     }
 
-    protected function contains(int|string $needle, array|int|string $haystack): bool
+    protected function contains(int|string $second, int|string $first): bool
     {
-        return Str::contains($needle, $haystack);
+        return Str::contains((string) $first, (string) $second);
     }
 
-    protected function doesntContain(int|string $needle, array|int|string $haystack): bool
+    protected function doesntContain(int|string $second, array|int|string $first): bool
     {
-        return Str::doesntContain($needle, $haystack);
+        return Str::doesntContain((string) $first, (string) $second);
     }
 
-    protected function containsAll(int|string $needle, array|int|string $haystack): bool
+    protected function containsAll(int|string $second, array|int|string $first): bool
     {
-        return Str::containsAll($needle, $haystack);
+        return Str::containsAll($first, Arr::wrap($second));
     }
 
-    protected function doesntContainAll(array|int|string $needle, array|int|string $haystack): bool
+    protected function doesntContainAll(int|string $second, array|int|string $first): bool
     {
-        return ! Str::containsAll($needle, $haystack);
+        return ! $this->containsAll($second, $first);
     }
 
-    protected function existsPath(string $haystack): bool
+    protected function existsPath(int|string $first): bool
     {
-        return File::exists($haystack) || Directory::exists($haystack);
+        return File::exists((string) $first) || Directory::exists((string) $first);
     }
 
-    protected function doesNotExistPath(string $haystack): bool
+    protected function doesNotExistPath(int|string $first): bool
     {
-        return ! File::exists($haystack) && ! Directory::exists($haystack);
+        return ! File::exists((string) $first) && ! Directory::exists((string) $first);
     }
 }

@@ -10,6 +10,8 @@ use Spatie\LaravelData\Data;
 
 class AuthorData extends Data
 {
+    public ?string $id = null;
+
     public ?string $name = null;
 
     public ?string $email = null;

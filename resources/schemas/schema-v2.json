@@ -419,15 +419,28 @@
                     "$ref": "#/definitions/valueReplace",
                     "default": ":license:"
                 },
-                "filename": {
-                    "type": "string",
-                    "default": "LICENSE"
+                "file": {
+                    "$ref": "#/definitions/questionLicenseFile"
                 }
             },
             "required": [
                 "type",
                 "default"
             ],
+            "additionalProperties": false
+        },
+        "questionLicenseFile": {
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "default": "LICENSE"
+                },
+                "replace": {
+                    "$ref": "#/definitions/valueReplace",
+                    "default": ":licensePath:"
+                }
+            },
             "additionalProperties": false
         },
         "questionAskSelect": {

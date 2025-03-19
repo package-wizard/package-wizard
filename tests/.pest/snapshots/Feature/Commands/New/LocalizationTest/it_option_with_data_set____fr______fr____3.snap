@@ -1,7 +1,29 @@
-<?php
-
-declare(strict_types=1);
-
-namespace AndreyHelldar\Test;
-
-class SomeClass {}
+{
+    "name": "andrey-helldar/test",
+    "description": "Some description",
+    "type": "template",
+    "require": {
+        "php": "^8.2",
+        "doctrine/dbal": "*"
+    },
+    "require-dev": {
+        "laravel/pail": "*"
+    },
+    "license": "Boost Software 1",
+    "autoload": {
+        "psr-4": {
+            "AndreyHelldar\\Test\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Andrey Helldar",
+            "email": "helldar@dragon-code.pro"
+        },
+        {
+            "name": "The Dragon Code",
+            "homepage": "https://dragon-code.pro"
+        }
+    ],
+    "minimum-stability": "stable"
+}

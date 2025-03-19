@@ -21,4 +21,6 @@ class RenameData extends Data
 
     #[WithCast(NormalizePathCast::class)]
     public string $target;
+
+    public bool $asked = false;
 }

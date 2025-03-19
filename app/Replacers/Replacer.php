@@ -12,20 +12,20 @@ abstract class Replacer
     abstract protected function with(): int|string;
 
     public function __construct(
-        protected ?Data $data,
+        protected array|Data|null $data,
         protected bool $asked = false
     ) {}
 
-    public static function get(?Data $data, bool $asked = false): ?ReplaceData
+    public static function get(array|Data|null $data, bool $asked = false): array|Data|null
     {
-        if ($data) {
+        if (filled($data)) {
             return (new static($data, $asked))->make();
         }
 
         return null;
     }
 
-    protected function make(): ReplaceData
+    protected function make(): array|Data|null
     {
         return ReplaceData::from([
             'id'      => $this->data->id ?? null,

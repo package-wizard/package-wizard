@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace PackageWizard\Installer\Fillers\Questions;
 
 use DragonCode\Support\Facades\Filesystem\File;
+use PackageWizard\Installer\Data\CopyData;
 use PackageWizard\Installer\Data\Questions\QuestionLicenseData;
 use PackageWizard\Installer\Data\ReplaceData;
 use PackageWizard\Installer\Fillers\Filler;
@@ -17,15 +18,35 @@ use function PackageWizard\Installer\resource_path;
 class LicenseFiller extends Filler
 {
     public function __construct(
-        protected QuestionLicenseData $data
+        protected QuestionLicenseData $data,
     ) {}
 
-    public function get(): ReplaceData
+    public function get(): array
+    {
+        $name = $this->answer();
+
+        return [
+            $this->replaceData($this->data->replace, $name, true),
+            $this->replaceData($this->data->file->replace, $this->data->file->path),
+            $this->copyData($name),
+        ];
+    }
+
+    protected function replaceData(array $replace, string $with, bool $withId = false): ReplaceData
     {
         return ReplaceData::from([
-            'id'      => $this->data->id,
-            'replace' => $this->data->replace,
-            'with'    => $this->answer(),
+            'id'      => $withId ? $this->data->id : null,
+            'replace' => $replace,
+            'with'    => $with,
+        ]);
+    }
+
+    protected function copyData(string $name): CopyData
+    {
+        return CopyData::from([
+            'source'   => resource_path('licenses/' . $name),
+            'target'   => $this->data->file->path,
+            'absolute' => true,
         ]);
     }
 

@@ -46,7 +46,7 @@ class FilesystemService
         $this->delete($target);
 
         if ($this->filesystem->isFile($source)) {
-            $this->filesystem->ensureDirectoryExists(dirname($target));
+            Directory::ensureDirectory(dirname($target));
         }
 
         $this->filesystem->isFile($source)

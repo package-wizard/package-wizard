@@ -1,3 +1,6 @@
 [
-    "fallback"
+    "LICENSE",
+    "README.md",
+    "composer.json",
+    "src\/SomeClass.php"
 ]

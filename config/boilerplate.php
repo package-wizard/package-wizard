@@ -9,5 +9,5 @@ declare(strict_types=1);
 return [
     'laravel/laravel',
     'moonshine/app' => true,
-    'package-wizard/writerside-template',
+    'package-wizard/writerside-template' => true,
 ];

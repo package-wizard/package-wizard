@@ -22,7 +22,7 @@ Once in the folder, call the `paw` console command and follow the prompts.
 The wizard will ask some questions and generate initial files for your project.
 
 ```bash
-paw new
+paw
 ```
 
 ## Documentation
@@ -34,7 +34,7 @@ See the [documentation](https://package-wizard.com) for detailed installation in
 For detailed information while the application is running, run it with the `-vvv` parameter:
 
 ```bash
-paw new -vvv
+paw -vvv
 ```
 
 ## License

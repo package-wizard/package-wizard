@@ -39,9 +39,8 @@
     "require-dev": {
         "dragon-code/support": "^6.16",
         "illuminate/http": "^11.44.2",
-        "illuminate/translation": "^11.44",
-        "justinrainbow/json-schema": "^6.3.0",
-        "laravel-lang/locales": "^2.10",
+        "illuminate/translation": "^11.44.2",
+        "justinrainbow/json-schema": "^6.3.1",
         "laravel-zero/framework": "^11.36.1",
         "laravel/prompts": "^0.3.5",
         "mockery/mockery": "^1.6.12",

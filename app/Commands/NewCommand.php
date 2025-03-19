@@ -7,6 +7,7 @@ namespace PackageWizard\Installer\Commands;
 use DragonCode\Support\Facades\Filesystem\Directory;
 use Illuminate\Console\Command;
 use JsonException;
+use LaravelLang\Locales\Facades\Locales;
 use PackageWizard\Installer\Actions\Action;
 use PackageWizard\Installer\Actions\AuthorsAction;
 use PackageWizard\Installer\Actions\CleanUpAction;
@@ -147,7 +148,8 @@ class NewCommand extends Command
             ->addOption('package-version', null, InputOption::VALUE_OPTIONAL, 'Version, will default to latest')
             ->addOption('dev', 'd', InputOption::VALUE_NONE, 'Install the development version')
             ->addOption('local', 'l', InputOption::VALUE_NONE, 'Uses a template from the local folder')
-            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Forces install even if the directory already exists');
+            ->addOption('force', 'f', InputOption::VALUE_NONE, 'Forces install even if the directory already exists')
+            ->addOption('lang', null, InputOption::VALUE_OPTIONAL, 'In which language to display messages');
     }
 
     /**
@@ -170,6 +172,10 @@ class NewCommand extends Command
         $this->newLine();
         $output->writeln(file_get_contents(resource_path('stubs/logotype.stub')));
         $this->newLine();
+
+        if ($locale = $input->getOption('lang')) {
+            Locales::set($locale);
+        }
 
         if (! $input->getArgument('name')) {
             $input->setArgument('name', DirectoryFiller::make(local: $input->getOption('local')));

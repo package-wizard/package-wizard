@@ -1,0 +1,19 @@
+{
+    "$schema": "../../../resources/schemas/schema-v2.json",
+    "wizard": {
+        "manager": {
+            "composer": false,
+            "npm": false,
+            "yarn": false
+        },
+        "clean": true
+    },
+    "questions": [
+        {
+            "id": "license",
+            "type": "license",
+            "replace": ":license:",
+            "default": "MIT License"
+        }
+    ]
+}

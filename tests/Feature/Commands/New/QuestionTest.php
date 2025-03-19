@@ -19,16 +19,16 @@ it('questions', function () {
 
     artisan(NewCommand::class)
         // The first attempt
-        ->expectsChoice('Which is license will be distributed?', 'Boost Software 1', $licenses)
-        ->expectsQuestion('What is your email?', 'qwe@example.com')
+        ->expectsChoice(__('form.field.license'), 'Boost Software 1', $licenses)
+        ->expectsQuestion(__('form.field.email'), 'qwe@example.com')
         ->expectsQuestion('Replace namespace', 'Qwe\\Rty')
         ->expectsChoice('Replace description', 'baz', ['foo', 'bar', 'baz'])
-        ->expectsConfirmation('Do you confirm generation?')
+        ->expectsConfirmation(__('info.accept'))
         // The second attempt
-        ->expectsChoice('Which is license will be distributed?', 'Apache License 2', $licenses)
-        ->expectsQuestion('What is your email?', 'some@example.com')
+        ->expectsChoice(__('form.field.license'), 'Apache License 2', $licenses)
+        ->expectsQuestion(__('form.field.email'), 'some@example.com')
         ->expectsQuestion('Replace namespace', 'Foo\\Bar')
         ->expectsChoice('Replace description', 'bar', ['foo', 'bar', 'baz'])
-        ->expectsConfirmation('Do you confirm generation?', 'yes')
+        ->expectsConfirmation(__('info.accept'), 'yes')
         ->assertSuccessful();
 });

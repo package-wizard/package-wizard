@@ -19,6 +19,6 @@ it('conditions', function () {
         ->doesntExpectOutputToContain('Some question #2')
         ->expectsQuestion('Some question #3', 'a3')
         ->expectsQuestion('Some question #4', 'a4')
-        ->expectsConfirmation('Do you confirm generation?', 'yes')
+        ->expectsConfirmation(__('info.accept'), 'yes')
         ->assertSuccessful();
 });

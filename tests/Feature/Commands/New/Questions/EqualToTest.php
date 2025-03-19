@@ -17,6 +17,6 @@ it('conditions', function () {
         ->expectsQuestion('Target question', '500')
         ->doesntExpectOutputToContain('Some question #1')
         ->expectsQuestion('Some question #2', 'a2')
-        ->expectsConfirmation('Do you confirm generation?', 'yes')
+        ->expectsConfirmation(__('info.accept'), 'yes')
         ->assertSuccessful();
 });

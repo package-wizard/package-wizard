@@ -17,9 +17,12 @@ class FilesystemService
         protected Filesystem $filesystem
     ) {}
 
+    /**
+     * @return array<\Symfony\Component\Finder\SplFileInfo>
+     */
     public function allFiles(string $directory): array
     {
-        return File::allPaths($directory, recursive: true);
+        return $this->filesystem->allFiles($directory);
     }
 
     public function names(string $directory): array

@@ -17,12 +17,12 @@ class RenameFilesAction extends Action
 
     protected function perform(): void
     {
-        foreach ($this->files() as $path) {
+        foreach ($this->files() as $file) {
             $basename = $this->rename(
-                $this->basename($path)
+                $this->basename($file->getRealPath())
             );
 
-            $this->filesystem->rename($path, $this->directory() . '/' . $basename);
+            $this->filesystem->rename($file->getRealPath(), $this->directory() . '/' . $basename);
         }
     }
 

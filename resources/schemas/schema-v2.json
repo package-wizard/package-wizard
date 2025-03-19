@@ -96,6 +96,10 @@
                 "clean": {
                     "type": "boolean",
                     "default": true
+                },
+                "localization": {
+                    "type": "string",
+                    "default": "en"
                 }
             },
             "additionalProperties": false

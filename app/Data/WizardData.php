@@ -12,6 +12,8 @@ class WizardData extends Data
 
     public bool $clean = true;
 
+    public ?string $localization = null;
+
     public static function prepareForPipeline(array $properties): array
     {
         $properties['manager'] ??= [];

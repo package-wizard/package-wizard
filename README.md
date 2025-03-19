@@ -6,6 +6,10 @@
 [![Total Downloads][badge_downloads]][link_packagist]
 [![License][badge_license]][link_license]
 
+> [!TIP]
+>
+> **Package Wizard** is a library for easy creation and customization of new projects with
+> a CLI tool using ready-made templates.
 
 ## Installation
 

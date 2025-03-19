@@ -8,6 +8,10 @@ declare(strict_types=1);
  */
 return [
     'laravel/laravel',
-    'moonshine/app'                      => true,
-    'package-wizard/writerside-template' => true,
+    'moonshine/app' => true,
+
+    'package-wizard/laravel'         => true,
+    'package-wizard/composer-light'  => true,
+    'package-wizard/symfony-console' => true,
+    'package-wizard/writerside'      => true,
 ];

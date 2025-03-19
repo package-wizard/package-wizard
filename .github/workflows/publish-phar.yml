@@ -36,27 +36,14 @@ jobs:
                     ini-values: error_reporting=E_ALL
                     coverage: none
 
-            -   name: Git setup
-                run: |
-                    git config --local user.email "action@github.com"
-                    git config --local user.name "GitHub Action"
-                    
-                    git config --global core.autocrlf false
-                    git config --global core.eol lf
-            -   name: Install the dependencies
-                run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
-
-            -   name: Create the PHAR file
-                id: build
-                run: |
-                    IS_DIRTY=1
-                    sudo php ./bin/paw app:build paw.phar --build-version=${{ steps.tag.outputs.tag }}
-
             -   name: Upload the PHAR artifact
                 uses: actions/upload-artifact@v4
                 with:
                     name: paw.phar
-                    path: builds/paw.phar
+                    path: builds/paw
+
+            -   name: Rename file
+                run: mv builds/paw builds/paw.phar
 
             -   name: Upload the PHAR to release
                 run: gh release upload ${{ steps.tag.outputs.tag }} builds/paw.phar

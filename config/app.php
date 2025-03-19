@@ -7,7 +7,7 @@ return [
 
     'version' => app('git.version'),
 
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'development'),
 
     'providers' => [],
 ];

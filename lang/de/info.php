@@ -9,7 +9,7 @@ return [
 
     'dependencies' => 'Abhängigkeiten werden installiert...',
     'downloading'  => 'Das Projekt wird heruntergeladen...',
-    'searching'    => 'Suche nach einem Paket...',
+    'searching'    => 'Suche nach einer Vorlage...',
     'build_config' => 'Konfiguration wird erstellt...',
 
     'copying_files'  => 'Kopiere Dateien und Ordner...',

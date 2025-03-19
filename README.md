@@ -1,6 +1,6 @@
 # Package Wizard
 
-<img src="https://preview.dragon-code.pro/the%20dragon%20code/package%20wizard.svg?brand=composer&mode=auto" alt="Package Wizard"/>
+![package wizard](https://preview.dragon-code.pro/the%20dragon%20code/package%20wizard.svg)
 
 [![Stable Version][badge_stable]][link_packagist]
 [![Total Downloads][badge_downloads]][link_packagist]

@@ -76,6 +76,8 @@ class NewCommand extends Command
             $this->directory ??= $this->projectDirectory()
         );
 
+        $this->setLocale($config);
+
         AuthorsAction::run([Action::Config => $config]);
         VariablesAction::run([Action::Config => $config]);
         QuestionsAction::run([Action::Config => $config]);
@@ -283,6 +285,13 @@ class NewCommand extends Command
     {
         if (Console::verbose()) {
             $this->output->writeln($message, OutputInterface::VERBOSITY_DEBUG);
+        }
+    }
+
+    protected function setLocale(ConfigData $config): void
+    {
+        if (! $this->option('lang') && $config->wizard->localization) {
+            Locales::set($config->wizard->localization);
         }
     }
 }

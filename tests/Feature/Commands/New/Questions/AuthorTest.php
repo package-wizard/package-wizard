@@ -16,7 +16,7 @@ it('auto', function () {
     artisan(NewCommand::class)
         ->expectsQuestion('Some question #1', 'a1')
         ->doesntExpectOutputToContain('Some question #2')
-        ->expectsConfirmation('Do you confirm generation?', 'yes')
+        ->expectsConfirmation(__('info.accept'), 'yes')
         ->assertSuccessful();
 });
 
@@ -25,9 +25,9 @@ it('manual', function () {
 
     artisan(NewCommand::class)
         ->expectsQuestion('What is your name?', 'Ivan Ivanov')
-        ->expectsQuestion('What is your email?', 'ivan@example.com')
+        ->expectsQuestion(__('form.field.email'), 'ivan@example.com')
         ->doesntExpectOutputToContain('Some question #1')
         ->expectsQuestion('Some question #2', 'a2')
-        ->expectsConfirmation('Do you confirm generation?', 'yes')
+        ->expectsConfirmation(__('info.accept'), 'yes')
         ->assertSuccessful();
 });

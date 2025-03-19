@@ -14,9 +14,9 @@ it('conditions', function () {
     prepare_project('questions-License');
 
     artisan(NewCommand::class)
-        ->expectsQuestion('Which is license will be distributed?', 'Boost Software 1')
+        ->expectsQuestion(__('form.field.license'), 'Boost Software 1')
         ->doesntExpectOutputToContain('Some question #1')
         ->expectsQuestion('Some question #2', 'a2')
-        ->expectsConfirmation('Do you confirm generation?', 'yes')
+        ->expectsConfirmation(__('info.accept'), 'yes')
         ->assertSuccessful();
 });

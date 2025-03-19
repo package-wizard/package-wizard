@@ -7,7 +7,6 @@ namespace PackageWizard\Installer\Commands;
 use DragonCode\Support\Facades\Filesystem\Directory;
 use Illuminate\Console\Command;
 use JsonException;
-use LaravelLang\Locales\Facades\Locales;
 use PackageWizard\Installer\Actions\Action;
 use PackageWizard\Installer\Actions\AuthorsAction;
 use PackageWizard\Installer\Actions\CleanUpAction;
@@ -21,6 +20,7 @@ use PackageWizard\Installer\Actions\RenameFilesAction;
 use PackageWizard\Installer\Actions\ReplaceContentAction;
 use PackageWizard\Installer\Actions\ValidateSchemaAction;
 use PackageWizard\Installer\Actions\VariablesAction;
+use PackageWizard\Installer\Concerns\Console\HasLocalization;
 use PackageWizard\Installer\Data\ConfigData;
 use PackageWizard\Installer\Enums\DependencyTypeEnum;
 use PackageWizard\Installer\Fillers\DirectoryFiller;
@@ -51,6 +51,8 @@ use function Termwind\renderUsing;
 #[AsCommand('new', 'Create new project')]
 class NewCommand extends Command
 {
+    use HasLocalization;
+
     protected $signature = 'new';
 
     protected $description = 'Create new project';
@@ -150,9 +152,7 @@ class NewCommand extends Command
         $output->writeln(file_get_contents(resource_path('stubs/logotype.stub')));
         $this->newLine();
 
-        if ($locale = $input->getOption('lang')) {
-            Locales::set($locale);
-        }
+        $this->setLocale();
 
         if (! $input->getArgument('template') && ! $input->getOption('local')) {
             $input->setArgument('template', PackageFiller::make());
@@ -260,13 +260,6 @@ class NewCommand extends Command
     {
         if (Console::verbose()) {
             $this->output->writeln($message, OutputInterface::VERBOSITY_DEBUG);
-        }
-    }
-
-    protected function setLocale(ConfigData $config): void
-    {
-        if (! $this->option('lang') && $config->wizard->localization) {
-            Locales::set($config->wizard->localization);
         }
     }
 }

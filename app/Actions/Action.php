@@ -75,7 +75,7 @@ abstract class Action
     protected function files(): array
     {
         return $this->filesystem->allFiles(
-            $this->parameter(static::Directory)
+          $this->directory()
         );
     }
 
@@ -86,7 +86,7 @@ abstract class Action
 
     protected function directory(): string
     {
-        return $this->parameter(self::Directory);
+        return $this->parameter(self::Directory) ?? $this->config()->directory;
     }
 
     protected function config(): ConfigData

@@ -75,7 +75,7 @@ abstract class Action
     protected function files(): array
     {
         return $this->filesystem->allFiles(
-          $this->directory()
+            $this->directory()
         );
     }
 

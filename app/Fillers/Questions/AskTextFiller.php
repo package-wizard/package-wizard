@@ -43,7 +43,7 @@ class AskTextFiller extends Filler
             default    : $this->data->default,
             required   : $this->data->required,
             validate   : $this->validator(),
-            hint       : ! $this->data->required ? __('form.hint.continue') : '',
+            hint       : ! $this->data->required ? __('Press Enter to continue if you want to leave the field blank') : '',
         );
     }
 

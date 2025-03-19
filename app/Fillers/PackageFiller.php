@@ -30,7 +30,7 @@ class PackageFiller extends Filler
     protected function local(): ?string
     {
         return select(
-            label   : __('form.field.template'),
+            label   : __('Which template do you want to use?'),
             options : $this->project->list(),
             scroll  : 20,
             required: __('validation.required', ['attribute' => __('validation.attributes.template')]),
@@ -40,9 +40,9 @@ class PackageFiller extends Filler
     protected function packagist(): string
     {
         return search(
-            label      : __('form.field.template'),
+            label      : __('Which template do you want to use?'),
             options    : fn (string $value) => $this->packagist->search($value),
-            placeholder: __('form.hint.eg', ['example' => 'monolog/monolog']),
+            placeholder: __('E.g. :example', ['example' => 'monolog/monolog']),
             required   : __('validation.required', ['attribute' => __('validation.attributes.template')]),
         );
     }

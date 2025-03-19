@@ -54,7 +54,7 @@ class LicenseFiller extends Filler
     protected function answer(): string
     {
         return select(
-            label  : __('form.field.license'),
+            label  : __('Which is license will be distributed?'),
             options: $this->available(),
             default: $this->data->default,
             scroll : 15

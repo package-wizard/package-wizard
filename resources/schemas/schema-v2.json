@@ -424,8 +424,7 @@
                 }
             },
             "required": [
-                "type",
-                "default"
+                "type"
             ],
             "additionalProperties": false
         },

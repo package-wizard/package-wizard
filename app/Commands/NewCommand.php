@@ -81,62 +81,34 @@ class NewCommand extends Command
         AuthorsAction::run([Action::Config => $config]);
         VariablesAction::run([Action::Config => $config]);
 
-        QuestionsAction::run([
-            Action::Config    => $config,
-            Action::Directory => $this->directory,
-        ]);
+        QuestionsAction::run([Action::Config => $config]);
 
         if (! $this->confirmChanges($config)) {
             return $this->handle();
         }
 
-        ReplaceContentAction::run([
-            Action::Directory => $this->directory,
-            Action::Config    => $config,
-        ]);
-
-        RenameFilesAction::run([
-            Action::Directory => $this->directory,
-            Action::Config    => $config,
-        ]);
-
-        RemoveFilesAction::run([
-            Action::Directory => $this->directory,
-            Action::Config    => $config,
-        ]);
-
-        CopyFilesAction::run([
-            Action::Directory => $this->directory,
-            Action::Config    => $config,
-        ]);
+        ReplaceContentAction::run([Action::Config => $config]);
+        RenameFilesAction::run([Action::Config => $config]);
+        RemoveFilesAction::run([Action::Config => $config]);
+        CopyFilesAction::run([Action::Config => $config]);
 
         SyncDependenciesAction::run([
             SyncDependenciesAction::Type => DependencyTypeEnum::Composer,
-            Action::Directory            => $this->directory,
             Action::Config               => $config,
         ]);
 
         SyncDependenciesAction::run([
             SyncDependenciesAction::Type => DependencyTypeEnum::Npm,
-            Action::Directory            => $this->directory,
             Action::Config               => $config,
         ]);
 
         SyncDependenciesAction::run([
             SyncDependenciesAction::Type => DependencyTypeEnum::Yarn,
-            Action::Directory            => $this->directory,
             Action::Config               => $config,
         ]);
 
-        InstallDependenciesAction::run([
-            Action::Directory => $this->directory,
-            Action::Config    => $config,
-        ]);
-
-        CleanUpAction::run([
-            Action::Directory => $this->directory,
-            Action::Config    => $config,
-        ]);
+        InstallDependenciesAction::run([Action::Config => $config]);
+        CleanUpAction::run([Action::Config => $config]);
 
         $this->output->writeln('');
         $this->components->success(__('info.congratulations'));

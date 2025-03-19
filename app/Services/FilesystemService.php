@@ -22,6 +22,17 @@ class FilesystemService
         return File::allPaths($directory, recursive: true);
     }
 
+    public function names(string $directory): array
+    {
+        $names = [];
+
+        foreach ($this->filesystem->allFiles($directory) as $file) {
+            $names[] = $file->getRelativePathname();
+        }
+
+        return $names;
+    }
+
     public function content(string $path): string
     {
         return $this->filesystem->get($path);

@@ -50,7 +50,7 @@ jobs:
                 run: composer install --prefer-dist --no-progress --no-interaction --no-suggest
 
             -   name: Create the PHAR file
-                run: php ./bin/paw app:build paw --build-version=${{ steps.tag.outputs.tag }} --ansi
+                run: php ./paw app:build paw --build-version=${{ steps.tag.outputs.tag }} --ansi
 
             -   name: Upload artifact
                 uses: actions/upload-artifact@v4

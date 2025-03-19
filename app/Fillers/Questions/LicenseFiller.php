@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Fillers\Questions;
 
-use DragonCode\Support\Facades\Filesystem\File;
 use PackageWizard\Installer\Data\CopyData;
 use PackageWizard\Installer\Data\Questions\QuestionLicenseData;
 use PackageWizard\Installer\Data\ReplaceData;
 use PackageWizard\Installer\Fillers\Filler;
+use PackageWizard\Installer\Services\FilesystemService;
 use Spatie\LaravelData\Data;
 
 use function Laravel\Prompts\select;
@@ -19,6 +19,7 @@ class LicenseFiller extends Filler
 {
     public function __construct(
         protected QuestionLicenseData $data,
+        protected FilesystemService $filesystem,
     ) {}
 
     public function get(): array
@@ -62,6 +63,8 @@ class LicenseFiller extends Filler
 
     protected function available(): array
     {
-        return File::names(resource_path('licenses'));
+        return $this->filesystem->names(
+            resource_path('licenses')
+        );
     }
 }

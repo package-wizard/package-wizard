@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Services;
 
-use DragonCode\Support\Facades\Filesystem\File;
 use Illuminate\Support\Str;
 
 use function collect;
@@ -13,6 +12,10 @@ use function PackageWizard\Installer\resource_path;
 
 class ProjectService
 {
+    public function __construct(
+        protected FilesystemService $filesystem
+    ) {}
+
     public static function searchOn(): string
     {
         return __('info.packagist');
@@ -34,7 +37,9 @@ class ProjectService
 
     protected function presets(): array
     {
-        return File::names(resource_path('rules'), recursive: true);
+        return $this->filesystem->names(
+            resource_path('rules')
+        );
     }
 
     protected function forced(): array

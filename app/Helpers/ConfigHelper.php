@@ -13,7 +13,6 @@ use function file_exists;
 use function file_get_contents;
 use function is_file;
 use function PackageWizard\Installer\resource_path;
-use function realpath;
 
 class ConfigHelper
 {
@@ -63,7 +62,7 @@ class ConfigHelper
     protected static function path(string $directory, string $filename): ?string
     {
         if (file_exists($path = $directory . '/' . $filename)) {
-            return realpath($path);
+            return $path;
         }
 
         return null;

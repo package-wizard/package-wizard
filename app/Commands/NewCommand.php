@@ -213,9 +213,7 @@ class NewCommand extends Command
         if (! $this->option('force') && Directory::exists($directory)) {
             warning(__('validation.exists.app'));
 
-            $path = realpath($directory);
-
-            if (! confirm(__('info.overwrite', ['path' => $path]))) {
+            if (! confirm(__('info.overwrite', ['path' => realpath($directory)]))) {
                 warning(__('info.impossible'));
 
                 exit(static::FAILURE);

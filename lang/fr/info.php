@@ -7,10 +7,11 @@ return [
     'check_data' => 'Vérifiez les données avant de continuer',
     'accept'     => 'Confirmez-vous la génération ?',
 
-    'dependencies' => 'Installation des dépendances...',
-    'downloading'  => 'Téléchargement du projet...',
-    'searching'    => 'Recherche d\'un modèle...',
-    'build_config' => 'Construction de la configuration...',
+    'dependencies'      => 'Installation des dépendances...',
+    'downloading'       => 'Téléchargement du projet...',
+    'searching'         => 'Recherche d\'un modèle...',
+    'build_config'      => 'Construction de la configuration...',
+    'validating_schema' => 'Vérification des règles par rapport au schéma...',
 
     'copying_files'  => 'Copie des fichiers et dossiers...',
     'removing_files' => 'Suppression des fichiers et dossiers...',

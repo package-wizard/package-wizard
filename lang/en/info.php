@@ -7,10 +7,11 @@ return [
     'check_data' => 'Check the data before continuing',
     'accept'     => 'Do you confirm generation?',
 
-    'dependencies' => 'Dependencies installing...',
-    'downloading'  => 'Downloading the project...',
-    'searching'    => 'Searching for a template...',
-    'build_config' => 'Build configuration...',
+    'dependencies'      => 'Dependencies installing...',
+    'downloading'       => 'Downloading the project...',
+    'searching'         => 'Searching for a template...',
+    'build_config'      => 'Build configuration...',
+    'validating_schema' => 'Checking the rules against the schema...',
 
     'copying_files'  => 'Copying files and folders...',
     'removing_files' => 'Removing files and folders...',

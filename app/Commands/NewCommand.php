@@ -19,6 +19,7 @@ use PackageWizard\Installer\Actions\QuestionsAction;
 use PackageWizard\Installer\Actions\RemoveFilesAction;
 use PackageWizard\Installer\Actions\RenameFilesAction;
 use PackageWizard\Installer\Actions\ReplaceContentAction;
+use PackageWizard\Installer\Actions\ValidateSchemaAction;
 use PackageWizard\Installer\Actions\VariablesAction;
 use PackageWizard\Installer\Data\ConfigData;
 use PackageWizard\Installer\Enums\DependencyTypeEnum;
@@ -46,7 +47,6 @@ use function PackageWizard\Installer\resource_path;
 use function realpath;
 use function Termwind\renderUsing;
 
-// TODO: Add schema validator
 // TODO: Add License file copying
 // TODO: Add license file link replace
 // TODO: Add forced boilerplates list
@@ -72,11 +72,13 @@ class NewCommand extends Command
             return static::FAILURE;
         }
 
-        $config = $this->getConfig(
-            $this->directory ??= $this->projectDirectory()
-        );
+        $this->directory ??= $this->projectDirectory();
 
-        $this->setLocale($config);
+        ValidateSchemaAction::run([Action::Directory => $this->directory]);
+
+        $this->setLocale(
+            $config = $this->getConfig()
+        );
 
         AuthorsAction::run([Action::Config => $config]);
         VariablesAction::run([Action::Config => $config]);
@@ -247,10 +249,7 @@ class NewCommand extends Command
         Directory::ensureDelete($directory);
     }
 
-    /**
-     * @throws JsonException
-     */
-    protected function getConfig(string $directory): ConfigData
+    protected function getConfig(): ConfigData
     {
         if (! $this->option('local')) {
             $this->debugMessage(__('info.searching'));
@@ -259,7 +258,7 @@ class NewCommand extends Command
         }
 
         return spin(
-            callback: fn () => ConfigHelper::data($directory, $package ?? 'default'),
+            callback: fn () => ConfigHelper::data($this->directory, $package ?? 'default'),
             message : __('info.build_config')
         );
     }

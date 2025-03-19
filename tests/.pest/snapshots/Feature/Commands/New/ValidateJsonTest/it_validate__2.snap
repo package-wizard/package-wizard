@@ -1,0 +1,29 @@
+{
+    "name": "my/package",
+    "description": "my description",
+    "type": "template",
+    "require": {
+        "php": "^8.2",
+        "doctrine/dbal": "*"
+    },
+    "require-dev": {
+        "laravel/pail": "*"
+    },
+    "license": "MIT License",
+    "autoload": {
+        "psr-4": {
+            "My\\Package\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "John Doe",
+            "email": "john@example.com"
+        },
+        {
+            "name": "The Dragon Code",
+            "homepage": "https://dragon-code.pro"
+        }
+    ],
+    "minimum-stability": "stable"
+}

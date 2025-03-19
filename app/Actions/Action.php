@@ -6,7 +6,6 @@ namespace PackageWizard\Installer\Actions;
 
 use Closure;
 use Illuminate\Support\Str;
-use Illuminate\Support\Stringable;
 use PackageWizard\Installer\Concerns\Console\HasOutput;
 use PackageWizard\Installer\Data\ConfigData;
 use PackageWizard\Installer\Services\FilesystemService;
@@ -25,8 +24,6 @@ abstract class Action
     public const Directory = 'directory';
 
     protected bool $rawOutput = false;
-
-    protected ?string $suffix = null;
 
     abstract protected function perform(): void;
 
@@ -103,7 +100,6 @@ abstract class Action
             ->classBasename()
             ->before(class_basename(self::class))
             ->lower()
-            ->when($this->suffix, static fn (Stringable $str, string $suffix) => $str->append(' ', $suffix))
             ->toString();
 
         return __('info.prepare', ['name' => $name]);

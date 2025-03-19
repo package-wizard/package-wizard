@@ -16,17 +16,17 @@ class InstallDependenciesAction extends DependencyAction
         return [
             [
                 'who'      => '[composer] Dependency installation...',
-                'when'     => $this->config()->wizard?->install?->composer ?? true,
+                'when'     => $this->config()->wizard?->manager?->composer ?? true,
                 'callback' => fn () => $this->composer()->install($this->directory()),
             ],
             [
                 'who'      => '[npm] Dependency installation...',
-                'when'     => $this->config()->wizard?->install?->npm ?? false,
+                'when'     => $this->config()->wizard?->manager?->npm ?? false,
                 'callback' => fn () => $this->npm()->install($this->directory()),
             ],
             [
                 'who'      => '[yarn] Dependency installation...',
-                'when'     => $this->config()->wizard?->install?->yarn ?? false,
+                'when'     => $this->config()->wizard?->manager?->yarn ?? false,
                 'callback' => fn () => $this->yarn()->install($this->directory()),
             ],
         ];

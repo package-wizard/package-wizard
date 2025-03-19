@@ -27,6 +27,7 @@ class AuthorFiller extends Filler
     public function get(): AuthorData
     {
         return AuthorData::from([
+            'id'      => $this->data->id,
             'replace' => $this->data->replace,
             'format'  => $this->data->format,
             'name'    => $this->name(),

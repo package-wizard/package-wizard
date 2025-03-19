@@ -29,6 +29,7 @@ class AskTextFiller extends Filler
         }
 
         return ReplaceData::from([
+            'id'      => $this->data->id,
             'replace' => $this->data->replace,
             'with'    => $answer,
         ]);

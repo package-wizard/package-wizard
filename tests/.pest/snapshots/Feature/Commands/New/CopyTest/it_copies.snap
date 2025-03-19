@@ -15,3 +15,10 @@ composer require andrey-helldar/test
 %date%
 
 The `Package Wizard` is licensed under the [:license:](:licenseFilename:).
+
+## Questions
+
+Question 1 is :q1:
+Question 2 is :q2:
+Question 3 is :q3:
+Question 4 is :q4:

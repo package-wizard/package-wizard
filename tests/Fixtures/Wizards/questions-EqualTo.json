@@ -1,0 +1,42 @@
+{
+    "$schema": "../../../resources/schemas/schema-v2.json",
+    "wizard": {
+        "install": {
+            "composer": false,
+            "npm": false,
+            "yarn": false
+        },
+        "clean": true
+    },
+    "questions": [
+        {
+            "id": "tarq",
+            "type": "ask",
+            "prompt": "text",
+            "question": "Target question",
+            "replace": ":tarq:"
+        },
+        {
+            "condition": {
+                "for": "tarq",
+                "operator": "=",
+                "value": "400"
+            },
+            "type": "ask",
+            "prompt": "text",
+            "question": "Some question #1",
+            "replace": ":q1:"
+        },
+        {
+            "condition": {
+                "for": "tarq",
+                "operator": "=",
+                "value": "500"
+            },
+            "type": "ask",
+            "prompt": "text",
+            "question": "Some question #2",
+            "replace": ":q2:"
+        }
+    ]
+}

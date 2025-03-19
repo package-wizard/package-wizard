@@ -7,6 +7,7 @@ namespace PackageWizard\Installer\Helpers;
 use JsonException;
 use PackageWizard\Installer\Data\ConfigData;
 
+use function array_merge;
 use function config;
 use function file_exists;
 use function file_get_contents;
@@ -21,9 +22,9 @@ class ConfigHelper
      */
     public static function data(string $directory, string $package = 'default'): ConfigData
     {
-        return ConfigData::from(
-            static::getConfig($directory, $package)
-        );
+        $data = static::getConfig($directory, $package);
+
+        return ConfigData::from(array_merge($data, ['directory' => $directory]));
     }
 
     /**

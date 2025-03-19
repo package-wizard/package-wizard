@@ -1,0 +1,53 @@
+{
+    "$schema": "../../../resources/schemas/schema-v2.json",
+    "wizard": {
+        "install": {
+            "composer": false,
+            "npm": false,
+            "yarn": false
+        },
+        "clean": true
+    },
+    "questions": [
+        {
+            "condition": {
+                "operator": "pathDoesNotExist",
+                "value": "foo/"
+            },
+            "type": "ask",
+            "prompt": "text",
+            "question": "Some question #1",
+            "replace": ":q1:"
+        },
+        {
+            "condition": {
+                "operator": "pathDoesNotExist",
+                "value": "foo/bar.txt"
+            },
+            "type": "ask",
+            "prompt": "text",
+            "question": "Some question #2",
+            "replace": ":q2:"
+        },
+        {
+            "condition": {
+                "operator": "pathDoesNotExist",
+                "value": "src"
+            },
+            "type": "ask",
+            "prompt": "text",
+            "question": "Some question #3",
+            "replace": ":q3:"
+        },
+        {
+            "condition": {
+                "operator": "pathDoesNotExist",
+                "value": "src/SomeClass.php"
+            },
+            "type": "ask",
+            "prompt": "text",
+            "question": "Some question #4",
+            "replace": ":q4:"
+        }
+    ]
+}

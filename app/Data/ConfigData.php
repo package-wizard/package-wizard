@@ -18,6 +18,8 @@ class ConfigData extends Data
     #[MapName(new ProvidedNameMapper('$schema'))]
     public string $schema = 'https://package-wizard.com/schemas/schema-v2.json';
 
+    public ?string $directory = null;
+
     public WizardData $wizard;
 
     #[DataCollectionOf(AuthorData::class)]

@@ -1,0 +1,39 @@
+{
+    "$schema": "../../../resources/schemas/schema-v2.json",
+    "wizard": {
+        "install": {
+            "composer": false,
+            "npm": false,
+            "yarn": false
+        },
+        "clean": true
+    },
+    "questions": [
+        {
+            "id": "license",
+            "type": "license",
+            "replace": ":license:",
+            "default": "Mozilla Public License 2"
+        },
+        {
+            "condition": {
+                "for": "license",
+                "value": "GNU Affero General Public License v3"
+            },
+            "type": "ask",
+            "prompt": "text",
+            "question": "Some question #1",
+            "replace": ":q1:"
+        },
+        {
+            "condition": {
+                "for": "license",
+                "value": "Boost Software 1"
+            },
+            "type": "ask",
+            "prompt": "text",
+            "question": "Some question #2",
+            "replace": ":q2:"
+        }
+    ]
+}

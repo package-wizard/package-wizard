@@ -12,7 +12,7 @@ class RenameFilesAction extends Action
 {
     protected function title(): string
     {
-        return 'Renaming files and folders...';
+        return __('info.renaming_files');
     }
 
     protected function perform(): void

@@ -26,7 +26,7 @@ class QuestionsAction extends Action
     protected function perform(): void
     {
         $this->config()->questions->each(function (QuestionData $question, int $index) {
-            static::verboseWriteln('    Question index: ' . $index);
+            static::verboseWriteln(__('info.index_number', ['name' => 'question', 'index' => $index]), 4);
 
             $this->question($question);
         });

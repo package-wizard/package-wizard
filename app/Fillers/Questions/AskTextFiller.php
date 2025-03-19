@@ -43,7 +43,7 @@ class AskTextFiller extends Filler
             default    : $this->data->default,
             required   : $this->data->required,
             validate   : $this->validator(),
-            hint       : ! $this->data->required ? 'Press Enter to continue if you want to leave the field blank' : '',
+            hint       : ! $this->data->required ? __('form.hint.continue') : '',
         );
     }
 
@@ -71,7 +71,7 @@ class AskTextFiller extends Filler
                 return null;
             }
 
-            return 'The value does not match the format: ' . $this->data->regex;
+            return __('validation.format', ['format' => $this->data->regex]);
         };
     }
 }

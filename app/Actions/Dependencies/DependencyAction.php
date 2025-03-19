@@ -9,6 +9,8 @@ use PackageWizard\Installer\Services\Managers\ComposerService;
 use PackageWizard\Installer\Services\Managers\NpmService;
 use PackageWizard\Installer\Services\Managers\YarnService;
 
+use function __;
+
 abstract class DependencyAction extends Action
 {
     abstract protected function managers(): array;
@@ -19,7 +21,7 @@ abstract class DependencyAction extends Action
     {
         foreach ($this->managers() as $manager) {
             if (! $manager['when']) {
-                static::verboseWriteln('Skip ' . $manager['who']);
+                static::verboseWriteln(__('info.skip', ['name' => $manager['who']]));
 
                 continue;
             }

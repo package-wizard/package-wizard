@@ -26,8 +26,6 @@ abstract class Action
 
     protected bool $rawOutput = false;
 
-    protected ?string $prefix = 'Preparation of the';
-
     protected ?string $suffix = null;
 
     abstract protected function perform(): void;
@@ -101,14 +99,13 @@ abstract class Action
 
     protected function title(): string
     {
-        return Str::of(static::class)
+        $name = Str::of(static::class)
             ->classBasename()
             ->before(class_basename(self::class))
             ->lower()
-            ->when($this->prefix, static fn (Stringable $str, string $prefix) => $str->prepend($prefix, ' '))
             ->when($this->suffix, static fn (Stringable $str, string $suffix) => $str->append(' ', $suffix))
-            ->append('...')
-            ->ucfirst()
             ->toString();
+
+        return __('info.prepare', ['name' => $name]);
     }
 }

@@ -12,7 +12,7 @@ class ReplaceContentAction extends Action
 {
     protected function title(): string
     {
-        return 'Replacing content';
+        return __('info.replacing_content');
     }
 
     protected function perform(): void

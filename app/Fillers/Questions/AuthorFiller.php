@@ -42,7 +42,7 @@ class AuthorFiller extends Filler
         }
 
         return text(
-            label   : 'What is your name?',
+            label   : __('form.field.name'),
             default : (string) $this->git->userName(),
             required: true
         );
@@ -55,7 +55,7 @@ class AuthorFiller extends Filler
         }
 
         return text(
-            label  : 'What is your email?',
+            label   : __('form.field.email'),
             default: (string) $this->git->userEmail(),
         );
     }

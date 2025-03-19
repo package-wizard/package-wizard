@@ -8,15 +8,12 @@ use Illuminate\Support\Collection;
 use PackageWizard\Installer\Data\Casts\QuestionsCast;
 use PackageWizard\Installer\Data\Casts\VariablesCast;
 use Spatie\LaravelData\Attributes\DataCollectionOf;
-use Spatie\LaravelData\Attributes\MapName;
 use Spatie\LaravelData\Attributes\WithCast;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\Mappers\ProvidedNameMapper;
 
 class ConfigData extends Data
 {
-    #[MapName(new ProvidedNameMapper('$schema'))]
-    public string $schema = 'https://package-wizard.com/schemas/schema-v2.json';
+    public string $schema;
 
     public ?string $directory = null;
 

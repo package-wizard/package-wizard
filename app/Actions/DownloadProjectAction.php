@@ -16,7 +16,7 @@ class DownloadProjectAction extends Action
 
     protected function title(): string
     {
-        return 'Downloading the project...';
+        return __('info.downloading');
     }
 
     protected function perform(): void

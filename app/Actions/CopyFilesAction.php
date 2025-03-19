@@ -10,7 +10,7 @@ class CopyFilesAction extends Action
 {
     protected function title(): string
     {
-        return 'Copying files and folders...';
+        return __('info.copying_files');
     }
 
     protected function perform(): void

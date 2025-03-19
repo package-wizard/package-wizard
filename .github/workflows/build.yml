@@ -93,7 +93,7 @@ jobs:
 
             -   name: Remove old file on Windows
                 if: ${{ matrix.os == 'windows' }}
-                run: del /f ./builds/paw
+                run: Remove-Item -Path "./builds/paw" -Force
 
             -   uses: actions/download-artifact@v4
                 with:

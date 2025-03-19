@@ -1,4 +1,5 @@
 [
+    "CUSTOM_LICENSE.md",
     "README.md",
     "composer.json",
     "src\/SomeClass.php"

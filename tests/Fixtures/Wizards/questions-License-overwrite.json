@@ -1,0 +1,22 @@
+{
+    "$schema": "../../../resources/schemas/schema-v2.json",
+    "wizard": {
+        "manager": {
+            "composer": false,
+            "npm": false,
+            "yarn": false
+        },
+        "clean": true
+    },
+    "questions": [
+        {
+            "type": "license",
+            "replace": ":license:",
+            "default": "Mozilla Public License 2",
+            "file": {
+                "path": "CUSTOM_LICENSE.md",
+                "replace": ":licenseFilename:"
+            }
+        }
+    ]
+}

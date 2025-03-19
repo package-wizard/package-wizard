@@ -16,15 +16,24 @@ class CopyFilesAction extends Action
     protected function perform(): void
     {
         $this->config()->copies->each(
-            fn (CopyData $item) => $this->copy($this->directory(), $item)
+            fn (CopyData $item) => $this->copy($item)
         );
     }
 
-    protected function copy(string $directory, CopyData $item): void
+    protected function copy(CopyData $item): void
     {
         $this->filesystem->copy(
-            source: $directory . '/' . $item->source,
-            target: $directory . '/' . $item->target
+            source: $this->sourcePath($item),
+            target: $this->directory() . '/' . $item->target
         );
+    }
+
+    protected function sourcePath(CopyData $item): string
+    {
+        if ($item->absolute) {
+            return $item->source;
+        }
+
+        return $this->directory() . '/' . $item->source;
     }
 }

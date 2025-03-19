@@ -17,5 +17,12 @@ class QuestionLicenseData extends QuestionData
     #[WithCast(ArrayWrapCast::class)]
     public array $replace = [':license:'];
 
-    public string $filename = 'LICENSE';
+    public QuestionLicenseFileData $file;
+
+    public static function prepareForPipeline(array $properties): array
+    {
+        $properties['file'] ??= [];
+
+        return $properties;
+    }
 }

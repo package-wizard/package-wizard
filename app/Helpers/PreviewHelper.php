@@ -6,6 +6,7 @@ namespace PackageWizard\Installer\Helpers;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\HigherOrderTapProxy;
+use PackageWizard\Installer\Data\CopyData;
 use PackageWizard\Installer\Data\ReplaceData;
 
 use function collect;
@@ -14,6 +15,7 @@ use function ob_end_clean;
 use function ob_get_contents;
 use function ob_start;
 use function PackageWizard\Installer\vendor_path;
+use function realpath;
 use function tap;
 use function Termwind\render;
 
@@ -32,6 +34,25 @@ class PreviewHelper
             static::twoColumnDetail(
                 static::compactReplace($item->replace),
                 static::compactValue($item->with)
+            );
+        }
+    }
+
+    /**
+     * @param  Collection<CopyData>  $items
+     */
+    public static function copies(Collection $items): void
+    {
+        foreach ($items as $item) {
+            if (! $item->asked) {
+                continue;
+            }
+
+            $source = $item->absolute ? realpath($item->source) : $item->source;
+
+            static::twoColumnDetail(
+                static::compactReplace([$source]),
+                static::compactValue($item->target)
             );
         }
     }

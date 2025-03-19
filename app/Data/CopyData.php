@@ -15,4 +15,8 @@ class CopyData extends Data
 
     #[WithCast(NormalizePathCast::class)]
     public string $target;
+
+    public bool $absolute = false;
+
+    public bool $asked = false;
 }

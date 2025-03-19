@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Actions;
 
+use Illuminate\Support\Arr;
 use PackageWizard\Installer\Data\ConditionData;
+use PackageWizard\Installer\Data\CopyData;
+use PackageWizard\Installer\Data\DependencyData;
 use PackageWizard\Installer\Data\Questions\QuestionData;
+use PackageWizard\Installer\Data\RenameData;
 use PackageWizard\Installer\Data\ReplaceData;
 use PackageWizard\Installer\Enums\ConditionOperatorEnum;
 use PackageWizard\Installer\Enums\TypeEnum;
@@ -16,6 +20,9 @@ use PackageWizard\Installer\Replacers\AskReplacer;
 use PackageWizard\Installer\Replacers\AuthorReplacer;
 use PackageWizard\Installer\Replacers\LicenseReplacer;
 use PackageWizard\Installer\Services\ComparatorService;
+use Spatie\LaravelData\Data;
+
+use function get_class;
 
 class QuestionsAction extends Action
 {
@@ -38,12 +45,26 @@ class QuestionsAction extends Action
             return;
         }
 
-        if ($value = $this->getValue($question)) {
-            $this->config()->replaces->push($value);
+        if (! $value = $this->getValue($question)) {
+            return;
+        }
+
+        foreach (Arr::wrap($value) as $item) {
+            if (! $item) {
+                continue;
+            }
+
+            match (get_class($item)) {
+                ReplaceData::class    => $this->config()->replaces->push($item),
+                CopyData::class       => $this->config()->copies->push($item),
+                RenameData::class     => $this->config()->renames->push($item),
+                DependencyData::class => $this->config()->dependencies->push($item),
+                default               => null
+            };
         }
     }
 
-    protected function getValue(QuestionData $question): ?ReplaceData
+    protected function getValue(QuestionData $question): array|Data|null
     {
         return match ($question->type) {
             TypeEnum::Ask     => AskReplacer::get(AskFiller::make(data: $question), true),

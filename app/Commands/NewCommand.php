@@ -47,8 +47,6 @@ use function PackageWizard\Installer\resource_path;
 use function realpath;
 use function Termwind\renderUsing;
 
-// TODO: Add License file copying
-// TODO: Add license file link replace
 // TODO: Add forced boilerplates list
 #[AsCommand('new', 'Create new project')]
 class NewCommand extends Command
@@ -82,7 +80,11 @@ class NewCommand extends Command
 
         AuthorsAction::run([Action::Config => $config]);
         VariablesAction::run([Action::Config => $config]);
-        QuestionsAction::run([Action::Config => $config]);
+
+        QuestionsAction::run([
+            Action::Config    => $config,
+            Action::Directory => $this->directory,
+        ]);
 
         if (! $this->confirmChanges($config)) {
             return $this->handle();
@@ -267,13 +269,15 @@ class NewCommand extends Command
     {
         intro(PHP_EOL . __('info.check_data') . PHP_EOL);
 
-        $doesntAsk = $config->replaces->where('asked', true)->isEmpty();
+        $doesntReplaces = $config->replaces->where('asked', true)->isEmpty();
+        $doesntCopies   = $config->copies->where('asked', true)->isEmpty();
 
-        if ($doesntAsk) {
+        if ($doesntReplaces && $doesntCopies) {
             return true;
         }
 
         PreviewHelper::replaces($config->replaces);
+        PreviewHelper::copies($config->copies);
 
         $this->newLine();
 

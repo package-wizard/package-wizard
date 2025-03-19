@@ -1,29 +1,24 @@
-{
-    "name": "andrey-helldar/test",
-    "description": "Some description",
-    "type": "template",
-    "require": {
-        "php": "^8.2",
-        "doctrine/dbal": "*"
-    },
-    "require-dev": {
-        "laravel/pail": "*"
-    },
-    "license": "Boost Software 1",
-    "autoload": {
-        "psr-4": {
-            "AndreyHelldar\\Test\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Andrey Helldar",
-            "email": "helldar@dragon-code.pro"
-        },
-        {
-            "name": "The Dragon Code",
-            "homepage": "https://dragon-code.pro"
-        }
-    ],
-    "minimum-stability": "stable"
-}
+# Test Readme
+
+> Some description for package
+
+## Installation
+
+```bash
+composer require andrey-helldar/test
+```
+
+## License
+
+%year% (c) :author:
+%year-range%
+%date%
+
+The `Package Wizard` is licensed under the [Boost Software 1](:licenseFilename:).
+
+## Questions
+
+Question 1 is :q1:
+Question 2 is :q2:
+Question 3 is :q3:
+Question 4 is :q4:

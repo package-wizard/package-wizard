@@ -16,4 +16,6 @@ class DependencyData extends Data
     public bool $dev = false;
 
     public bool $remove = false;
+
+    public bool $asked = false;
 }

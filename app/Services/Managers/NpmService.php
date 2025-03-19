@@ -13,6 +13,7 @@ class NpmService extends Manager
     protected array $options = [
         '--ignore-scripts' => true,
         '--no-audit'       => true,
+        '--no-fund'        => true,
     ];
 
     public function __construct(

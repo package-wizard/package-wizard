@@ -38,7 +38,7 @@ class ComposerService extends Manager
             $this->ansi(),
         ]);
 
-        $this->perform($command, $directory);
+        $this->perform($command, $directory, false);
     }
 
     public function install(string $directory): void
@@ -53,7 +53,7 @@ class ComposerService extends Manager
             $this->ansi(),
         ]);
 
-        $this->perform($command, $directory);
+        $this->perform($command, $directory, false);
     }
 
     public function add(string $directory, array $packages, bool $dev = false): void
@@ -72,7 +72,7 @@ class ComposerService extends Manager
             $this->ansi(),
         ]);
 
-        $this->perform($command, $directory);
+        $this->perform($command, $directory, false);
     }
 
     public function remove(string $directory, array $packages, bool $dev = false): void
@@ -92,7 +92,7 @@ class ComposerService extends Manager
             $this->ansi(),
         ]);
 
-        $this->perform($command, $directory);
+        $this->perform($command, $directory, false);
     }
 
     protected function ansi(): string

@@ -32,8 +32,12 @@ abstract class Manager implements DependencyManager
             ->join(' ');
     }
 
-    protected function perform(string $command, string $directory): void
+    protected function perform(string $command, string $directory, bool $cd = true): void
     {
+        if ($cd) {
+            $command = sprintf('cd "%s" && %s', $directory, $command);
+        }
+
         app(ProcessService::class)->runWithInteract($command, $directory);
     }
 

@@ -90,8 +90,8 @@
         "wizard": {
             "type": "object",
             "properties": {
-                "install": {
-                    "$ref": "#/definitions/wizardInstall"
+                "manager": {
+                    "$ref": "#/definitions/wizardManager"
                 },
                 "clean": {
                     "type": "boolean",
@@ -100,7 +100,7 @@
             },
             "additionalProperties": false
         },
-        "wizardInstall": {
+        "wizardManager": {
             "type": "object",
             "properties": {
                 "composer": {

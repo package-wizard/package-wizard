@@ -17,7 +17,6 @@ beforeEach(function () {
 });
 
 it('installed', function () {
-
     artisan(NewCommand::class)
         ->expectsConfirmation(__('info.install_dependencies'), 'yes')
         ->doesntExpectOutputToContain(__('dependency.install', ['name' => 'composer']))

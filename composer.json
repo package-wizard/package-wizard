@@ -47,8 +47,7 @@
         "peckphp/peck": "^0.1.2",
         "pestphp/pest": "^3.7.4",
         "pestphp/pest-plugin-type-coverage": "^3.4",
-        "spatie/laravel-data": "^4.14.1",
-        "spatie/laravel-permission": "^6.16"
+        "spatie/laravel-data": "^4.14.1"
     },
     "minimum-stability": "stable",
     "prefer-stable": true,

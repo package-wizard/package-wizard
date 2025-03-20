@@ -1,3 +1,7 @@
 [
-    "fallback"
+    "NEW_README",
+    "README.md",
+    "composer.json",
+    "package.json",
+    "src\/SomeClass.php"
 ]

@@ -82,6 +82,11 @@ class FilesystemService
             : Directory::ensureDelete($path);
     }
 
+    public function exists(string $path): bool
+    {
+        return $this->filesystem->exists($path);
+    }
+
     public function directoryExists(string $path): bool
     {
         return Directory::exists($path);

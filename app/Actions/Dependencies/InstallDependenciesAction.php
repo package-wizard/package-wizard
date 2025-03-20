@@ -8,11 +8,6 @@ use function __;
 
 class InstallDependenciesAction extends DependencyAction
 {
-    protected function title(): string
-    {
-        return __('info.dependencies');
-    }
-
     protected function managers(): array
     {
         return [

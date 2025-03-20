@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function app;
 use function class_basename;
 use function Laravel\Prompts\spin;
+use function value;
 
 abstract class Action
 {
@@ -35,8 +36,14 @@ abstract class Action
         static::output(OutputInterface::VERBOSITY_DEBUG);
     }
 
-    public static function run(array $parameters = []): void
+    public static function run(array $parameters = [], bool|callable $when = true): void
     {
+        if (! value($when)) {
+            static::verboseWriteln(static::class . ': Not allow to run.');
+
+            return;
+        }
+
         $instance = new static(
             $parameters,
             app(ProcessService::class),

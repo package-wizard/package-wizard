@@ -1,7 +1,12 @@
-<?php
-
-declare(strict_types=1);
-
-namespace My\Package;
-
-class SomeClass {}
+{
+    "name": "test",
+    "version": "1.0.0",
+    "description": "Test file",
+    "author": "John Doe <john@example.com>",
+    "license": "MIT",
+    "private": true,
+    "type": "module",
+    "devDependencies": {
+        "vite": "^6.0.11"
+    }
+}

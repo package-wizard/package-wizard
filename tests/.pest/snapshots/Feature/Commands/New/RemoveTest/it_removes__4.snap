@@ -1,3 +1,5 @@
 [
-    "fallback"
+    "composer.json",
+    "package.json",
+    "src\/SomeClass.php"
 ]

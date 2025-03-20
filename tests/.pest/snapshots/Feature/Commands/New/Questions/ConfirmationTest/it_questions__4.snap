@@ -1,7 +1,12 @@
-<?php
-
-declare(strict_types=1);
-
-namespace Foo\Bar;
-
-class SomeClass {}
+{
+    "name": "test",
+    "version": "1.0.0",
+    "description": "Test file",
+    "author": "Andrey Helldar <helldar@dragon-code.pro>",
+    "license": "MIT",
+    "private": true,
+    "type": "module",
+    "devDependencies": {
+        "vite": "^6.0.11"
+    }
+}

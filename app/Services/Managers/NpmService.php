@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Services\Managers;
 
-use PackageWizard\Installer\Support\Npm;
-
 use function vsprintf;
 
 class NpmService extends Manager
@@ -16,15 +14,20 @@ class NpmService extends Manager
         '--no-fund'        => true,
     ];
 
-    public function __construct(
-        protected Npm $npm,
-    ) {}
+    public function find(): string
+    {
+        return 'npm';
+    }
+
+    public function filename(): string
+    {
+        return 'package.json';
+    }
 
     public function install(string $directory): void
     {
-        $command = vsprintf('%s install %s %s', [
-            $this->npm->find(),
-            $directory,
+        $command = vsprintf('%s install %s', [
+            $this->find(),
             $this->options(),
         ]);
 
@@ -34,7 +37,7 @@ class NpmService extends Manager
     public function add(string $directory, array $packages, bool $dev = false): void
     {
         $command = vsprintf('%s install %s %s', [
-            $this->npm->find(),
+            $this->find(),
             collect($packages)->join(' '),
             $this->options([
                 '--save-dev' => $dev,
@@ -48,7 +51,7 @@ class NpmService extends Manager
     public function remove(string $directory, array $packages, bool $dev = false): void
     {
         $command = vsprintf('%s uninstall %s %s', [
-            $this->npm->find(),
+            $this->find(),
             collect($packages)->join(' '),
             $this->options([
                 '--save-dev' => $dev,

@@ -5,6 +5,8 @@
 
 /.phpunit.cache
 
+.env
+
 *.backup
 *.cache
 *.log

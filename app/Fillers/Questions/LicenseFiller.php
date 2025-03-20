@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace PackageWizard\Installer\Fillers\Questions;
 
+use DragonCode\Support\Facades\Helpers\Arr;
 use PackageWizard\Installer\Data\CopyData;
 use PackageWizard\Installer\Data\Questions\QuestionLicenseData;
 use PackageWizard\Installer\Data\ReplaceData;
@@ -17,6 +18,8 @@ use function PackageWizard\Installer\resource_path;
 /** @method static make(QuestionLicenseData|Data $data) */
 class LicenseFiller extends Filler
 {
+    protected ?array $list = null;
+
     public function __construct(
         protected QuestionLicenseData $data,
         protected FilesystemService $filesystem,
@@ -24,12 +27,12 @@ class LicenseFiller extends Filler
 
     public function get(): array
     {
-        $name = $this->answer();
+        $filename = $this->answer();
 
         return [
-            $this->replaceData($this->data->replace, $name, true),
+            $this->replaceData($this->data->replace, $this->getName($filename), true),
             $this->replaceData($this->data->file->replace, $this->data->file->path),
-            $this->copyData($name),
+            $this->copyData($filename),
         ];
     }
 
@@ -42,10 +45,10 @@ class LicenseFiller extends Filler
         ]);
     }
 
-    protected function copyData(string $name): CopyData
+    protected function copyData(string $filename): CopyData
     {
         return CopyData::from([
-            'source'   => resource_path('licenses/' . $name),
+            'source'   => resource_path('licenses/' . $filename),
             'target'   => $this->data->file->path,
             'absolute' => true,
         ]);
@@ -61,10 +64,13 @@ class LicenseFiller extends Filler
         );
     }
 
+    protected function getName(string $filename): string
+    {
+        return Arr::get($this->available(), $filename, 'MIT License');
+    }
+
     protected function available(): array
     {
-        return $this->filesystem->names(
-            resource_path('licenses')
-        );
+        return $this->list ??= Arr::ofFile(resource_path('licenses/list.json'))->toArray();
     }
 }

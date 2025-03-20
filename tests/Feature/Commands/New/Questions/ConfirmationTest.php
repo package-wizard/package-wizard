@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use DragonCode\Support\Facades\Filesystem\File;
+use DragonCode\Support\Facades\Helpers\Arr;
 use PackageWizard\Installer\Commands\NewCommand;
 
 use function PackageWizard\Installer\resource_path;
@@ -15,17 +15,17 @@ afterEach(
 it('questions', function () {
     prepare_project('questions');
 
-    $licenses = File::names(resource_path('licenses'));
+    $licenses = Arr::ofFile(resource_path('licenses/list.json'))->toArray();
 
     artisan(NewCommand::class)
         // The first attempt
-        ->expectsChoice(__('Which is license will be distributed?'), 'Boost Software 1', $licenses)
+        ->expectsChoice(__('Which is license will be distributed?'), 'bsl-1.0', $licenses)
         ->expectsQuestion(__('What is your email?'), 'qwe@example.com')
         ->expectsQuestion('Replace namespace', 'Qwe\\Rty')
         ->expectsChoice('Replace description', 'baz', ['foo', 'bar', 'baz'])
         ->expectsConfirmation(__('info.accept'))
         // The second attempt
-        ->expectsChoice(__('Which is license will be distributed?'), 'Apache License 2', $licenses)
+        ->expectsChoice(__('Which is license will be distributed?'), 'apache-2.0', $licenses)
         ->expectsQuestion(__('What is your email?'), 'some@example.com')
         ->expectsQuestion('Replace namespace', 'Foo\\Bar')
         ->expectsChoice('Replace description', 'bar', ['foo', 'bar', 'baz'])

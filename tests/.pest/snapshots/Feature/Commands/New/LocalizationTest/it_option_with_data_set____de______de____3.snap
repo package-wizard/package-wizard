@@ -9,7 +9,7 @@
     "require-dev": {
         "laravel/pail": "*"
     },
-    "license": "Boost Software 1",
+    "license": "Boost Software License 1.0",
     "autoload": {
         "psr-4": {
             "AndreyHelldar\\Test\\": "src/"

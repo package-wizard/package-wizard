@@ -89,10 +89,10 @@ class NewCommand extends Command
             return $this->handle();
         }
 
-        ReplaceContentAction::run([Action::Config => $config]);
+        CopyFilesAction::run([Action::Config => $config]);
         RenameFilesAction::run([Action::Config => $config]);
         RemoveFilesAction::run([Action::Config => $config]);
-        CopyFilesAction::run([Action::Config => $config]);
+        ReplaceContentAction::run([Action::Config => $config]);
 
         SyncDependenciesAction::run([
             SyncDependenciesAction::Type => DependencyTypeEnum::Composer,

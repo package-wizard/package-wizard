@@ -28,4 +28,7 @@ return [
     'impossible' => 'Продовжити неможливо.',
 
     'packagist' => 'Пошук на Packagist',
+
+    'copies'   => 'Копії:',
+    'replaces' => 'Заміни:',
 ];

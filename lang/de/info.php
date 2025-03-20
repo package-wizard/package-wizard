@@ -28,4 +28,7 @@ return [
     'impossible' => 'Es ist unmöglich fortzufahren.',
 
     'packagist' => 'Auf Packagist suchen',
+
+    'copies'   => 'Kopien:',
+    'replaces' => 'Ersetzt:',
 ];

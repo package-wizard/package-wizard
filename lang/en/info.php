@@ -28,4 +28,7 @@ return [
     'impossible' => 'It\'s impossible to continue.',
 
     'packagist' => 'Search on Packagist',
+
+    'replaces' => 'Replaces:',
+    'copies'   => 'Copies:',
 ];

@@ -411,7 +411,7 @@
                 },
                 "default": {
                     "type": "string",
-                    "default": "MIT License"
+                    "default": "mit"
                 },
                 "replace": {
                     "$ref": "#/definitions/valueReplace",

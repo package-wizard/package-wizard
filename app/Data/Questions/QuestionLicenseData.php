@@ -12,7 +12,7 @@ class QuestionLicenseData extends QuestionData
 {
     public TypeEnum $type = TypeEnum::License;
 
-    public string $default = 'MIT License';
+    public string $default = 'mit';
 
     #[WithCast(ArrayWrapCast::class)]
     public array $replace = [':license:'];

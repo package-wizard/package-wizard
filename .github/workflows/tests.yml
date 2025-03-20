@@ -109,7 +109,9 @@ jobs:
                     node-version: 22
 
             -   name: Prepare Yarn
-                run: corepack enable
+                run: |
+                    npm install -g corepack
+                    yarn set version stable
 
             -   name: Remove Peck
                 run: composer remove peckphp/peck --dev --no-progress --no-scripts --no-install --ignore-platform-reqs --no-interaction --ansi

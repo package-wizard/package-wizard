@@ -7,7 +7,6 @@ return [
     'check_data' => 'Überprüfen Sie die Daten, bevor Sie fortfahren',
     'accept'     => 'Bestätigen Sie die Generierung?',
 
-    'dependencies'      => 'Abhängigkeiten werden installiert...',
     'downloading'       => 'Das Projekt wird heruntergeladen...',
     'searching'         => 'Suche nach einer Vorlage...',
     'build_config'      => 'Konfiguration wird erstellt...',

@@ -1,0 +1,10 @@
+{
+    "$schema": "../../../resources/schemas/schema-v2.json",
+    "wizard": {
+        "manager": {
+            "composer": true,
+            "npm": true,
+            "yarn": true
+        }
+    }
+}

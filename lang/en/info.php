@@ -7,7 +7,8 @@ return [
     'check_data' => 'Check the data before continuing',
     'accept'     => 'Do you confirm generation?',
 
-    'dependencies'      => 'Dependencies installing...',
+    'install_dependencies' => 'Do you want to install dependencies?',
+
     'downloading'       => 'Downloading the project...',
     'searching'         => 'Searching for a template...',
     'build_config'      => 'Build configuration...',

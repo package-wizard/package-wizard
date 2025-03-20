@@ -7,7 +7,6 @@ return [
     'check_data' => 'Vérifiez les données avant de continuer',
     'accept'     => 'Confirmez-vous la génération ?',
 
-    'dependencies'      => 'Installation des dépendances...',
     'downloading'       => 'Téléchargement du projet...',
     'searching'         => 'Recherche d\'un modèle...',
     'build_config'      => 'Construction de la configuration...',

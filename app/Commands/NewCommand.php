@@ -13,6 +13,7 @@ use PackageWizard\Installer\Actions\CleanUpAction;
 use PackageWizard\Installer\Actions\CopyFilesAction;
 use PackageWizard\Installer\Actions\Dependencies\InstallDependenciesAction;
 use PackageWizard\Installer\Actions\Dependencies\SyncDependenciesAction;
+use PackageWizard\Installer\Actions\DependenciesConfirmAction;
 use PackageWizard\Installer\Actions\DownloadProjectAction;
 use PackageWizard\Installer\Actions\QuestionsAction;
 use PackageWizard\Installer\Actions\RemoveFilesAction;
@@ -91,6 +92,7 @@ class NewCommand extends Command
         VariablesAction::run([Action::Config => $config]);
 
         QuestionsAction::run([Action::Config => $config]);
+        DependenciesConfirmAction::run([Action::Config => $config]);
 
         if (! $this->confirmChanges($config)) {
             return $this->handle();
@@ -116,7 +118,12 @@ class NewCommand extends Command
             Action::Config               => $config,
         ]);
 
-        InstallDependenciesAction::run([Action::Config => $config]);
+        InstallDependenciesAction::run([Action::Config => $config], static function () use ($config) {
+            return $config->wizard->manager->composer
+                || $config->wizard->manager->npm
+                || $config->wizard->manager->yarn;
+        });
+
         CleanUpAction::run([Action::Config => $config]);
 
         $this->output->writeln('');

@@ -8,7 +8,6 @@ use Illuminate\Support\Composer;
 use PackageWizard\Installer\Support\Console;
 
 use function collect;
-use function implode;
 
 class ComposerService extends Manager
 {
@@ -22,23 +21,14 @@ class ComposerService extends Manager
         protected Composer $composer,
     ) {}
 
-    public function createProject(string $directory, string $package, ?string $version, bool $dev): void
+    public function find(): string
     {
-        $command = vsprintf('%s create-project %s "%s" %s %s %s', [
-            $this->find(),
-            $package,
-            $directory,
-            $version,
-            $this->options([
-                '--no-install',
-                '--stability=dev'  => $dev,
-                '--quiet'          => Console::quiet(),
-                '--no-interaction' => Console::quiet(),
-            ]),
-            $this->ansi(),
-        ]);
+        return implode(' ', $this->composer->findComposer());
+    }
 
-        $this->perform($command, $directory, false);
+    public function filename(): string
+    {
+        return 'composer.json';
     }
 
     public function install(string $directory): void
@@ -95,13 +85,27 @@ class ComposerService extends Manager
         $this->perform($command, $directory, false);
     }
 
+    public function createProject(string $directory, string $package, ?string $version, bool $dev): void
+    {
+        $command = vsprintf('%s create-project %s "%s" %s %s %s', [
+            $this->find(),
+            $package,
+            $directory,
+            $version,
+            $this->options([
+                '--no-install',
+                '--stability=dev'  => $dev,
+                '--quiet'          => Console::quiet(),
+                '--no-interaction' => Console::quiet(),
+            ]),
+            $this->ansi(),
+        ]);
+
+        $this->perform($command, $directory, false);
+    }
+
     protected function ansi(): string
     {
         return Console::ansi() ? '--ansi' : '--no-ansi';
-    }
-
-    protected function find(): string
-    {
-        return implode(' ', $this->composer->findComposer());
     }
 }

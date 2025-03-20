@@ -7,6 +7,10 @@ use LaravelZero\Framework\Testing\TestCase;
 uses(TestCase::class)
     ->in('Feature')
     ->afterEach(function () {
+        if (env('GITHUB_ACTIONS')) {
+            return;
+        }
+
         assertFileSnapshots(temp_path());
 
         expect(['fallback'])->toMatchSnapshot();

@@ -53,7 +53,9 @@ class ProcessService
 
     protected function process(string $command, string $path): Process
     {
-        return Process::fromShellCommandline($command, dirname($path), timeout: 300);
+        $directory = is_file($path) ? dirname($path) : $path;
+
+        return Process::fromShellCommandline($command, $directory, timeout: 300);
     }
 
     protected function tty(Process $process): void

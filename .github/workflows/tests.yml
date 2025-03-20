@@ -76,20 +76,55 @@ jobs:
             -   name: Misspelling tests
                 run: composer test:misspelling
 
-    unit:
-        runs-on: ${{ matrix.os }}-latest
+    linux:
+        runs-on: ubuntu-latest
 
         strategy:
             fail-fast: true
             matrix:
-                os: [ ubuntu, windows ]
                 php: [ 8.2, 8.3, 8.4 ]
 
-        name: ${{ matrix.os }} - php ${{ matrix.php }}
+        name: Ubuntu - PHP ${{ matrix.php }}
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: ${{ matrix.php }}
+                    extensions: curl, mbstring, zip, iconv, json, dom, fileinfo, tokenizer
+                    coverage: none
+
+            -   uses: actions/setup-node@v4
+                with:
+                    node-version: 22
+
+            -   name: Prepare Yarn
+                run: sudo corepack enable
+
+            -   name: Remove Peck
+                run: composer remove peckphp/peck --dev --no-progress --no-scripts --no-install --ignore-platform-reqs --no-interaction --ansi
+
+            -   name: Install dependencies
+                run: composer install --no-progress --no-scripts --optimize-autoloader --no-interaction --ansi
+
+            -   name: Unit tests
+                run: sudo vendor/bin/pest --parallel
+
+    windows:
+        runs-on: windows-latest
+
+        strategy:
+            fail-fast: true
+            matrix:
+                php: [ 8.2, 8.3, 8.4 ]
+
+        name: Windows - PHP ${{ matrix.php }}
 
         steps:
             -   name: Set git to use LF
-                if: ${{ matrix.os == 'windows' }}
                 run: |
                     git config --global core.autocrlf false
                     git config --global core.eol lf
@@ -107,9 +142,6 @@ jobs:
             -   uses: actions/setup-node@v4
                 with:
                     node-version: 22
-
-            -   name: Prepare Yarn
-                run: sudo corepack enable
 
             -   name: Remove Peck
                 run: composer remove peckphp/peck --dev --no-progress --no-scripts --no-install --ignore-platform-reqs --no-interaction --ansi

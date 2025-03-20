@@ -58,11 +58,9 @@
         },
         "dependencies": {
             "type": "array",
-            "items": [
-                {
-                    "$ref": "#/definitions/dependency"
-                }
-            ],
+            "items": {
+                "$ref": "#/definitions/dependency"
+            },
             "uniqueItems": true
         },
         "questions": {
@@ -501,9 +499,6 @@
                         },
                         {
                             "type": "integer"
-                        },
-                        {
-                            "type": "null"
                         }
                     ]
                 },

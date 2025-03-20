@@ -6,5 +6,15 @@
             "npm": false,
             "yarn": true
         }
-    }
+    },
+    "copies": [
+        {
+            "source": "../tests/Fixtures/ProjectManagers/yarn.json",
+            "target": "package.json"
+        },
+        {
+            "source": "../../tests/Fixtures/ProjectManagers/yarn.json",
+            "target": "package.json"
+        }
+    ]
 }

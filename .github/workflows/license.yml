@@ -28,7 +28,7 @@ jobs:
                     composer global require dragon-code/codestyler
 
             -   name: Download
-                run: ./paw licenses
+                run: php ./paw licenses
 
             -   name: Code-Style
                 run: codestyle

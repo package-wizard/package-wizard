@@ -28,6 +28,7 @@ use PackageWizard\Installer\Fillers\PackageFiller;
 use PackageWizard\Installer\Helpers\ConfigHelper;
 use PackageWizard\Installer\Helpers\PackageHelper;
 use PackageWizard\Installer\Helpers\PreviewHelper;
+use PackageWizard\Installer\Services\FilesystemService;
 use PackageWizard\Installer\Support\Console;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -58,6 +59,12 @@ class NewCommand extends Command
     protected $description = 'Create new project';
 
     protected ?string $directory = null;
+
+    public function __construct(
+        protected FilesystemService $filesystem
+    ) {
+        parent::__construct();
+    }
 
     /**
      * @throws \Psr\Container\ContainerExceptionInterface
@@ -210,7 +217,7 @@ class NewCommand extends Command
 
     protected function ensureDirectory(string $directory): void
     {
-        if (! $this->option('force') && Directory::exists($directory)) {
+        if (! $this->option('force') && ! $this->filesystem->canCreateProject($directory)) {
             warning(__('validation.exists.app'));
 
             if (! confirm(__('info.overwrite', ['path' => realpath($directory)]))) {

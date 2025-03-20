@@ -81,4 +81,19 @@ class FilesystemService
             ? File::ensureDelete($path)
             : Directory::ensureDelete($path);
     }
+
+    public function directoryExists(string $path): bool
+    {
+        return Directory::exists($path);
+    }
+
+    public function directoryIsEmpty(string $path): bool
+    {
+        return $this->filesystem->isEmptyDirectory($path);
+    }
+
+    public function canCreateProject(string $path): bool
+    {
+        return ! $this->directoryExists($path) || $this->directoryIsEmpty($path);
+    }
 }

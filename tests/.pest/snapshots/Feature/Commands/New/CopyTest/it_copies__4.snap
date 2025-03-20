@@ -5,8 +5,5 @@
     "author": "Andrey Helldar <helldar@dragon-code.pro>",
     "license": "MIT",
     "private": true,
-    "type": "module",
-    "devDependencies": {
-        "vite": "^6.0.11"
-    }
+    "type": "module"
 }

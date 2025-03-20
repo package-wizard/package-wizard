@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use PackageWizard\Installer\Commands\NewCommand;
 
-use function PHPUnit\Framework\assertDirectoryDoesNotExist;
+use function PHPUnit\Framework\assertFileDoesNotExist;
 
 it('not installed', function () {
     prepare_project('dependencies-install-disabled');
@@ -16,7 +16,7 @@ it('not installed', function () {
         ->doesntExpectOutputToContain(__('dependency.install', ['name' => 'yarn']))
         ->assertSuccessful();
 
-    assertDirectoryDoesNotExist(temp_path('vendor'));
-    assertDirectoryDoesNotExist(temp_path('node_modules'));
-    assertDirectoryDoesNotExist(temp_path('.yarn'));
+    assertFileDoesNotExist(temp_path('composer.lock'));
+    assertFileDoesNotExist(temp_path('package-lock.json'));
+    assertFileDoesNotExist(temp_path('yarn.lock'));
 });

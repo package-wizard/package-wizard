@@ -6,9 +6,11 @@ use PackageWizard\Installer\Commands\NewCommand;
 
 use function PHPUnit\Framework\assertFileDoesNotExist;
 
-it('not installed', function () {
+beforeEach(function () {
     prepare_project('dependencies-install-disabled');
+});
 
+it('not installed', function () {
     artisan(NewCommand::class)
         ->doesntExpectOutputToContain(__('info.install_dependencies'))
         ->doesntExpectOutputToContain(__('dependency.install', ['name' => 'composer']))

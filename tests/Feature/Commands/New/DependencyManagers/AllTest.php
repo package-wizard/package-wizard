@@ -7,9 +7,11 @@ use PackageWizard\Installer\Commands\NewCommand;
 use function PHPUnit\Framework\assertFileDoesNotExist;
 use function PHPUnit\Framework\assertFileExists;
 
-it('installed', function () {
+beforeEach(function () {
     prepare_project('dependencies-install-all');
+});
 
+it('installed', function () {
     artisan(NewCommand::class)
         ->expectsConfirmation(__('info.install_dependencies'), 'yes')
         ->expectsOutputToContain(__('dependency.install', ['name' => 'composer']))
@@ -23,8 +25,6 @@ it('installed', function () {
 });
 
 it('not installed', function () {
-    prepare_project('dependencies-install-all');
-
     artisan(NewCommand::class)
         ->expectsConfirmation(__('info.install_dependencies'))
         ->doesntExpectOutputToContain(__('dependency.install', ['name' => 'composer']))

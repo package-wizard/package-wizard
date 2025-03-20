@@ -8,7 +8,7 @@ it('option', function (string $locale) {
     prepare_project('localization-option');
 
     artisan(NewCommand::class, ['--lang' => $locale])
-        ->expectsQuestion(__('Which is license will be distributed?', locale: $locale), 'Boost Software 1')
+        ->expectsQuestion(__('Which is license will be distributed?', locale: $locale), 'bsl-1.0')
         ->expectsConfirmation(__('info.accept', locale: $locale), 'yes')
         ->assertSuccessful();
 })->with('localization');
@@ -19,7 +19,7 @@ it('schema', function () {
     $locale = 'de';
 
     artisan(NewCommand::class)
-        ->expectsQuestion(__('Which is license will be distributed?', locale: $locale), 'Boost Software 1')
+        ->expectsQuestion(__('Which is license will be distributed?', locale: $locale), 'bsl-1.0')
         ->expectsConfirmation(__('info.accept', locale: $locale), 'yes')
         ->assertSuccessful();
 });
@@ -30,7 +30,7 @@ it('overwrite', function () {
     $locale = 'fr';
 
     artisan(NewCommand::class, ['--lang' => $locale])
-        ->expectsQuestion(__('Which is license will be distributed?', locale: $locale), 'Boost Software 1')
+        ->expectsQuestion(__('Which is license will be distributed?', locale: $locale), 'bsl-1.0')
         ->expectsConfirmation(__('info.accept', locale: $locale), 'yes')
         ->assertSuccessful();
 });

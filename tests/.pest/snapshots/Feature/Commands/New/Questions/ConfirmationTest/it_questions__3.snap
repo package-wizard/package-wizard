@@ -9,7 +9,7 @@
     "require-dev": {
         "laravel/pail": "*"
     },
-    "license": "Apache License 2",
+    "license": "Apache License 2.0",
     "autoload": {
         "psr-4": {
             "Foo\\Bar\\": "src/"

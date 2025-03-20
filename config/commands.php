@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PackageWizard\Installer\Commands\LicensesCommand;
 use PackageWizard\Installer\Commands\NewCommand;
 
 return [
@@ -20,6 +21,8 @@ return [
         Illuminate\Console\Scheduling\ScheduleFinishCommand::class,
         Illuminate\Foundation\Console\VendorPublishCommand::class,
         LaravelZero\Framework\Commands\StubPublishCommand::class,
+
+        LicensesCommand::class,
     ],
 
     'remove' => [],

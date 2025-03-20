@@ -12,6 +12,7 @@
             "packagist",
             "replacer",
             "replacers",
+            "spdx",
             "tty",
             "writeln"
         ],

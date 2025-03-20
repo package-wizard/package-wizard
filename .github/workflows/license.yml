@@ -1,4 +1,4 @@
-name: Update license
+name: Update licenses
 
 on:
     schedule:
@@ -6,5 +6,42 @@ on:
     workflow_dispatch:
 
 jobs:
-    Update:
+    Readme:
         uses: TheDragonCode/.github/.github/workflows/license.yml@main
+
+    List:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Checkout code
+                uses: actions/checkout@v4
+
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    extensions: curl, mbstring, zip, pcntl, pdo, pdo_sqlite, iconv, json
+                    coverage: none
+
+            -   name: Install dependencies
+                run: |
+                    composer update --prefer-stable --prefer-dist --no-progress --no-interaction
+                    composer global require dragon-code/codestyler
+
+            -   name: Download
+                run: ./paw licenses
+
+            -   name: Code-Style
+                run: codestyle
+
+            -   name: Create a Pull Request
+                uses: peter-evans/create-pull-request@v7
+                with:
+                    branch: projects/download
+                    branch-suffix: random
+                    delete-branch: true
+                    add-paths: resources/licenses
+                    title: "[source]: The list of licenses has been updated"
+                    commit-message: 🗝️ The list of licenses has been updated
+                    body: The list of licenses has been updated 💪
+                    labels: |
+                        source

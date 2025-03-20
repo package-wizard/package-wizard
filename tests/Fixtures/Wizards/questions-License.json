@@ -13,12 +13,12 @@
             "id": "license",
             "type": "license",
             "replace": ":license:",
-            "default": "Mozilla Public License 2"
+            "default": "mpl-2.0"
         },
         {
             "condition": {
                 "for": "license",
-                "value": "GNU Affero General Public License v3"
+                "value": "GNU General Public License v3.0"
             },
             "type": "ask",
             "prompt": "text",
@@ -28,7 +28,7 @@
         {
             "condition": {
                 "for": "license",
-                "value": "Boost Software 1"
+                "value": "Boost Software License 1.0"
             },
             "type": "ask",
             "prompt": "text",

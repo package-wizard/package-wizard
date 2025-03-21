@@ -12,6 +12,6 @@ return [
 
     'package-wizard/laravel'         => true,
     'package-wizard/composer-light'  => true,
-    'package-wizard/symfony-console' => true,
+    'package-wizard/console'         => true,
     'package-wizard/writerside'      => true,
 ];

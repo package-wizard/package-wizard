@@ -10,8 +10,8 @@ return [
     'laravel/laravel',
     'moonshine/app' => true,
 
-    'package-wizard/laravel'         => true,
-    'package-wizard/composer-light'  => true,
-    'package-wizard/console'         => true,
-    'package-wizard/writerside'      => true,
+    'package-wizard/laravel'        => true,
+    'package-wizard/composer-light' => true,
+    'package-wizard/console'        => true,
+    'package-wizard/writerside'     => true,
 ];
